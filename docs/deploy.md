@@ -17,6 +17,8 @@ https://zongon0914-lang.github.io/still-borrowing-books/
 
 ## 第一次上線（只做一次）
 
+> 已於 2026-11-17 完成（用 GitHub CLI 建立儲存庫、推送、開啟 Pages）。以下留作紀錄；之後只需要看「之後怎麼更新網站」。
+
 ### 1. 在 GitHub 建立儲存庫
 
 1. 登入 <https://github.com>，右上角 **＋** → **New repository**。
