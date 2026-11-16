@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>類別熱門書單｜我們這一代，還借書嗎？</title>
+  <meta name="description" content="某一類書在全國公共圖書館借最多的書，以及台北 18–24 歲借這一類的比例。">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&family=Noto+Serif+TC:wght@400;700&display=swap">
@@ -26,15 +27,31 @@
     <ol>
       <li><a href="index.html">首頁</a></li>
       <li><a href="chapter3.html">我們這一代借什麼？</a></li>
-      <li aria-current="page">類別熱門書單</li>
+      <li aria-current="page" id="crumb-category">類別熱門書單</li>
     </ol>
   </nav>
 
   <main>
     <p class="chapter-label">類別細節</p>
-    <h1>類別熱門書單</h1>
-    <!-- 暫時頁面：之後的任務會換成正式內容 -->
-    <p class="placeholder">各類別的熱門書單，製作中。</p>
+    <h1 id="category-title">類別熱門書單</h1>
+
+    <div id="category-content">
+      <p class="lead" id="category-lead">這一類書在全國公共圖書館借最多的 10 本書。</p>
+      <div id="category-note"></div>
+
+      <ol class="book-list" id="book-list"></ol>
+      <p class="chart-source" id="book-source">資料來源：國家圖書館《113年臺灣閱讀風貌及全民閱讀力年度報告》各類別圖書借閱排行。</p>
+
+      <section class="category-index" aria-labelledby="others-title">
+        <h2 id="others-title">看看其他類別</h2>
+        <ul id="category-others"></ul>
+      </section>
+    </div>
+
+    <div class="county-missing" id="category-missing" hidden>
+      <p id="category-message">找不到這個類別。</p>
+      <p><a href="chapter3.html">回到「我們這一代借什麼？」選一個類別 →</a></p>
+    </div>
 
     <nav class="chapter-nav" aria-label="章節導覽">
       <a href="chapter3.html">← 回到：我們這一代借什麼？</a>
@@ -46,5 +63,9 @@
     <p>115 學年世新大學資訊傳播創意大賞・資訊設計類參賽作品</p>
     <p>數據來自政府公開資料｜<a href="sources.html">資料來源與 AI 使用說明</a></p>
   </footer>
+
+  <script src="assets/data.js"></script>
+  <script src="assets/site.js"></script>
+  <script src="assets/category.js"></script>
 </body>
 </html>

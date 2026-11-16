@@ -154,7 +154,49 @@ export function buildAgeData(raw) {
   };
 }
 
-/** 網站用的全部乾淨數據：全國、縣市、年齡 */
+// ---------- 類別細節頁：各類熱門書單 ----------
+
+const BOOKS_RAW_FILE = fileURLToPath(new URL('./raw/ncl-books-2024.json', import.meta.url));
+const BOOKS_PER_CATEGORY = 10;
+
+/** 讀取人工抄寫的國圖各類別借閱排行 */
+export function loadBooksRaw(file = BOOKS_RAW_FILE) {
+  return JSON.parse(readFileSync(file, 'utf8'));
+}
+
+/**
+ * 核對書單抄寫，並整理成跟年齡表同樣的類別順序。
+ * @param {object} raw tools/raw/ncl-books-2024.json
+ * @param {string[]} categories 北市圖年齡表的類別名稱（章節三用的就是這一組）
+ */
+export function buildBooksData(raw, categories) {
+  const ranks = Array.from({ length: BOOKS_PER_CATEGORY }, (_, i) => i + 1);
+  const result = categories.map((name) => {
+    const c = raw.categories.find((x) => x.name === name);
+    if (!c) throw new Error(`書單少了「${name}」這一類，章節三的連結會點不到`);
+    if (c.books.map((b) => b.rank).join() !== ranks.join()) {
+      throw new Error(`「${name}」的名次應該是 1 到 ${BOOKS_PER_CATEGORY}，現在是 ${c.books.map((b) => b.rank).join('、')}`);
+    }
+    for (const b of c.books) {
+      if (!b.title?.trim()) throw new Error(`「${name}」第 ${b.rank} 名沒有書名`);
+      if (!b.author?.trim()) throw new Error(`「${name}」第 ${b.rank} 名沒有作者`);
+    }
+    return c;
+  });
+  const extra = raw.categories.filter((c) => !categories.includes(c.name)).map((c) => c.name);
+  if (extra.length) throw new Error(`書單有年齡表沒有的類別：${extra.join('、')}`);
+
+  return {
+    year: raw.year,
+    rocYear: raw.rocYear,
+    source: raw.source,
+    taipeiSource: raw.taipeiSource,
+    categories: result,
+  };
+}
+
+/** 網站用的全部乾淨數據：全國、縣市、年齡、書單 */
 export function buildSiteData() {
-  return { ...buildCleanData(loadRaw()), age: buildAgeData(loadAgeRaw()) };
+  const age = buildAgeData(loadAgeRaw());
+  return { ...buildCleanData(loadRaw()), age, books: buildBooksData(loadBooksRaw(), age.categories) };
 }

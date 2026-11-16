@@ -433,3 +433,40 @@ h2 {
   text-decoration: none;
 }
 .category-index a:hover { border-color: var(--accent); color: var(--accent); }
+
+/* 類別細節頁：熱門書單 */
+.book-list { list-style: none; margin: 1.5rem 0 0.5rem; padding: 0; border-top: 1px solid var(--rule); }
+.book {
+  display: grid;
+  grid-template-columns: 2.25rem 1fr;
+  gap: 0.75rem;
+  padding: 0.875rem 0;
+  border-bottom: 1px solid var(--rule);
+}
+.book__rank {
+  font-family: var(--sans);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--ink-soft);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.5;
+}
+.book:nth-child(-n + 3) .book__rank { color: var(--accent); }
+.book__body { min-width: 0; }
+.book__body p { margin: 0; }
+.book__title { font-weight: 700; line-height: 1.5; overflow-wrap: anywhere; }
+.book__sub { display: block; font-weight: 400; font-size: 0.875rem; color: var(--ink-soft); }
+.book__author { font-family: var(--sans); font-size: 0.875rem; color: var(--ink-soft); margin-top: 0.15rem; overflow-wrap: anywhere; }
+.book__tags { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-top: 0.4rem; }
+.book-tag {
+  font-family: var(--sans);
+  font-size: 0.75rem;
+  padding: 0.1rem 0.5rem;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  color: var(--ink-soft);
+  background: #fffdf8;
+}
+.book-tag.is-long { border-color: var(--accent); color: #fffdf8; background: var(--accent); }
+.category-index { margin-top: 2.5rem; }
