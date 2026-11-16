@@ -2,7 +2,7 @@
 // 期望值來自規格書（docs/spec.md）和人工核對過的事實，不是用程式重算出來的。
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { loadRaw, buildCleanData } from '../tools/clean-data.mjs';
+import { loadRaw, buildCleanData, buildSiteData } from '../tools/clean-data.mjs';
 
 const data = buildCleanData(loadRaw());
 
@@ -52,7 +52,7 @@ test('網站讀的 assets/data.js 就是最新的整理結果（改了資料要�
   const text = await readFile(new URL('../assets/data.js', import.meta.url), 'utf8');
   const sandbox = {};
   new Function('window', text)(sandbox);
-  assert.deepEqual(sandbox.LIBRARY_DATA, data);
+  assert.deepEqual(sandbox.LIBRARY_DATA, buildSiteData());
 });
 
 test('每一年都有紙本借閱人次和服務人口，而且人次少於冊數', () => {

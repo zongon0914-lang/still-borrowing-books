@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>我們這一代借什麼？｜我們這一代，還借書嗎？</title>
+  <meta name="description" content="台北市各年齡層借閱類別比較：18–24 歲的年輕世代還借書嗎？">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&family=Noto+Serif+TC:wght@400;700&display=swap">
@@ -32,8 +33,114 @@
   <main>
     <p class="chapter-label">第三章</p>
     <h1>我們這一代借什麼？</h1>
-    <!-- 暫時頁面：之後的任務會換成正式內容 -->
-    <p class="placeholder">各年齡層借閱類別比較和年齡工具，製作中。</p>
+
+    <p class="note data-scope">
+      <strong>先說清楚：</strong>這一章的年齡資料只有<strong>台北市</strong>，
+      來自臺北市立圖書館 <span data-stat="ageRocYear">113</span> 年度（<span data-stat="ageYear">2024</span> 年）年刊。
+      前兩章的全國和縣市資料到 2025 年，這一章是 2024 年。
+    </p>
+
+    <p class="lead drop-cap">
+      <span data-stat="ageYear">2024</span> 年，北市圖借出的紙本書裡，
+      18 到 24 歲、也就是大學生年紀的我們，一共借了
+      <strong><span data-stat="youngLoans">31.8 萬</span>冊</strong>，
+      只占全部的 <span data-stat="youngShare">2.5%</span>：每 <span data-stat="youngPerBook">40</span> 本書裡，還不到 1 本是我們借的。
+    </p>
+
+    <div class="stat-row">
+      <p class="stat">
+        <span class="stat__value"><span data-stat="youngLoans">31.8 萬</span>冊</span>
+        <span class="stat__label">18–24 歲一年借的書</span>
+      </p>
+      <p class="stat">
+        <span class="stat__value"><span data-stat="youngShare">2.5%</span></span>
+        <span class="stat__label">占全部借閱</span>
+      </p>
+      <p class="stat">
+        <span class="stat__value">1／<span data-stat="youngVsPeak">10</span></span>
+        <span class="stat__label">只有 <span data-stat="peakLabel">35–44 歲</span>的十分之一</span>
+      </p>
+    </div>
+
+    <h2>各年齡層一年借幾冊？</h2>
+
+    <figure class="chart-card">
+      <figcaption>台北市各年齡層讀者借閱冊數（<span data-stat="ageYear">2024</span> 年，紙本，男女合計）</figcaption>
+      <ol class="rank-bars age-bars" id="age-bars">
+        <li class="placeholder">圖表載入中…</li>
+      </ol>
+      <p class="chart-source">點年齡可以看那個年齡層最常借什麼。資料來源：臺北市立圖書館《113年度臺北市立圖書館年刊》各年齡層讀者借閱類別統計</p>
+    </figure>
+
+    <p>
+      借最多的是 <span data-stat="peakLabel">35–44 歲</span>（<span data-stat="peakLoans">327.0 萬</span>冊），
+      接著是 45–54 歲。
+      國小學童（6–11 歲）也借了很多。
+      可是一上國中，借閱量就掉了一半以上（12–17 歲只有 <span data-stat="teensLoans">63.0 萬</span>冊），
+      到了 18–24 歲又再少一半，掉到 6 歲以上最低的位置。
+    </p>
+
+    <h2>我們借的書，跟大家有什麼不一樣？</h2>
+
+    <figure class="chart-card">
+      <figcaption>18–24 歲和所有讀者：借的書各類別占多少（<span data-stat="ageYear">2024</span> 年，台北市）</figcaption>
+      <ul class="pair-legend" aria-label="圖例">
+        <li><span class="swatch is-young"></span>18–24 歲</li>
+        <li><span class="swatch is-overall"></span>所有讀者</li>
+      </ul>
+      <ol class="pair-bars" id="compare-bars">
+        <li class="placeholder">圖表載入中…</li>
+      </ol>
+      <p class="chart-source">類別照北市圖年刊的分法。點類別名稱可以看那一類的熱門書單。</p>
+    </figure>
+
+    <p>
+      跟所有讀者一樣，我們最常借的還是語言文學（小說、散文都在這一類）。
+      不同的是，跟所有讀者的平均比起來，我們更常借<strong><span data-stat="standoutNames">哲學和社會科學</span></strong>：
+      <span data-stat="standoutDetail">哲學占 7.4%（所有讀者是 5.1%）；社會科學占 12.3%（所有讀者是 9.9%）</span>。
+      在圖書分類裡，心理學也歸在哲學類。
+    </p>
+
+    <h2>每個年齡層最常借的前三類</h2>
+    <ol class="age-tops" id="age-tops">
+      <li class="placeholder">載入中…</li>
+    </ol>
+
+    <section class="conclusion" aria-labelledby="conclusion-title">
+      <h2 id="conclusion-title">所以，我們這一代，還借書嗎？</h2>
+      <p class="conclusion__answer">還借，但在台北的公共圖書館，我們是 6 歲以上借得最少的一群。</p>
+      <p>
+        <span data-stat="ageYear">2024</span> 年 18–24 歲借了 <span data-stat="youngLoans">31.8 萬</span>冊，
+        只占 <span data-stat="youngShare">2.5%</span>，大約是 <span data-stat="peakLabel">35–44 歲</span>的十分之一。
+        而我們真的拿起書時，比所有讀者的平均更常往哲學（含心理學）和社會科學的書架走。
+      </p>
+      <p class="note">
+        要公平地看這個數字：這裡算的是「借了幾冊」，不是「每人借幾本」，各年齡層的人數本來就不一樣；
+        而且大學生還能用學校的圖書館，那些借閱不在北市圖的統計裡。
+      </p>
+    </section>
+
+    <section class="tool-entry" aria-labelledby="tool-entry-title">
+      <h2 id="tool-entry-title">跟你同年齡的人都借什麼？</h2>
+      <p>選你的年齡（也可以分男女），看台北同齡人最常借的類別和熱門書單。</p>
+      <a class="button" href="age.html">打開年齡工具 →</a>
+    </section>
+
+    <section class="category-index" aria-labelledby="category-index-title">
+      <h2 id="category-index-title">各類別的熱門書</h2>
+      <ul>
+        <li><a href="category.html?category=語言文學">語言文學</a></li>
+        <li><a href="category.html?category=應用科學">應用科學</a></li>
+        <li><a href="category.html?category=社會科學">社會科學</a></li>
+        <li><a href="category.html?category=藝術">藝術</a></li>
+        <li><a href="category.html?category=自然科學">自然科學</a></li>
+        <li><a href="category.html?category=史地">史地</a></li>
+        <li><a href="category.html?category=哲學">哲學</a></li>
+        <li><a href="category.html?category=學齡前">學齡前</a></li>
+        <li><a href="category.html?category=總類">總類</a></li>
+        <li><a href="category.html?category=宗教">宗教</a></li>
+      </ul>
+    </section>
 
     <nav class="chapter-nav" aria-label="章節導覽">
       <a href="chapter2.html">← 上一章：哪裡的人最愛借書？</a>
@@ -45,5 +152,9 @@
     <p>115 學年世新大學資訊傳播創意大賞・資訊設計類參賽作品</p>
     <p>數據來自政府公開資料｜<a href="sources.html">資料來源與 AI 使用說明</a></p>
   </footer>
+
+  <script src="assets/data.js"></script>
+  <script src="assets/site.js"></script>
+  <script src="assets/chapter3.js"></script>
 </body>
 </html>

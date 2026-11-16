@@ -40,3 +40,12 @@ test('章節二連得到 22 個縣市的細節頁，而且細節頁存在', () =
   assert.equal(counties.size, 22, `只找到：${[...counties].join('、')}`);
   assert.ok(site.pages.has('county.html'), '點不到 county.html');
 });
+
+test('章節三連得到年齡工具和 10 個類別頁，而且這些頁面存在', () => {
+  const html = site.html.get('chapter3.html');
+  assert.ok(html, '首頁點不到 chapter3.html');
+  const categories = new Set([...html.matchAll(/href="category\.html\?category=([^"&#]+)"/g)].map((m) => m[1]));
+  assert.equal(categories.size, 10, `只找到：${[...categories].join('、')}`);
+  assert.ok(site.pages.has('age.html'), '點不到 age.html（年齡工具）');
+  assert.ok(site.pages.has('category.html'), '點不到 category.html（類別頁）');
+});

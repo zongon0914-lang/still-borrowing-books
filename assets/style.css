@@ -333,3 +333,103 @@ h2 {
   border-radius: 4px;
   font-family: var(--sans);
 }
+
+/* ---------- 章節三：年齡層 ---------- */
+.note.data-scope { border-left-color: var(--accent); color: var(--ink); background: #fffdf8; padding: 0.5rem 0.75rem; }
+
+/* 各年齡層借閱冊數：沿用排行長條，18–24 歲用強調色 */
+.age-bars li { grid-template-columns: 5rem minmax(0, 1fr) 3.75rem; }
+.age-bars .rank-bars__track::after { content: none; }
+.age-bars .rank-bars__bar { background: var(--chart-print); opacity: 0.55; }
+.age-bars li.is-young { background: var(--paper-deep); }
+.age-bars li.is-young .rank-bars__bar { background: var(--accent); opacity: 1; }
+.age-bars li.is-young .rank-bars__name,
+.age-bars li.is-young .rank-bars__value { color: var(--accent); font-weight: 700; }
+.age-bars li.placeholder, .pair-bars li.placeholder, .age-tops li.placeholder { display: block; }
+
+/* 18–24 歲 vs 所有讀者：每個類別兩條長條 */
+.swatch.is-young, .pair-bars__bar.is-young { background: var(--accent); }
+.swatch.is-overall, .pair-bars__bar.is-overall { background: var(--chart-print); opacity: 0.55; }
+.pair-legend { list-style: none; margin: 0 0 0.75rem; padding: 0; display: flex; gap: 1rem; font-family: var(--sans); font-size: 0.8125rem; }
+.pair-legend li { display: flex; align-items: center; gap: 0.4rem; }
+.pair-bars { list-style: none; margin: 0; padding: 0; font-family: var(--sans); font-size: 0.8125rem; }
+.pair-bars li {
+  display: grid;
+  grid-template-columns: 4.5rem minmax(0, 1fr) 3.5rem;
+  gap: 0.5rem;
+  align-items: center;
+  padding: 0.3rem 0;
+  border-bottom: 1px solid var(--paper-deep);
+}
+.pair-bars__name { color: var(--ink); text-decoration: none; white-space: nowrap; }
+.pair-bars__name:hover { color: var(--accent); text-decoration: underline; }
+.pair-bars__tracks { display: grid; gap: 2px; }
+.pair-bars__bar { display: block; height: 0.6rem; border-radius: 0 2px 2px 0; min-width: 1px; }
+.pair-bars__value { text-align: right; font-variant-numeric: tabular-nums; line-height: 1.25; color: var(--ink-soft); font-size: 0.75rem; }
+.pair-bars__value strong { color: var(--accent); }
+
+/* 每個年齡層最常借的前三類 */
+.age-tops {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(9.5rem, 1fr));
+  gap: 0.75rem;
+  font-family: var(--sans);
+  font-size: 0.875rem;
+}
+.age-top { background: #fffdf8; border: 1px solid var(--rule); border-radius: 4px; padding: 0.75rem; }
+.age-top.is-young { border-color: var(--accent); box-shadow: inset 0 3px 0 var(--accent); }
+.age-top__label { display: block; font-weight: 700; color: var(--ink); text-decoration: none; margin-bottom: 0.25rem; }
+.age-top__label:hover { color: var(--accent); }
+.age-top__label small { margin-left: 0.4rem; font-weight: 400; color: var(--accent); font-size: 0.75rem; }
+.age-top ol { margin: 0; padding-left: 1.25rem; line-height: 1.8; }
+.age-top ol a { color: var(--ink); }
+.age-top ol span { color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+
+/* 結論 */
+.conclusion {
+  margin: 3rem 0 2rem;
+  padding: 1.5rem 1.25rem;
+  background: #fffdf8;
+  border: 1px solid var(--rule);
+  border-top: 4px solid var(--accent);
+  border-radius: 4px;
+}
+.conclusion h2 { margin-top: 0; padding-top: 0; border-top: none; }
+.conclusion__answer { font-size: 1.375rem; font-weight: 700; line-height: 1.6; color: var(--accent); margin: 0.5rem 0 1rem; }
+
+/* 年齡工具入口、類別列表 */
+.tool-entry { text-align: center; margin: 2.5rem 0; }
+.button {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  background: var(--accent);
+  color: #fffdf8;
+  border-radius: 4px;
+  font-family: var(--sans);
+  font-weight: 700;
+  text-decoration: none;
+}
+.button:hover { background: var(--ink); }
+.category-index ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  font-family: var(--sans);
+  font-size: 0.9375rem;
+}
+.category-index a {
+  display: inline-block;
+  padding: 0.3rem 0.8rem;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  background: #fffdf8;
+  color: var(--ink);
+  text-decoration: none;
+}
+.category-index a:hover { border-color: var(--accent); color: var(--accent); }
