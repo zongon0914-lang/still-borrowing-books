@@ -7,84 +7,96 @@ window.LIBRARY_DATA = {
       "printLoans": 64865830,
       "printVisits": 17933061,
       "ebookLoans": 797040,
-      "population": 23433753
+      "population": 23433753,
+      "printPerCapita": 2.7680512805609925
     },
     {
       "year": 2015,
       "printLoans": 69322388,
       "printVisits": 20380969,
       "ebookLoans": 1470965,
-      "population": 23492074
+      "population": 23492074,
+      "printPerCapita": 2.950884115212646
     },
     {
       "year": 2016,
       "printLoans": 73445361,
       "printVisits": 20449979,
       "ebookLoans": 1924834,
-      "population": 23539816
+      "population": 23539816,
+      "printPerCapita": 3.120048219578267
     },
     {
       "year": 2017,
       "printLoans": 76529276,
       "printVisits": 21759700,
       "ebookLoans": 2851630,
-      "population": 23571227
+      "population": 23571227,
+      "printPerCapita": 3.24672432198799
     },
     {
       "year": 2018,
       "printLoans": 80072982,
       "printVisits": 22396221,
       "ebookLoans": 2874140,
-      "population": 23588932
+      "population": 23588932,
+      "printPerCapita": 3.3945149360725613
     },
     {
       "year": 2019,
       "printLoans": 82283149,
       "printVisits": 23724348,
       "ebookLoans": 3081776,
-      "population": 23572437
+      "population": 23572437,
+      "printPerCapita": 3.490650924212885
     },
     {
       "year": 2020,
       "printLoans": 81925622,
       "printVisits": 22925570,
       "ebookLoans": 4072465,
-      "population": 23507843
+      "population": 23507843,
+      "printPerCapita": 3.4850335694346777
     },
     {
       "year": 2021,
       "printLoans": 71252495,
       "printVisits": 19849496,
       "ebookLoans": 8188266,
-      "population": 23375315
+      "population": 23375315,
+      "printPerCapita": 3.048194002947126
     },
     {
       "year": 2022,
       "printLoans": 94173830,
       "printVisits": 25439105,
       "ebookLoans": 9330977,
-      "population": 23264640
+      "population": 23264640,
+      "printPerCapita": 4.047938416412204
     },
     {
       "year": 2023,
       "printLoans": 118090430,
       "printVisits": 29639219,
       "ebookLoans": 11324351,
-      "population": 23420442
+      "population": 23420442,
+      "printPerCapita": 5.042194763019417
     },
     {
       "year": 2024,
       "printLoans": 128108040,
       "printVisits": 41566768,
       "ebookLoans": 19801799,
-      "population": 23400220
+      "population": 23400220,
+      "printPerCapita": 5.474651093023912
     },
     {
       "year": 2025,
       "printLoans": 135251757,
       "printVisits": 45165867,
       "ebookLoans": 19106198,
-      "population": 23299132
+      "population": 23299132,
+      "printPerCapita": 5.8050126931767245
     }
   ]
 };

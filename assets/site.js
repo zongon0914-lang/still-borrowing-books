@@ -1,4 +1,5 @@
 // 每一頁共用的小工具：數字格式化，以及把 data-stat 欄位填上真實數據。
+// 只放每一頁都可能用到的數字；章節專用的數字放在各章節自己的 js。
 (function () {
   const data = window.LIBRARY_DATA;
 
@@ -13,31 +14,27 @@
     return data.national.find((r) => r.year === year);
   }
 
+  /**
+   * 頁面上寫 <span data-stat="名稱">備用文字</span>，這裡依 stats 的同名函式填數字。
+   * 填不到時保留 HTML 原本的文字，確保 JS 失敗時頁面也看得懂。
+   */
+  function fillStats(stats) {
+    document.querySelectorAll('[data-stat]').forEach((el) => {
+      const fn = stats[el.dataset.stat];
+      if (fn) el.textContent = fn();
+    });
+  }
+
   const latest = data.national[data.national.length - 1];
   const first = data.national[0];
-  const pct = (a, b) => Math.round((a / b - 1) * 100);
 
-  // 頁面上寫 <span data-stat="名稱"></span>，這裡負責填數字。
-  // 填不到數字時保留 HTML 裡原本寫的文字，確保 JS 失敗時頁面也看得懂。
-  const stats = {
+  window.Site = { data, formatBig, byYear, fillStats, latest, first };
+
+  fillStats({
     latestYear: () => latest.year,
     firstYear: () => first.year,
     latestPrint: () => formatBig(latest.printLoans),
-    latestPerCapita: () => (latest.printLoans / latest.population).toFixed(1),
-    firstPerCapita: () => (first.printLoans / first.population).toFixed(1),
-    printGrowthTimes: () => (latest.printLoans / first.printLoans).toFixed(1),
-    covidDropPct: () => Math.abs(pct(byYear(2021).printLoans, byYear(2020).printLoans)),
-    covidPrint: () => formatBig(byYear(2021).printLoans),
-    ebook2024: () => formatBig(byYear(2024).ebookLoans),
-    ebookLatest: () => formatBig(latest.ebookLoans),
-    ebookGrowthTimes: () => Math.round(byYear(2024).ebookLoans / first.ebookLoans),
-    ebookLatestDropPct: () => Math.abs((latest.ebookLoans / byYear(2024).ebookLoans - 1) * 100).toFixed(1),
-  };
-
-  window.Site = { data, formatBig, byYear };
-
-  document.querySelectorAll('[data-stat]').forEach((el) => {
-    const fn = stats[el.dataset.stat];
-    if (fn) el.textContent = fn();
+    latestPerCapita: () => latest.printPerCapita.toFixed(1),
+    firstPerCapita: () => first.printPerCapita.toFixed(1),
   });
 })();

@@ -41,12 +41,15 @@ export function buildCleanData(rawByYear) {
     .sort((a, b) => a - b)
     .map((year) => {
       const row = pickRow(rawByYear[year], '全國', year);
+      const printLoans = toNumber(row['全年圖書資訊借閱冊數']);
+      const population = toNumber(row['服務轄區人口數']);
       return {
         year,
-        printLoans: toNumber(row['全年圖書資訊借閱冊數']),
+        printLoans,
         printVisits: toNumber(row['全年圖書資訊借閱人次']),
         ebookLoans: toNumber(row['年度電子書刊借閱冊數']),
-        population: toNumber(row['服務轄區人口數']),
+        population,
+        printPerCapita: printLoans / population, // 人均借閱 = 紙本借閱冊數 ÷ 服務轄區人口
       };
     });
 

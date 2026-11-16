@@ -43,6 +43,10 @@ test('電子書借閱 2025 年比 2024 年少', () => {
   assert.ok(byYear(2025).ebookLoans < byYear(2024).ebookLoans);
 });
 
+test('2025 年全國紙本人均借閱約 5.8 本（135,251,757 冊 ÷ 23,299,132 人）', () => {
+  assert.equal(byYear(2025).printPerCapita.toFixed(1), '5.8');
+});
+
 test('網站讀的 assets/data.js 就是最新的整理結果（改了資料要記得跑 npm.cmd run build-data）', async () => {
   const { readFile } = await import('node:fs/promises');
   const text = await readFile(new URL('../assets/data.js', import.meta.url), 'utf8');

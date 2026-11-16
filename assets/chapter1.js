@@ -1,6 +1,24 @@
 // 章節一：全國紙本借閱趨勢圖、電子書借閱圖
 (function () {
-  const { data, formatBig } = window.Site;
+  const { data, formatBig, byYear, fillStats, latest, first } = window.Site;
+
+  // 故事裡提到的關鍵年份
+  const COVID_YEAR = 2021;
+  const EBOOK_PEAK_YEAR = 2024;
+
+  const changePct = (now, before) => (now / before - 1) * 100;
+
+  fillStats({
+    printGrowthTimes: () => (latest.printLoans / first.printLoans).toFixed(1),
+    covidPrint: () => formatBig(byYear(COVID_YEAR).printLoans),
+    covidDropPct: () =>
+      Math.abs(changePct(byYear(COVID_YEAR).printLoans, byYear(COVID_YEAR - 1).printLoans)).toFixed(0),
+    ebook2024: () => formatBig(byYear(EBOOK_PEAK_YEAR).ebookLoans),
+    ebookLatest: () => formatBig(latest.ebookLoans),
+    ebookGrowthTimes: () => Math.round(byYear(EBOOK_PEAK_YEAR).ebookLoans / first.ebookLoans),
+    ebookLatestDropPct: () =>
+      Math.abs(changePct(latest.ebookLoans, byYear(EBOOK_PEAK_YEAR).ebookLoans)).toFixed(1),
+  });
   const css = getComputedStyle(document.documentElement);
   const color = (name) => css.getPropertyValue(name).trim();
   const years = data.national.map((r) => String(r.year));
@@ -96,8 +114,8 @@
     color('--chart-print'),
     '紙本借閱冊數',
     [
-      { year: 2021, text: '2021 疫情谷底', below: true },
-      { year: 2025, text: '2025 新高' },
+      { year: COVID_YEAR, text: `${COVID_YEAR} 疫情谷底`, below: true },
+      { year: latest.year, text: `${latest.year} 新高` },
     ],
   );
 
@@ -107,7 +125,7 @@
     color('--chart-ebook'),
     '電子書借閱冊數',
     [
-      { year: 2024, text: '2024 高峰' },
+      { year: EBOOK_PEAK_YEAR, text: `${EBOOK_PEAK_YEAR} 高峰` },
     ],
   );
 })();
