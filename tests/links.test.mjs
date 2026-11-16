@@ -49,3 +49,10 @@ test('章節三連得到年齡工具和 10 個類別頁，而且這些頁面存�
   assert.ok(site.pages.has('age.html'), '點不到 age.html（年齡工具）');
   assert.ok(site.pages.has('category.html'), '點不到 category.html（類別頁）');
 });
+
+test('章節三連得到 9 個年齡層的結果頁', () => {
+  const html = site.html.get('chapter3.html');
+  assert.ok(html, '首頁點不到 chapter3.html');
+  const ages = new Set([...html.matchAll(/href="age\.html\?age=([^"&#]+)"/g)].map((m) => decodeURIComponent(m[1])));
+  assert.deepEqual([...ages].sort(), ['0-5', '12-17', '18-24', '25-34', '35-44', '45-54', '55-64', '6-11', '65+']);
+});

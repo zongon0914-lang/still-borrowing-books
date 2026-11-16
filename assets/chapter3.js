@@ -60,6 +60,7 @@
   window.Chapter3Page = { view, categoryUrl, ageUrl, ageLabel };
 
   if (typeof document === 'undefined' || !window.Site) return; // Node 測試，或數據檔沒載入：保留 HTML 的備用文字
+  if (!document.getElementById('age-bars')) return; // 年齡工具頁只借用上面的小工具，不畫章節三的圖
 
   const v = view(window.Site.data);
   const pct = (n) => (n * 100).toFixed(1) + '%';

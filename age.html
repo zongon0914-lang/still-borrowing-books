@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>年齡工具｜我們這一代，還借書嗎？</title>
+  <meta name="description" content="選你的年齡（也可以分男女），看台北同齡人最常借的類別和熱門書單。">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&family=Noto+Serif+TC:wght@400;700&display=swap">
@@ -26,15 +27,76 @@
     <ol>
       <li><a href="index.html">首頁</a></li>
       <li><a href="chapter3.html">我們這一代借什麼？</a></li>
-      <li aria-current="page">年齡工具</li>
+      <li aria-current="page" id="crumb-age">年齡工具</li>
     </ol>
   </nav>
 
   <main>
     <p class="chapter-label">年齡工具</p>
-    <h1>年齡工具</h1>
-    <!-- 暫時頁面：之後的任務會換成正式內容 -->
-    <p class="placeholder">選年齡、看台北同齡人借什麼，製作中。</p>
+    <h1 id="age-title">跟你同年齡的人都借什麼？</h1>
+
+    <p class="note data-scope">
+      <strong>先說清楚：</strong>年齡資料只有<strong>台北市</strong>，
+      來自臺北市立圖書館 113 年度（2024 年）年刊，算的是紙本書的借閱冊數。
+    </p>
+
+    <!-- 沒有 JS 也能用：一般的表單，送出後網址變成 age.html?age=…&sex=… -->
+    <form class="age-picker" id="age-picker" action="age.html" method="get">
+      <fieldset>
+        <legend>你的年齡</legend>
+        <div class="chip-group">
+          <label class="chip"><input type="radio" name="age" value="0-5"><span>0–5 歲</span></label>
+          <label class="chip"><input type="radio" name="age" value="6-11"><span>6–11 歲</span></label>
+          <label class="chip"><input type="radio" name="age" value="12-17"><span>12–17 歲</span></label>
+          <label class="chip"><input type="radio" name="age" value="18-24"><span>18–24 歲</span></label>
+          <label class="chip"><input type="radio" name="age" value="25-34"><span>25–34 歲</span></label>
+          <label class="chip"><input type="radio" name="age" value="35-44"><span>35–44 歲</span></label>
+          <label class="chip"><input type="radio" name="age" value="45-54"><span>45–54 歲</span></label>
+          <label class="chip"><input type="radio" name="age" value="55-64"><span>55–64 歲</span></label>
+          <label class="chip"><input type="radio" name="age" value="65+"><span>65 歲以上</span></label>
+        </div>
+      </fieldset>
+      <fieldset>
+        <legend>性別（可不選）</legend>
+        <div class="chip-group">
+          <label class="chip"><input type="radio" name="sex" value="all" checked><span>不分性別</span></label>
+          <label class="chip"><input type="radio" name="sex" value="female"><span>女</span></label>
+          <label class="chip"><input type="radio" name="sex" value="male"><span>男</span></label>
+        </div>
+      </fieldset>
+      <button class="button" type="submit" id="age-submit">看結果 →</button>
+    </form>
+
+    <noscript><p class="note">結果需要開啟瀏覽器的 JavaScript 才看得到。</p></noscript>
+
+    <div class="county-missing" id="age-missing" hidden>
+      <p id="age-message">找不到這個年齡層。</p>
+    </div>
+
+    <section class="age-result" id="age-result" hidden aria-live="polite">
+      <p class="lead" id="age-lead"></p>
+
+      <figure class="chart-card">
+        <figcaption id="age-ranking-caption">借的書各類別占多少</figcaption>
+        <ul class="pair-legend" aria-label="圖例">
+          <li><span class="swatch is-young"></span><span id="legend-self">這個年齡層</span></li>
+          <li><span class="swatch is-overall"></span><span id="legend-compare">台北所有讀者</span></li>
+        </ul>
+        <ol class="pair-bars" id="age-ranking"></ol>
+        <p class="chart-source">點類別名稱可以看那一類的熱門書單。資料來源：臺北市立圖書館《113年度臺北市立圖書館年刊》各年齡層讀者借閱類別統計（2024 年，只有台北市）</p>
+      </figure>
+
+      <div class="age-standout" id="age-standout"></div>
+
+      <h2 id="age-books-title">最常借的類別：熱門書</h2>
+      <ol class="book-list" id="age-books"></ol>
+      <p class="chart-source" id="age-books-source"></p>
+
+      <p class="age-share">
+        想分享這個結果？直接複製這一頁的網址就可以。
+        <a href="#age-picker">換一個年齡再看 ↑</a>
+      </p>
+    </section>
 
     <nav class="chapter-nav" aria-label="章節導覽">
       <a href="chapter3.html">← 回到：我們這一代借什麼？</a>
@@ -46,5 +108,10 @@
     <p>115 學年世新大學資訊傳播創意大賞・資訊設計類參賽作品</p>
     <p>數據來自政府公開資料｜<a href="sources.html">資料來源與 AI 使用說明</a></p>
   </footer>
+
+  <script src="assets/data.js"></script>
+  <script src="assets/site.js"></script>
+  <script src="assets/chapter3.js"></script>
+  <script src="assets/age.js"></script>
 </body>
 </html>
