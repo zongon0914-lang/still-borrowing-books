@@ -61,3 +61,53 @@ test('每一年都有紙本借閱人次和服務人口，而且人次少於冊�
     assert.ok(r.printVisits > 0 && r.printVisits < r.printLoans, `${r.year} 人次 ${r.printVisits}`);
   }
 });
+
+// ---------- 章節二：22 縣市 ----------
+const COUNTY_NAMES = [
+  '基隆市', '臺北市', '新北市', '桃園市', '新竹縣', '新竹市', '苗栗縣', '臺中市',
+  '彰化縣', '南投縣', '雲林縣', '嘉義縣', '嘉義市', '臺南市', '高雄市', '屏東縣',
+  '宜蘭縣', '花蓮縣', '臺東縣', '澎湖縣', '金門縣', '連江縣',
+];
+
+test('22 個縣市都在，一個不少，也沒有重複', () => {
+  const names = data.counties.map((c) => c.name);
+  assert.equal(names.length, 22);
+  assert.deepEqual([...names].sort(), [...COUNTY_NAMES].sort());
+});
+
+const county = (name) => data.counties.find((c) => c.name === name);
+const perCapita2025 = (name) => county(name).years.find((y) => y.year === 2025).perCapita;
+
+test('每個縣市都有 2014–2025 每一年的人均借閱', () => {
+  for (const c of data.counties) {
+    assert.deepEqual(c.years.map((y) => y.year), data.national.map((r) => r.year), c.name);
+    for (const y of c.years) assert.ok(y.perCapita > 0 && y.perCapita < 30, `${c.name} ${y.year}：${y.perCapita}`);
+  }
+});
+
+test('2025 年人均借閱：新北第一（約 8.7）、高雄第二（約 7.2）、台北約 5.5', () => {
+  const ranked = [...data.counties].sort((a, b) => perCapita2025(b.name) - perCapita2025(a.name));
+  assert.deepEqual(ranked.slice(0, 2).map((c) => c.name), ['新北市', '高雄市']);
+  assert.equal(perCapita2025('新北市').toFixed(1), '8.7');
+  assert.equal(perCapita2025('高雄市').toFixed(1), '7.2');
+  assert.equal(perCapita2025('臺北市').toFixed(1), '5.5');
+});
+
+test('新北、台中、南投標明用的是「不含國立館」的數字，其他縣市沒有', () => {
+  const marked = data.counties.filter((c) => c.excludesNationalLibrary).map((c) => c.name);
+  assert.deepEqual(marked.sort(), ['南投縣', '新北市', '臺中市'].sort());
+  // 期望值是人工對照 2025 年原始資料「不含國立館」那一列算出來的（冊數 ÷ 服務轄區人口）；
+  // 如果誤用含國立館那一列，會變成 新北 8.9、台中 7.0、南投 2.6
+  assert.equal(perCapita2025('臺中市').toFixed(1), '6.2');
+  assert.equal(perCapita2025('南投縣').toFixed(1), '2.1');
+});
+
+test('地圖上的 22 塊縣市形狀，和數據的 22 個縣市一一對得上', async () => {
+  const { readFile } = await import('node:fs/promises');
+  const text = await readFile(new URL('../assets/taiwan-map.js', import.meta.url), 'utf8');
+  const sandbox = {};
+  new Function('window', text)(sandbox);
+  const shapes = sandbox.TAIWAN_MAP.counties;
+  assert.deepEqual(shapes.map((s) => s.name).sort(), [...COUNTY_NAMES].sort());
+  for (const s of shapes) assert.match(s.d, /^M[\d.,LMZ-]+$/, `${s.name} 的形狀是空的或格式不對`);
+});

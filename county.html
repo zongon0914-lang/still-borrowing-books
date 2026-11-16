@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>縣市細節｜我們這一代，還借書嗎？</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&family=Noto+Serif+TC:wght@400;700&display=swap">
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a class="site-title" href="index.html">我們這一代，還借書嗎？</a>
+      <nav class="site-nav" aria-label="主要導覽">
+        <a href="chapter1.html">一年借幾本</a>
+        <a href="chapter2.html">哪裡最愛借</a>
+        <a href="chapter3.html">我們借什麼</a>
+        <a href="sources.html">資料來源與 AI 使用說明</a>
+      </nav>
+    </div>
+  </header>
+
+  <nav class="breadcrumb" aria-label="你在這裡">
+    <ol>
+      <li><a href="index.html">首頁</a></li>
+      <li><a href="chapter2.html">哪裡的人最愛借書？</a></li>
+      <li aria-current="page" id="crumb-county">縣市細節</li>
+    </ol>
+  </nav>
+
+  <main>
+    <p class="chapter-label">縣市細節</p>
+    <h1 id="county-title">縣市細節</h1>
+    <!-- 暫時頁面：任務 04 會換成正式內容 -->
+    <p class="placeholder">這個縣市 2014–2025 年的人均借閱變化，製作中。</p>
+
+    <nav class="chapter-nav" aria-label="章節導覽">
+      <a href="chapter2.html">← 回到：哪裡的人最愛借書？</a>
+      <a href="index.html">回首頁</a>
+    </nav>
+  </main>
+
+  <footer class="site-footer">
+    <p>115 學年世新大學資訊傳播創意大賞・資訊設計類參賽作品</p>
+    <p>數據來自政府公開資料｜<a href="sources.html">資料來源與 AI 使用說明</a></p>
+  </footer>
+
+  <script>
+    // 暫時：只把網址裡的縣市名稱顯示出來
+    (function () {
+      var name = new URLSearchParams(location.search).get('county');
+      if (!name) return;
+      document.getElementById('county-title').textContent = name;
+      document.getElementById('crumb-county').textContent = name;
+      document.title = name + '｜我們這一代，還借書嗎？';
+    })();
+  </script>
+</body>
+</html>

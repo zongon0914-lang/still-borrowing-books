@@ -7,6 +7,7 @@
   "scripts": {
     "fetch-raw": "node tools/fetch-raw.mjs",
     "build-data": "node tools/build-data.mjs",
+    "build-map": "node tools/build-map.mjs",
     "test": "node --test \"tests/*.test.mjs\"",
     "check-online": "node tools/check-online.mjs"
   }

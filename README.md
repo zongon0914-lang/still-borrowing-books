@@ -19,6 +19,8 @@
 | `assets/` | 樣式、程式，以及自動產生的 `data.js` |
 | `tools/raw/` | 「公共圖書館統計」開放資料原始檔（2014–2025） |
 | `tools/clean-data.mjs` | 資料整理模組：原始資料 → 網站用的乾淨數據 |
+| `tools/geo/` | 台灣 22 縣市界線（taiwan-atlas，MIT 授權；原始資料為內政部國土測繪中心） |
+| `tools/build-map.mjs` | 把縣市界線轉成地圖用的 SVG 路徑，寫進 `assets/taiwan-map.js` |
 | `tests/` | 檢查點一（數據對不對）、檢查點二（網站點得通） |
 
 ## 常用指令（PowerShell）
@@ -27,5 +29,6 @@
 npm.cmd test              # 跑兩個檢查點
 npm.cmd run check-online  # 線上版檢查點二：上線的網站每一頁都點得通
 npm.cmd run build-data    # 原始資料有改時，重新產生 assets/data.js
+npm.cmd run build-map     # 縣市界線有改時，重新產生 assets/taiwan-map.js
 npm.cmd run fetch-raw     # 重新從政府 API 下載原始資料（平常不用）
 ```

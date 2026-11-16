@@ -32,3 +32,11 @@ test('每一頁都有標題和麵包屑', () => {
     if (page !== 'index.html') assert.match(html, /class="breadcrumb"/, `${page} 沒有麵包屑`);
   }
 });
+
+test('章節二連得到 22 個縣市的細節頁，而且細節頁存在', () => {
+  const html = site.html.get('chapter2.html');
+  assert.ok(html, '首頁點不到 chapter2.html');
+  const counties = new Set([...html.matchAll(/href="county\.html\?county=([^"&#]+)"/g)].map((m) => m[1]));
+  assert.equal(counties.size, 22, `只找到：${[...counties].join('、')}`);
+  assert.ok(site.pages.has('county.html'), '點不到 county.html');
+});

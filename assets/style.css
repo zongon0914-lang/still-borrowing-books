@@ -9,6 +9,12 @@
   --accent-soft: #e8c9bd;
   --chart-print: #3e5a6e;  /* 紙本：藍墨 */
   --chart-ebook: #7a8f5b;  /* 電子書：橄欖綠 */
+  /* 人均借閱分級（淺 → 深），地圖和排行共用 */
+  --bin-0: #e2d7bf;
+  --bin-1: #c3cdd0;
+  --bin-2: #8ea6b3;
+  --bin-3: #5a7d91;
+  --bin-4: #2c4a5e;
   --serif: "Noto Serif TC", "Songti TC", "PMingLiU", serif;
   --sans: "Noto Sans TC", "Microsoft JhengHei", system-ui, sans-serif;
   --measure: 40rem;
@@ -177,6 +183,80 @@ h2 {
 .data-table th, .data-table td { padding: 0.25rem 0.5rem; border-bottom: 1px solid var(--rule); text-align: right; }
 .data-table th:first-child, .data-table td:first-child { text-align: left; }
 .table-scroll { overflow-x: auto; }
+
+/* ---------- 章節二：地圖與排行 ---------- */
+.bin-0 { fill: var(--bin-0); background: var(--bin-0); }
+.bin-1 { fill: var(--bin-1); background: var(--bin-1); }
+.bin-2 { fill: var(--bin-2); background: var(--bin-2); }
+.bin-3 { fill: var(--bin-3); background: var(--bin-3); }
+.bin-4 { fill: var(--bin-4); background: var(--bin-4); }
+
+.map-layout { display: grid; gap: 1rem; }
+@media (min-width: 36rem) {
+  .map-layout { grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); align-items: end; }
+}
+.map-box { max-width: 26rem; margin: 0 auto; width: 100%; }
+.county-map { display: block; width: 100%; height: auto; }
+.county-map__county path {
+  stroke: #fffdf8;
+  stroke-width: 0.6;
+  stroke-linejoin: round;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+.county-map__county.is-island path { stroke: var(--ink-soft); stroke-width: 0.5; }
+.county-map__county:hover path,
+.county-map__county:focus path,
+.county-map__county.is-active path { stroke: var(--accent); stroke-width: 1.6; }
+.county-map__county:focus { outline: none; }
+.county-map__county.is-active { /* 讓外框畫在鄰居上面 */ paint-order: stroke; }
+.county-map__inset { fill: none; stroke: var(--rule); stroke-dasharray: 3 2; }
+.county-map__inset-label { font-family: var(--sans); font-size: 9px; fill: var(--ink-soft); }
+
+.map-legend { list-style: none; margin: 0 0 1rem; padding: 0; font-family: var(--sans); font-size: 0.8125rem; }
+.map-legend li { display: flex; align-items: center; gap: 0.5rem; line-height: 1.9; }
+.swatch { display: inline-block; width: 1.25rem; height: 0.75rem; border-radius: 2px; }
+.map-readout {
+  font-family: var(--sans);
+  font-size: 0.875rem;
+  color: var(--ink-soft);
+  min-height: 5.5em;
+  margin: 0;
+}
+.map-readout strong { color: var(--ink); }
+
+.rank-bars { list-style: none; margin: 0; padding: 0; font-family: var(--sans); font-size: 0.8125rem; counter-reset: rank; }
+.rank-bars li {
+  display: grid;
+  grid-template-columns: 4.5rem minmax(0, 1fr) 3.25rem;
+  gap: 0.5rem;
+  align-items: center;
+  padding: 0.15rem 0.25rem;
+  border-radius: 3px;
+}
+.rank-bars li.is-active { background: var(--paper-deep); }
+.rank-bars__name { color: var(--ink); text-decoration: none; white-space: nowrap; }
+.rank-bars__name:hover { color: var(--accent); text-decoration: underline; }
+.rank-bars__track { position: relative; height: 0.875rem; }
+.rank-bars__track::after { /* 全國平均線 */
+  content: "";
+  position: absolute;
+  top: -0.2rem;
+  bottom: -0.2rem;
+  left: var(--avg, 0);
+  border-left: 1px dashed var(--accent);
+}
+.rank-bars__bar { display: block; height: 100%; border-radius: 0 2px 2px 0; }
+.rank-bars__value { text-align: right; font-variant-numeric: tabular-nums; line-height: 1.2; }
+.rank-bars__note { display: block; font-size: 0.625rem; color: var(--ink-soft); white-space: nowrap; }
+
+.county-index__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(7rem, 1fr));
+  gap: 0.5rem 1rem;
+}
+.county-index h3 { font-size: 0.9375rem; margin: 0.5rem 0 0.25rem; color: var(--ink-soft); }
+.county-index ul { list-style: none; margin: 0; padding: 0; font-family: var(--sans); font-size: 0.9375rem; line-height: 2; }
 
 /* ---------- 首頁 ---------- */
 .cover {

@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>哪裡的人最愛借書？｜我們這一代，還借書嗎？</title>
+  <meta name="description" content="台灣 22 縣市公共圖書館人均借閱地圖與排行。">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&family=Noto+Serif+TC:wght@400;700&display=swap">
@@ -32,8 +33,122 @@
   <main>
     <p class="chapter-label">第二章</p>
     <h1>哪裡的人最愛借書？</h1>
-    <!-- 暫時頁面：之後的任務會換成正式內容 -->
-    <p class="placeholder">22 縣市人均借閱地圖和排行，製作中。</p>
+
+    <p class="lead drop-cap">
+      把每個縣市的紙本借閱冊數，除以圖書館服務的人口，就是「人均借閱」：平均每人一年借幾本。
+      <span data-stat="year">2025</span> 年借最多的不是首都台北，而是
+      <strong>新北市，每人 <span data-stat="topValue">8.7</span> 本</strong>。
+    </p>
+
+    <div class="stat-row">
+      <p class="stat">
+        <span class="stat__value"><span data-stat="topValue">8.7</span> 本</span>
+        <span class="stat__label">第一名・<span data-stat="topName">新北市</span></span>
+      </p>
+      <p class="stat">
+        <span class="stat__value"><span data-stat="secondValue">7.2</span> 本</span>
+        <span class="stat__label">第二名・<span data-stat="secondName">高雄市</span></span>
+      </p>
+      <p class="stat">
+        <span class="stat__value"><span data-stat="taipeiValue">5.5</span> 本</span>
+        <span class="stat__label">臺北市・第 <span data-stat="taipeiRank">5</span> 名</span>
+      </p>
+    </div>
+
+    <h2>一張地圖看全台：顏色越深，借得越多</h2>
+
+    <figure class="chart-card map-card">
+      <figcaption><span data-stat="year">2025</span> 年各縣市人均借閱（紙本，本／人）</figcaption>
+      <div class="map-layout">
+        <div class="map-box" id="county-map">
+          <p class="placeholder">地圖載入中…（若一直沒出現，可以用下方的縣市列表）</p>
+        </div>
+        <div class="map-side">
+          <ul class="map-legend" id="map-legend" aria-label="圖例"></ul>
+          <p class="map-readout" id="map-readout" aria-live="polite">滑過縣市看它的數字，點一下進入縣市細節頁。（手機上：先點一下看數字，再點一次進入。）</p>
+        </div>
+      </div>
+      <p class="chart-source">金門、連江離本島較遠，放在左上角的小框裡。資料來源：公共圖書館統計（國立公共資訊圖書館）；縣市界線：內政部國土測繪中心</p>
+    </figure>
+
+    <h2>22 縣市排行</h2>
+
+    <figure class="chart-card">
+      <figcaption><span data-stat="year">2025</span> 年人均借閱排行（紙本，本／人）</figcaption>
+      <ol class="rank-bars" id="rank-bars"></ol>
+      <p class="chart-source">點縣市名稱可以看它十年來的變化。虛線是全國平均（<span data-stat="nationalValue">5.8</span> 本）。</p>
+    </figure>
+
+    <p>
+      新北、高雄、臺南、臺中這幾個直轄市排在前面，人均借閱都超過 6 本；
+      而臺北市人均只有 <span data-stat="taipeiValue">5.5</span> 本，
+      比全國平均還低。
+      另一端，宜蘭、嘉義縣、花蓮、連江每人一年借不到 2 本，跟新北差了大約五倍。
+    </p>
+    <p>
+      新北的數字特別突出：<span data-stat="firstYear">2014</span> 年每人只借
+      <span data-stat="ntpcFirst">2.2</span> 本，到了 <span data-stat="year">2025</span> 年變成將近 4 倍。
+      成長幅度明顯，原因可能包含政策推動與評比制度，本作品未深入查證，留給讀者自己判斷。
+    </p>
+
+    <p class="note">
+      為什麼新北、臺中、南投要「不含國立館」？這三個縣市境內有國立的公共圖書館，
+      原始資料另外提供「含國立館」和「不含國立館」兩種數字。國立館服務的是全國讀者，不只是當地人，
+      所以本作品計算這三個縣市的人均借閱時，一律用扣除國立館之後的數字。
+    </p>
+
+    <section class="county-index" aria-labelledby="county-index-title">
+      <h2 id="county-index-title">找你的縣市</h2>
+      <div class="county-index__grid">
+        <div class="county-index__group">
+          <h3>北部</h3>
+          <ul>
+            <li><a href="county.html?county=基隆市">基隆市</a></li>
+            <li><a href="county.html?county=臺北市">臺北市</a></li>
+            <li><a href="county.html?county=新北市">新北市</a></li>
+            <li><a href="county.html?county=桃園市">桃園市</a></li>
+            <li><a href="county.html?county=新竹市">新竹市</a></li>
+            <li><a href="county.html?county=新竹縣">新竹縣</a></li>
+          </ul>
+        </div>
+        <div class="county-index__group">
+          <h3>中部</h3>
+          <ul>
+            <li><a href="county.html?county=苗栗縣">苗栗縣</a></li>
+            <li><a href="county.html?county=臺中市">臺中市</a></li>
+            <li><a href="county.html?county=彰化縣">彰化縣</a></li>
+            <li><a href="county.html?county=南投縣">南投縣</a></li>
+            <li><a href="county.html?county=雲林縣">雲林縣</a></li>
+          </ul>
+        </div>
+        <div class="county-index__group">
+          <h3>南部</h3>
+          <ul>
+            <li><a href="county.html?county=嘉義市">嘉義市</a></li>
+            <li><a href="county.html?county=嘉義縣">嘉義縣</a></li>
+            <li><a href="county.html?county=臺南市">臺南市</a></li>
+            <li><a href="county.html?county=高雄市">高雄市</a></li>
+            <li><a href="county.html?county=屏東縣">屏東縣</a></li>
+          </ul>
+        </div>
+        <div class="county-index__group">
+          <h3>東部</h3>
+          <ul>
+            <li><a href="county.html?county=宜蘭縣">宜蘭縣</a></li>
+            <li><a href="county.html?county=花蓮縣">花蓮縣</a></li>
+            <li><a href="county.html?county=臺東縣">臺東縣</a></li>
+          </ul>
+        </div>
+        <div class="county-index__group">
+          <h3>離島</h3>
+          <ul>
+            <li><a href="county.html?county=澎湖縣">澎湖縣</a></li>
+            <li><a href="county.html?county=金門縣">金門縣</a></li>
+            <li><a href="county.html?county=連江縣">連江縣</a></li>
+          </ul>
+        </div>
+      </div>
+    </section>
 
     <nav class="chapter-nav" aria-label="章節導覽">
       <a href="chapter1.html">← 上一章：台灣人一年借幾本書？</a>
@@ -45,5 +160,10 @@
     <p>115 學年世新大學資訊傳播創意大賞・資訊設計類參賽作品</p>
     <p>數據來自政府公開資料｜<a href="sources.html">資料來源與 AI 使用說明</a></p>
   </footer>
+
+  <script src="assets/data.js"></script>
+  <script src="assets/taiwan-map.js"></script>
+  <script src="assets/site.js"></script>
+  <script src="assets/chapter2.js"></script>
 </body>
 </html>
