@@ -2,6 +2,10 @@
 
 115 學年世新大學資訊傳播創意大賞・資訊設計類參賽作品。規格見 [docs/spec.md](docs/spec.md)，用詞見 [GLOSSARY.md](GLOSSARY.md)。
 
+## 作品連結
+
+<https://zongon0914-lang.github.io/still-borrowing-books/>（上線與更新步驟見 [docs/deploy.md](docs/deploy.md)）
+
 ## 預覽
 
 直接雙擊 `index.html` 就能在瀏覽器打開，不用安裝任何東西。
@@ -21,6 +25,7 @@
 
 ```powershell
 npm.cmd test              # 跑兩個檢查點
+npm.cmd run check-online  # 線上版檢查點二：上線的網站每一頁都點得通
 npm.cmd run build-data    # 原始資料有改時，重新產生 assets/data.js
 npm.cmd run fetch-raw     # 重新從政府 API 下載原始資料（平常不用）
 ```

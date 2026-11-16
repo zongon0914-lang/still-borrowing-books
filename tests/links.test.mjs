@@ -1,10 +1,12 @@
 // 檢查點二・網站點得通
 // 從首頁出發，跟著每一個站內連結走，確認每一頁都到得了，而且每一頁都有共用的導覽連結。
+// 平常檢查本機檔案；有設定 SITE_URL 時改檢查上線的網站（見 tools/check-online.mjs）。
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { crawlSite } from './crawl.mjs';
+import { crawlSite, localSite, onlineSite } from './crawl.mjs';
 
-const site = crawlSite('index.html');
+const SITE_URL = process.env.SITE_URL;
+const site = await crawlSite('index.html', SITE_URL ? onlineSite(SITE_URL) : localSite());
 
 test('從首頁出發，沒有壞掉的連結（含圖片、樣式、程式檔）', () => {
   assert.deepEqual(site.broken, []);
