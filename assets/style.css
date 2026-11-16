@@ -1,0 +1,246 @@
+/* 書頁質感：米白紙張、書本內文字型、章節像書的章節 */
+:root {
+  --paper: #f6f1e6;
+  --paper-deep: #ece4d2;
+  --ink: #2b2620;
+  --ink-soft: #5e554a;
+  --rule: #d6cbb5;
+  --accent: #a2452f;       /* 朱紅：強調色，少量使用 */
+  --accent-soft: #e8c9bd;
+  --chart-print: #3e5a6e;  /* 紙本：藍墨 */
+  --chart-ebook: #7a8f5b;  /* 電子書：橄欖綠 */
+  --serif: "Noto Serif TC", "Songti TC", "PMingLiU", serif;
+  --sans: "Noto Sans TC", "Microsoft JhengHei", system-ui, sans-serif;
+  --measure: 40rem;
+}
+
+* { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: 1.0625rem;
+  line-height: 1.85;
+  overflow-wrap: anywhere;
+}
+
+a { color: var(--accent); text-underline-offset: 0.2em; }
+a:hover { text-decoration-thickness: 2px; }
+
+img, svg, canvas { max-width: 100%; }
+
+/* ---------- 頁首 ---------- */
+.site-header {
+  border-bottom: 1px solid var(--rule);
+  padding: 0.75rem 1rem;
+}
+.site-header__inner {
+  max-width: 60rem;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1.25rem;
+  align-items: baseline;
+  justify-content: space-between;
+}
+.site-title {
+  font-weight: 700;
+  color: var(--ink);
+  text-decoration: none;
+  letter-spacing: 0.05em;
+}
+.site-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1rem;
+  font-family: var(--sans);
+  font-size: 0.875rem;
+}
+.site-nav a { color: var(--ink-soft); text-decoration: none; }
+.site-nav a:hover, .site-nav a[aria-current="page"] { color: var(--accent); }
+
+/* ---------- 麵包屑 ---------- */
+.breadcrumb {
+  max-width: var(--measure);
+  margin: 1.25rem auto 0;
+  padding: 0 1rem;
+  font-family: var(--sans);
+  font-size: 0.8125rem;
+  color: var(--ink-soft);
+}
+.breadcrumb ol { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; }
+.breadcrumb li + li::before { content: "›"; margin: 0 0.5em; color: var(--rule); }
+.breadcrumb a { color: var(--ink-soft); }
+
+/* ---------- 內文 ---------- */
+main {
+  max-width: var(--measure);
+  margin: 0 auto;
+  padding: 1.5rem 1rem 3rem;
+}
+
+.chapter-label {
+  font-family: var(--sans);
+  font-size: 0.8125rem;
+  letter-spacing: 0.3em;
+  color: var(--accent);
+  margin: 0;
+}
+
+h1, h2, h3 { line-height: 1.4; font-weight: 700; }
+h1 { font-size: clamp(1.75rem, 6vw, 2.5rem); margin: 0.25rem 0 1rem; }
+h2 {
+  font-size: 1.375rem;
+  margin: 3rem 0 0.75rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--rule);
+}
+.lead { font-size: 1.125rem; color: var(--ink-soft); }
+
+/* 首字放大，像書的章節開頭 */
+.drop-cap::first-letter {
+  float: left;
+  font-size: 3.2em;
+  line-height: 1;
+  padding: 0.05em 0.12em 0 0;
+  color: var(--accent);
+}
+
+.note {
+  font-family: var(--sans);
+  font-size: 0.875rem;
+  color: var(--ink-soft);
+  border-left: 3px solid var(--rule);
+  padding: 0.25rem 0 0.25rem 0.75rem;
+  margin: 1rem 0;
+}
+
+/* ---------- 大數字 ---------- */
+.big-number {
+  margin: 2rem 0;
+  text-align: center;
+}
+.big-number__value {
+  display: block;
+  font-size: clamp(2.5rem, 12vw, 4rem);
+  font-weight: 700;
+  color: var(--accent);
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+.big-number__unit { font-size: 0.45em; margin-left: 0.15em; }
+.big-number__caption { display: block; color: var(--ink-soft); font-size: 0.9375rem; margin-top: 0.5rem; }
+
+.stat-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+.stat {
+  background: var(--paper-deep);
+  border-radius: 4px;
+  padding: 1rem;
+}
+.stat__value { display: block; font-size: 1.75rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+.stat__label { display: block; font-family: var(--sans); font-size: 0.8125rem; color: var(--ink-soft); }
+
+/* ---------- 圖表 ---------- */
+.chart-card {
+  margin: 1.5rem 0;
+  padding: 1rem;
+  background: #fffdf8;
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+}
+.chart-card figcaption {
+  font-family: var(--sans);
+  font-size: 0.875rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+.chart-box { position: relative; height: 18rem; }
+.chart-card .chart-source {
+  font-family: var(--sans);
+  font-size: 0.75rem;
+  color: var(--ink-soft);
+  margin: 0.5rem 0 0;
+}
+.chart-card details { font-family: var(--sans); font-size: 0.8125rem; margin-top: 0.5rem; }
+.chart-card summary { cursor: pointer; color: var(--ink-soft); }
+
+.data-table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+.data-table th, .data-table td { padding: 0.25rem 0.5rem; border-bottom: 1px solid var(--rule); text-align: right; }
+.data-table th:first-child, .data-table td:first-child { text-align: left; }
+.table-scroll { overflow-x: auto; }
+
+/* ---------- 首頁 ---------- */
+.cover {
+  min-height: 70vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+}
+.cover h1 { font-size: clamp(2rem, 9vw, 3.5rem); letter-spacing: 0.05em; }
+.cover .lead { margin-top: 0; }
+
+.question-list { list-style: none; padding: 0; margin: 2rem 0; display: grid; gap: 1rem; }
+.question-card {
+  display: block;
+  padding: 1.25rem 1.25rem 1.25rem 4rem;
+  position: relative;
+  background: #fffdf8;
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  color: var(--ink);
+  text-decoration: none;
+  transition: border-color 0.15s, transform 0.15s;
+}
+.question-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+.question-card__no {
+  position: absolute;
+  left: 1.25rem;
+  top: 1.1rem;
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--accent);
+}
+.question-card__title { display: block; font-size: 1.25rem; font-weight: 700; }
+.question-card__hint { display: block; font-family: var(--sans); font-size: 0.875rem; color: var(--ink-soft); }
+
+/* ---------- 章節底部導覽 ---------- */
+.chapter-nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--rule);
+  font-family: var(--sans);
+  font-size: 0.9375rem;
+}
+
+.placeholder {
+  text-align: center;
+  padding: 3rem 1rem;
+  border: 1px dashed var(--rule);
+  border-radius: 4px;
+  color: var(--ink-soft);
+}
+
+/* ---------- 頁尾 ---------- */
+.site-footer {
+  border-top: 1px solid var(--rule);
+  padding: 1.5rem 1rem 2.5rem;
+  font-family: var(--sans);
+  font-size: 0.8125rem;
+  color: var(--ink-soft);
+  text-align: center;
+}
+.site-footer p { margin: 0.25rem 0; }

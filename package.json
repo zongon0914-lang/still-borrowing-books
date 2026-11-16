@@ -1,0 +1,11 @@
+{
+  "name": "still-borrowing-books",
+  "private": true,
+  "type": "module",
+  "description": "《我們這一代，還借書嗎？》資訊設計類參賽作品",
+  "scripts": {
+    "fetch-raw": "node tools/fetch-raw.mjs",
+    "build-data": "node tools/build-data.mjs",
+    "test": "node --test \"tests/*.test.mjs\""
+  }
+}
