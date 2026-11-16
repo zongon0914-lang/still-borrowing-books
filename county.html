@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>縣市細節｜我們這一代，還借書嗎？</title>
+  <meta name="description" content="單一縣市 2014–2025 年公共圖書館人均借閱變化，以及跟全國平均的比較。">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&family=Noto+Serif+TC:wght@400;700&display=swap">
@@ -33,8 +34,34 @@
   <main>
     <p class="chapter-label">縣市細節</p>
     <h1 id="county-title">縣市細節</h1>
-    <!-- 暫時頁面：任務 04 會換成正式內容 -->
-    <p class="placeholder">這個縣市 2014–2025 年的人均借閱變化，製作中。</p>
+
+    <div id="county-content">
+      <p class="lead" id="county-lead">這個縣市 2014–2025 年的人均借閱變化，以及跟全國平均的比較。</p>
+
+      <div class="stat-row" id="county-stats"></div>
+
+      <figure class="chart-card">
+        <figcaption><span data-county-name>這個縣市</span>和全國平均：每人一年借幾本（紙本，2014–2025）</figcaption>
+        <div class="chart-box"><canvas id="county-chart" role="img" aria-label="人均借閱折線圖，實線是這個縣市，虛線是全國平均"></canvas></div>
+        <p class="chart-source">人均借閱＝紙本借閱冊數 ÷ 服務轄區人口。資料來源：公共圖書館統計（國立公共資訊圖書館）</p>
+        <details>
+          <summary>看數字</summary>
+          <div class="table-scroll">
+            <table class="data-table" id="county-table">
+              <thead><tr><th>年份</th><th><span data-county-name>這個縣市</span>（本／人）</th><th>全國平均（本／人）</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </details>
+      </figure>
+
+      <div id="county-notes"></div>
+    </div>
+
+    <div class="county-missing" id="county-missing" hidden>
+      <p id="county-message">找不到這個縣市。</p>
+      <p><a href="chapter2.html">回到「哪裡的人最愛借書？」選一個縣市 →</a></p>
+    </div>
 
     <nav class="chapter-nav" aria-label="章節導覽">
       <a href="chapter2.html">← 回到：哪裡的人最愛借書？</a>
@@ -47,15 +74,9 @@
     <p>數據來自政府公開資料｜<a href="sources.html">資料來源與 AI 使用說明</a></p>
   </footer>
 
-  <script>
-    // 暫時：只把網址裡的縣市名稱顯示出來
-    (function () {
-      var name = new URLSearchParams(location.search).get('county');
-      if (!name) return;
-      document.getElementById('county-title').textContent = name;
-      document.getElementById('crumb-county').textContent = name;
-      document.title = name + '｜我們這一代，還借書嗎？';
-    })();
-  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  <script src="assets/data.js"></script>
+  <script src="assets/site.js"></script>
+  <script src="assets/county.js"></script>
 </body>
 </html>

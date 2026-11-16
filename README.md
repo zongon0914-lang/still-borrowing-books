@@ -16,6 +16,7 @@
 | 位置 | 內容 |
 |---|---|
 | `index.html`、`chapter*.html`、`sources.html` | 網站頁面 |
+| `county.html` | 縣市細節頁範本，網址寫 `county.html?county=新北市` 決定顯示哪個縣市 |
 | `assets/` | 樣式、程式，以及自動產生的 `data.js` |
 | `tools/raw/` | 「公共圖書館統計」開放資料原始檔（2014–2025） |
 | `tools/clean-data.mjs` | 資料整理模組：原始資料 → 網站用的乾淨數據 |
