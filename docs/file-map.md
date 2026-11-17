@@ -66,7 +66,9 @@ tools/geo/counties-10t.json ──tools/build-map.mjs──> assets/taiwan-map.j
 
 ## 容易踩到的地方
 
-- **本機預覽要用網址開。** `.claude/launch.json` 的 `site` 用 `python -m http.server 8123`。`tools/check-*.html` 雙擊打開會讀不到其他頁面。port 寫死在參數裡，8123 被別的預覽（例如另一個 worktree）佔住時，伺服器會起不來。
-- **瀏覽器會快取 `assets/*.js`。** 改完程式在預覽裡看起來沒變，先強制重新整理（`Ctrl + F5`）。
+- **本機預覽要用網址開。** 伺服器是 `tools/serve.mjs`（`npm.cmd run serve`），每個回應都叫瀏覽器不要快取，改完重新整理就是新版。`tools/check-*.html` 雙擊打開會讀不到其他頁面。
+- **8123 被佔住時換 port。** `.claude/launch.json` 的 `site` 固定用 8123（預覽分頁要對得上），被別的預覽（例如另一個 worktree）佔住就起不來。小幫手或第二個預覽用 `npm.cmd run serve -- 0`，系統會挑空的 port，網址印在第一行。
+- **瀏覽器面板藏起來時，動畫不會跑。** 面板沒顯示，頁面就不繪製：捲動動畫、「捲到才畫」的圖都不會觸發，截圖也會逾時。這種時候看到長條是空的、圖沒畫出來，先執行 `await new Promise(r => { requestAnimationFrame(() => r('有在繪製')); setTimeout(() => r('沒在繪製'), 1000); })`，是「沒在繪製」就請使用者把面板打開再檢查，不要當成網站的 bug。
+- **線上網站的 `assets/*.js` 會被快取約 10 分鐘。** GitHub Pages 的設定，剛上線看到舊版就按 `Ctrl + F5`。
 - **GitHub 分大小寫，Windows 不分。** 檔名大小寫打錯，本機正常、線上 404；`npm.cmd test` 會抓到。
 - **推 `main` 就是更新正式網站。** 推之前先問使用者。

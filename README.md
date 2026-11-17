@@ -50,4 +50,4 @@ npm.cmd run setup-hooks   # 每台電腦跑一次：之後每次 commit 前自�
 
 - 線上版：<https://zongon0914-lang.github.io/still-borrowing-books/tools/check-scorecard.html>
 - 本機版：`http://localhost:8123/tools/check-scorecard.html`
-- 剛改完程式卻好像在測舊版：瀏覽器可能還用著舊的 `scorecard.js`，按 `Ctrl + F5` 再跑一次。
+- 剛改完程式卻好像在測舊版：本機預覽（`npm.cmd run serve`）不會被快取；線上版按 `Ctrl + F5` 再跑一次。
