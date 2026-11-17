@@ -48,7 +48,7 @@ tools/geo/counties-10t.json ──tools/build-map.mjs──> assets/taiwan-map.j
 
 ## 文件
 
-- 規格：`docs/spec.md`（整個網站）、`docs/spec-scorecard.md`（借書成績單）
+- 規格：`docs/spec.md`（整個網站）、`docs/spec-scorecard.md`（借書成績單）、`docs/spec-ending.md`（結語、章節進度、分享預覽、先猜再看、捲動動畫）
 - 上線步驟和出問題時怎麼辦：`docs/deploy.md`
 - 用詞：`GLOSSARY.md`；寫程式的規則：`CODING_STANDARDS.md`
 - 任務：`.scratch/<功能>/issues/`（見 `docs/agents/issue-tracker.md`）
