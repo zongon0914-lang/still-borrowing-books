@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>換你回答：你還借書嗎？｜我們這一代，還借書嗎？</title>
+  <meta name="description" content="填你住的縣市、年齡層和去年借了幾本書，拿到你的借書成績單：跟家鄉和全國比，如果你是一個縣市可以排第幾名。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&family=Noto+Serif+TC:wght@400;700&display=swap">
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a class="site-title" href="index.html">我們這一代，還借書嗎？</a>
+      <nav class="site-nav" aria-label="主要導覽">
+        <a href="chapter1.html">一年借幾本</a>
+        <a href="chapter2.html">哪裡最愛借</a>
+        <a href="chapter3.html">我們借什麼</a>
+        <a href="sources.html">資料來源與 AI 使用說明</a>
+      </nav>
+    </div>
+  </header>
+
+  <nav class="breadcrumb" aria-label="你在這裡">
+    <ol>
+      <li><a href="index.html">首頁</a></li>
+      <li aria-current="page">換你回答</li>
+    </ol>
+  </nav>
+
+  <main>
+    <p class="chapter-label">換你回答</p>
+    <h1>你還借書嗎？</h1>
+    <p class="lead">看完三個問題，換你自己回答。填三樣東西，拿到你的借書成績單。</p>
+
+    <p class="note data-scope privacy-note">
+      <strong>放心填：</strong>計算都在你的瀏覽器裡完成，不會傳出去、也不會存下來。
+      不用填姓名，重新整理頁面就清空。
+    </p>
+
+    <noscript><p class="note">成績單需要開啟瀏覽器的 JavaScript 才能計算。</p></noscript>
+
+    <!-- 有 JS 才顯示：表單不送出到任何地方，輸入也不寫進網址 -->
+    <form class="age-picker scorecard-form" id="scorecard-form" hidden novalidate>
+      <fieldset>
+        <legend><label for="sc-county">你住哪個縣市？</label></legend>
+        <select class="scorecard-select" id="sc-county" name="county">
+          <option value="">請選縣市</option>
+        </select>
+      </fieldset>
+      <fieldset>
+        <legend>你的年齡層</legend>
+        <div class="chip-group">
+          <label class="chip"><input type="radio" name="age" value="0-5"><span>0–5 歲</span></label>
+          <label class="chip"><input type="radio" name="age" value="6-11"><span>6–11 歲</span></label>
+          <label class="chip"><input type="radio" name="age" value="12-17"><span>12–17 歲</span></label>
+          <label class="chip"><input type="radio" name="age" value="18-24"><span>18–24 歲</span></label>
+          <label class="chip"><input type="radio" name="age" value="25-34"><span>25–34 歲</span></label>
+          <label class="chip"><input type="radio" name="age" value="35-44"><span>35–44 歲</span></label>
+          <label class="chip"><input type="radio" name="age" value="45-54"><span>45–54 歲</span></label>
+          <label class="chip"><input type="radio" name="age" value="55-64"><span>55–64 歲</span></label>
+          <label class="chip"><input type="radio" name="age" value="65+"><span>65 歲以上</span></label>
+        </div>
+      </fieldset>
+      <fieldset>
+        <legend><label for="sc-books">去年借了幾本書？</label></legend>
+        <p class="scorecard-books">
+          <input class="scorecard-number" id="sc-books" name="books" type="text" inputmode="numeric" autocomplete="off" placeholder="例如 3" maxlength="4">
+          <span>本</span>
+        </p>
+        <p class="scorecard-hint">記不清楚？選一個大概的範圍：</p>
+        <div class="chip-group" id="sc-ranges">
+          <label class="chip"><input type="radio" name="range" value="0"><span>大概 0 本</span></label>
+          <label class="chip"><input type="radio" name="range" value="1-5"><span>1–5 本</span></label>
+          <label class="chip"><input type="radio" name="range" value="6-12"><span>6–12 本</span></label>
+          <label class="chip"><input type="radio" name="range" value="13+"><span>13 本以上</span></label>
+        </div>
+      </fieldset>
+      <button class="button" type="submit">看我的成績單 →</button>
+    </form>
+
+    <div class="county-missing" id="sc-error" role="alert" hidden>
+      <p id="sc-error-message"></p>
+    </div>
+
+    <section class="scorecard" id="sc-result" hidden aria-live="polite" aria-labelledby="sc-result-title">
+      <h2 id="sc-result-title">你的借書成績單</h2>
+      <p class="scorecard__books" id="sc-books-line"></p>
+
+      <div class="scorecard__title">
+        <p class="scorecard__name" id="sc-title"></p>
+        <p class="scorecard__line" id="sc-line"></p>
+      </div>
+
+      <dl class="scorecard__rows">
+        <div>
+          <dt id="sc-county-label">跟你的縣市比</dt>
+          <dd id="sc-county-compare"></dd>
+        </div>
+        <div>
+          <dt>跟全國比</dt>
+          <dd id="sc-national-compare"></dd>
+        </div>
+        <div>
+          <dt>如果你是一個縣市</dt>
+          <dd id="sc-rank"></dd>
+        </div>
+      </dl>
+
+      <p class="chart-source" id="sc-source"></p>
+      <p class="age-share"><a href="#scorecard-form">改輸入、重算一次 ↑</a></p>
+    </section>
+
+    <nav class="chapter-nav" aria-label="章節導覽">
+      <a href="chapter3.html">← 回到：我們這一代借什麼？</a>
+      <a href="index.html">回首頁</a>
+    </nav>
+  </main>
+
+  <footer class="site-footer">
+    <p>115 學年世新大學資訊傳播創意大賞・資訊設計類參賽作品</p>
+    <p>數據來自政府公開資料｜<a href="sources.html">資料來源與 AI 使用說明</a></p>
+  </footer>
+
+  <script src="assets/data.js"></script>
+  <script src="assets/site.js"></script>
+  <script src="assets/chapter3.js"></script>
+  <script src="assets/scorecard.js"></script>
+</body>
+</html>

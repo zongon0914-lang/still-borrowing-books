@@ -75,3 +75,9 @@ test('從首頁到任何第三層頁面（縣市、類別、年齡結果）不�
     assert.ok(clicks.get(page) <= 2, `${page} 要點 ${clicks.get(page)} 次才到`);
   }
 });
+
+test('首頁（第四個入口）和章節三都連得到「換你回答」成績單頁，從首頁 1 次點擊就到', () => {
+  assert.ok(site.pages.get('index.html').includes('scorecard.html'), '首頁沒有連到 scorecard.html');
+  assert.ok(site.pages.get('chapter3.html')?.includes('scorecard.html'), '章節三沒有連到 scorecard.html');
+  assert.ok(site.pages.has('scorecard.html'), '點不到 scorecard.html');
+});
