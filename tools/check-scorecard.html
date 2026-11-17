@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>成績單檢查</title>
+  <!--
+    借書成績單・自動檢查：在看不見的小視窗裡打開 scorecard.html，照讀者的操作走一遍：
+    填表 → 看成績單 → 換一本 → 確認借書連結跟著換 → 產生圖片並確認是 1080×1920。
+    跟 tools/check-mobile.html 一樣，要透過網址打開（本機預覽 http://localhost:8123/tools/check-scorecard.html，
+    或線上 作品連結/tools/check-scorecard.html），雙擊檔案打開時瀏覽器不讓它讀其他頁面。
+    結果也寫在 <body data-status>（running / pass / fail）和頁面標題，方便自動讀取。
+    「存成圖片」不按真的按鈕（會下載檔案），改呼叫按鈕背後同一個 ScorecardImage.render。
+  -->
+  <style>
+    :root { --paper: #f6f1e6; --ink: #2b2620; --soft: #5e554a; --rule: #d6cbb5; --ok: #3f6b3a; --bad: #a2452f; }
+    * { box-sizing: border-box; }
+    body { margin: 0; padding: 1.5rem 1rem 3rem; background: var(--paper); color: var(--ink);
+      font-family: "Noto Sans TC", "Microsoft JhengHei", system-ui, sans-serif; line-height: 1.7; }
+    main { max-width: 48rem; margin: 0 auto; }
+    h1 { font-size: 1.5rem; margin: 0 0 0.5rem; }
+    #summary { font-size: 1.125rem; font-weight: 700; margin: 1rem 0; }
+    [data-status="pass"] #summary { color: var(--ok); }
+    [data-status="fail"] #summary { color: var(--bad); }
+    button { font: inherit; padding: 0.4rem 1rem; border: 1px solid var(--rule); border-radius: 4px; background: #fffdf8; cursor: pointer; }
+    ul { padding-left: 1.25rem; }
+    #results li { margin-bottom: 0.5rem; }
+    #results li.bad { color: var(--bad); }
+    #results small { display: block; color: var(--soft); overflow-wrap: anywhere; }
+    #stage { position: fixed; left: -10000px; top: 0; } /* 檢查用的小視窗放在畫面外 */
+    #stage iframe { width: 375px; height: 800px; border: 0; display: block; }
+  </style>
+</head>
+<body data-status="running">
+  <main>
+    <h1>成績單檢查</h1>
+    <p>照讀者的操作把借書成績單走一遍：填表 → 看成績單 → 換一本 → 借書連結跟著換 → 產生 1080×1920 的圖片。</p>
+    <p id="summary">檢查中…</p>
+    <button id="rerun" type="button" hidden>重新檢查</button>
+    <ul id="results"></ul>
+  </main>
+  <div id="stage" aria-hidden="true"></div>
+
+  <script>
+    const SITE = new URL('../', location.href); // 網站根目錄（本機和線上都適用）
+    const $ = (id) => document.getElementById(id);
+    const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+    // 讀者會填的幾種組合：有能帶書名的縣市、只有查詢頁的新北、借 0 本、用範圍估算
+    const CASES = [
+      { name: '臺北市・18–24 歲・填 3 本', county: '臺北市', age: '18-24', books: '3' },
+      { name: '新北市・65 歲以上・選「13 本以上」', county: '新北市', age: '65+', range: '13+' },
+      { name: '連江縣・6–11 歲・填 0 本', county: '連江縣', age: '6-11', books: '0' },
+      { name: '臺南市・25–34 歲・填 120 本', county: '臺南市', age: '25-34', books: '120' },
+    ];
+
+    /** 打開一份新的成績單頁，等它的程式準備好 */
+    async function openScorecard() {
+      const frame = document.createElement('iframe');
+      $('stage').append(frame);
+      await new Promise((resolve, reject) => {
+        frame.onload = resolve;
+        frame.onerror = reject;
+        frame.src = new URL('scorecard.html', SITE).href;
+      });
+      const win = frame.contentWindow;
+      for (let i = 0; i < 50 && !(win.Scorecard && win.Scorecard.current && win.ScorecardImage && win.ScorecardImage.render); i++) await wait(100);
+      if (!win.Scorecard || !win.ScorecardImage || !win.ScorecardImage.render) throw new Error('成績單的程式沒有載入');
+      return frame;
+    }
+
+    /** 跟讀者一樣填表、按「看我的成績單」 */
+    function fill(doc, c) {
+      doc.getElementById('sc-county').value = c.county ?? '';
+      doc.querySelectorAll('input[name="age"], input[name="range"]').forEach((r) => { r.checked = false; });
+      if (c.age) doc.querySelector(`input[name="age"][value="${c.age}"]`).checked = true;
+      doc.getElementById('sc-books').value = c.books ?? '';
+      if (c.range) doc.querySelector(`input[name="range"][value="${c.range}"]`).checked = true;
+      doc.getElementById('scorecard-form').requestSubmit();
+    }
+
+    /** 畫面上的借書連結，應該是這個縣市、這本書的連結 */
+    function checkBorrow(doc, win, county, title, problems, when) {
+      const a = doc.getElementById('sc-book-borrow');
+      const lib = win.Scorecard.libraryLink(win.LIBRARY_DATA, county, title);
+      if (a.hidden) return problems.push(`${when}：沒有顯示借書連結`);
+      if (a.getAttribute('href') !== lib.url) problems.push(`${when}：借書連結不是《${title}》的（${a.getAttribute('href')}）`);
+      if (lib.withTitle && !a.href.includes(encodeURIComponent(title))) problems.push(`${when}：借書連結裡沒有書名《${title}》`);
+      if (a.textContent !== lib.label) problems.push(`${when}：連結文字是「${a.textContent}」`);
+      if (a.target !== '_blank') problems.push(`${when}：借書連結不是在新分頁打開`);
+    }
+
+    async function checkCase(c) {
+      const problems = [];
+      const frame = await openScorecard();
+      try {
+        const doc = frame.contentDocument;
+        const win = frame.contentWindow;
+        fill(doc, c);
+        await wait(50);
+
+        const result = doc.getElementById('sc-result');
+        if (result.hidden) return [`按了「看我的成績單」沒有出現成績單（錯誤訊息：${doc.getElementById('sc-error-message').textContent || '無'}）`];
+        const text = result.innerText;
+        for (const bad of ['undefined', 'NaN', 'null', 'Infinity', '[object']) {
+          if (text.includes(bad)) problems.push(`成績單上出現「${bad}」`);
+        }
+        for (const id of ['sc-title', 'sc-line', 'sc-county-compare', 'sc-national-compare', 'sc-peer-compare', 'sc-rank', 'sc-book-title']) {
+          if (!doc.getElementById(id).textContent.trim()) problems.push(`#${id} 是空的`);
+        }
+        if (!doc.getElementById('sc-county-label').textContent.includes(c.county)) problems.push(`「跟縣市比」沒寫${c.county}`);
+
+        // 推薦書和借書連結
+        const first = doc.getElementById('sc-book-title').textContent;
+        checkBorrow(doc, win, c.county, first, problems, '第一本');
+
+        // 換一本：書名換掉，借書連結跟著換
+        const next = doc.getElementById('sc-book-next');
+        if (next.hidden) problems.push('沒有「換一本」按鈕');
+        else {
+          next.click();
+          await wait(50);
+          const second = doc.getElementById('sc-book-title').textContent;
+          if (second === first) problems.push(`按了「換一本」，書還是《${first}》`);
+          checkBorrow(doc, win, c.county, second, problems, '換一本之後');
+          const current = win.Scorecard.current();
+          if (!current.book || current.book.title !== second) problems.push('存圖用的推薦書跟畫面上的不一樣');
+        }
+
+        // 存成圖片：用「存成圖片」按鈕背後的同一個函式產生圖片
+        const { card, book } = win.Scorecard.current();
+        const file = await win.ScorecardImage.render(card, book);
+        if (file.type !== 'image/png') problems.push(`圖片格式是 ${file.type}，不是 PNG`);
+        const bitmap = await createImageBitmap(file);
+        if (bitmap.width !== 1080 || bitmap.height !== 1920) problems.push(`圖片是 ${bitmap.width}×${bitmap.height}，不是 1080×1920`);
+        if (file.size < 20000) problems.push(`圖片只有 ${Math.round(file.size / 1024)} KB，可能是空白的`);
+        return problems;
+      } finally {
+        frame.remove();
+      }
+    }
+
+    /** 沒填完就按送出：要出現錯誤訊息、不出現成績單 */
+    async function checkEmpty() {
+      const frame = await openScorecard();
+      try {
+        const doc = frame.contentDocument;
+        fill(doc, { county: '臺北市', age: '18-24' }); // 沒填本數
+        await wait(50);
+        const problems = [];
+        if (!doc.getElementById('sc-result').hidden) problems.push('沒填本數也出現了成績單');
+        if (doc.getElementById('sc-error').hidden || !doc.getElementById('sc-error-message').textContent.trim()) problems.push('沒填本數卻沒有錯誤訊息');
+        if (doc.getElementById('sc-book-borrow').getAttribute('href') !== '#') problems.push('沒填完就出現了借書連結');
+        return problems;
+      } finally {
+        frame.remove();
+      }
+    }
+
+    function addResult(name, problems) {
+      const li = document.createElement('li');
+      li.textContent = `${problems.length ? '✖' : '✔'} ${name}`;
+      if (problems.length) {
+        li.className = 'bad';
+        const small = document.createElement('small');
+        small.textContent = problems.join('；');
+        li.append(small);
+      }
+      $('results').append(li);
+    }
+
+    async function run() {
+      document.body.dataset.status = 'running';
+      $('rerun').hidden = true;
+      $('results').replaceChildren();
+      const jobs = [...CASES.map((c) => ({ name: c.name, fn: () => checkCase(c) })), { name: '沒填本數就送出：顯示錯誤訊息', fn: checkEmpty }];
+      let failed = 0;
+      for (const [i, job] of jobs.entries()) {
+        $('summary').textContent = `檢查中…（${i + 1}／${jobs.length}）`;
+        let problems;
+        try {
+          problems = await job.fn();
+        } catch (err) {
+          problems = [`檢查途中出錯：${err.message}。請用網址打開這一頁（本機預覽或線上作品連結），不要直接雙擊檔案。`];
+        }
+        if (problems.length) failed++;
+        addResult(job.name, problems);
+      }
+      if (failed) finish('fail', `✖ ${jobs.length} 種操作中有 ${failed} 種有問題`);
+      else finish('pass', `✔ 全部通過：${jobs.length} 種操作都正常，圖片都是 1080×1920`);
+    }
+
+    function finish(status, message) {
+      document.body.dataset.status = status;
+      $('summary').textContent = message;
+      document.title = `${status === 'pass' ? '✔' : '✖'} 成績單檢查`;
+      $('rerun').hidden = false;
+    }
+
+    $('rerun').addEventListener('click', run);
+    run();
+  </script>
+</body>
+</html>
