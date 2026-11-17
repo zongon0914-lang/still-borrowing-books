@@ -24,7 +24,7 @@ tools/geo/counties-10t.json ──tools/build-map.mjs──> assets/taiwan-map.j
 | 頁面 | 專用程式 | 計算那一半（Node 裡可測） | 測試 |
 |---|---|---|---|
 | `index.html` | 無 | | `links.test.mjs` |
-| `chapter1.html` 一年借幾本 | `chapter1.js` | 無（只畫圖） | `data.test.mjs` |
+| `chapter1.html` 一年借幾本 | `chapter1.js` | `Chapter1Page.guess`（先猜再看的揭曉句） | `data.test.mjs`、`chapter1-guess.test.mjs` |
 | `chapter2.html` 哪裡最愛借 | `taiwan-map.js`、`chapter2.js` | 無（只畫圖） | `data.test.mjs` |
 | `county.html?county=…` | `county.js` | `CountyPage.view` | `county.test.mjs` |
 | `chapter3.html` 我們借什麼 | `chapter3.js` | `Chapter3Page.view` | `chapter3.test.mjs`、`age.test.mjs` |

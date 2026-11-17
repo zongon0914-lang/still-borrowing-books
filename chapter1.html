@@ -34,6 +34,27 @@
     <p class="chapter-label">第一章</p>
     <h1>台灣人一年借幾本書？</h1>
 
+    <!-- 先猜再看：沒有 JavaScript 時只看到題目和答案；有的話換成拉桿，按「揭曉」才看答案。猜的數字只留在這個畫面上。 -->
+    <section class="guess" aria-labelledby="guess-question">
+      <p class="guess__question" id="guess-question">
+        你猜，<span data-stat="latestYear">2025</span> 年台灣人平均一年借幾本紙本書？
+      </p>
+      <div class="guess__play" hidden>
+        <label class="guess__label" for="guess-range">我猜</label>
+        <input class="guess__range" id="guess-range" type="range" min="0" max="20" step="0.5" value="0"
+          aria-describedby="guess-question">
+        <output class="guess__value" for="guess-range" id="guess-value">0 本</output>
+        <button class="button guess__reveal" type="button" id="guess-reveal">揭曉</button>
+      </div>
+      <div class="guess__result" id="guess-result" aria-live="polite">
+        <p class="guess__answer">
+          答案是 <strong><span data-stat="latestPerCapita">5.8</span> 本</strong>。
+          <span class="guess__sentence" id="guess-sentence"></span>
+        </p>
+        <button class="button button--quiet guess__again" type="button" id="guess-again" hidden>再猜一次</button>
+      </div>
+    </section>
+
     <p class="lead drop-cap">
       全台灣的公共圖書館，在 <span data-stat="latestYear">2025</span> 年一共借出
       <strong><span data-stat="latestPrint">1.35 億</span>冊</strong>紙本書。
