@@ -70,7 +70,8 @@
     const visible = rect.top >= 0 && rect.top < window.innerHeight * 0.85;
     if (visible) return;
     const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-    el.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+    // nearest：結果比畫面小（地圖下的數字）就捲到剛好露出來，地圖還看得到；比畫面大（年齡結果）就對齊上緣
+    el.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'nearest' });
   }
 
   const latest = data.national[data.national.length - 1];

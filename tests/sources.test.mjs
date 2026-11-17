@@ -92,7 +92,7 @@ test('說明為什麼紙本和電子書分開、為什麼扣除國立館、為�
 
 test('AI 使用說明寫清楚三點分工', () => {
   assert.match(text, /生成式AI（Claude）協助撰寫/);
-  for (const part of ['借書成績單', '結語頁', '先猜再看', '捲動動畫', '分享預覽圖']) assert.ok(text.includes(part), part);
+  for (const part of ['借書成績單', '結語頁', '先猜再看', '捲動動畫', '分享預覽圖', '顏色深淺表', '長條圖', '特別愛借']) assert.ok(text.includes(part), part);
   for (const part of ['主題選擇', '故事架構', '視覺方向']) assert.ok(text.includes(part), part);
   assert.match(text, /人工核對/);
   assert.match(text, /不是AI生成的/);
