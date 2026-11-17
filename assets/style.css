@@ -616,3 +616,29 @@ h2 {
 .method-q { font-size: 1.0625rem; margin: 1.75rem 0 0.5rem; }
 .ai-split { padding-left: 1.25rem; }
 .ai-split li { margin: 0.5rem 0; }
+
+/* ---------- 結語 ---------- */
+.ending-findings { list-style: none; margin: 2rem 0; padding: 0; display: grid; gap: 1.25rem; }
+.ending-finding {
+  padding: 1.25rem;
+  background: #fffdf8;
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+}
+.ending-finding__number { margin: 0 0 0.5rem; }
+.ending-finding__value {
+  display: block;
+  font-size: clamp(2.25rem, 10vw, 3rem);
+  font-weight: 700;
+  color: var(--accent);
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+.ending-finding__unit { font-size: 0.45em; margin-left: 0.15em; }
+.ending-finding__caption { display: block; font-family: var(--sans); font-size: 0.8125rem; color: var(--ink-soft); }
+.ending-finding__title { margin: 0.5rem 0 0.25rem; padding-top: 0; border-top: none; font-size: 1.25rem; }
+.ending-finding p:not(.ending-finding__number) { margin: 0 0 0.5rem; }
+.ending-finding a { font-family: var(--sans); font-size: 0.9375rem; }
+/* 章節三結論下面連到結語的一行 */
+.ending-link { text-align: right; font-family: var(--sans); font-size: 0.9375rem; color: var(--ink-soft); }
+.button--big { font-size: 1.125rem; padding: 1rem 1.75rem; }
