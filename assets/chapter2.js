@@ -1,6 +1,6 @@
 // 章節二：22 縣市人均借閱地圖、排行長條
 (function () {
-  const { data, fillStats, latest, first } = window.Site;
+  const { data, fillStats, drawWhenSeen, latest, first } = window.Site;
   const map = window.TAIWAN_MAP;
 
   const YEAR = latest.year;
@@ -56,6 +56,16 @@
       </li>`;
     })
     .join('');
+
+  // 捲動動畫：先把長條縮到 0（is-waiting），捲到時依名次一條一條長出來（is-growing，延遲看 --i）。
+  // 減少動態效果、沒有 IntersectionObserver：馬上拿掉 is-waiting，長條直接完整（沒 JS 時本來就完整）。
+  bars.querySelectorAll('li').forEach((li, i) => li.style.setProperty('--i', i));
+  bars.classList.add('is-waiting');
+  drawWhenSeen(
+    bars,
+    () => bars.classList.replace('is-waiting', 'is-growing'),
+    () => bars.classList.remove('is-waiting'),
+  );
 
   // ---------- 地圖 ----------
   const box = document.getElementById('county-map');
