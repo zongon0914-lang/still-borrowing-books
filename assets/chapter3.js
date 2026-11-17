@@ -56,6 +56,8 @@
     const peak = adults.reduce((a, b) => (b.perCapita > a.perCapita ? b : a));
     const top = groups.reduce((a, b) => (b.perCapita > a.perCapita ? b : a));
     const vsPeak = peak.perCapita / young.perCapita;
+    const leastOfAll = groups.every((g) => g === young || g.perCapita > young.perCapita);
+    const fromBottom = groups.filter((g) => g.perCapita < young.perCapita).length + 1; // 人均由少到多排第幾
 
     const compare = age.categories
       .map((name) => {
@@ -87,9 +89,15 @@
       top,
       young: {
         ...young,
-        leastOfAll: groups.every((g) => g === young || g.perCapita > young.perCapita),
+        leastOfAll,
         vsPeak,
         vsPeakRounded: Math.round(vsPeak),
+        /** 跟成年人裡借最多那一組比的那句話：章節三和結語都照抄這一句 */
+        vsPeakLine: `大約是 ${peak.label}（${peak.perCapita.toFixed(1)} 本）的 1／${Math.round(vsPeak)}`,
+        /** 章節三數字卡：18–24 歲在所有年齡層裡排第幾（由數據決定，不寫死「最少」） */
+        position: leastOfAll
+          ? { value: '最少', label: `${groups.length} 個年齡層裡排最後` }
+          : { value: `倒數第 ${fromBottom}`, label: `${groups.length} 個年齡層裡，人均由少到多排` },
         monthsPerBook: monthsPerBook(young.perCapita),
         everyLine: `台北 ${young.label}平均大約每 ${monthsPerBook(young.perCapita)}才借 1 本`,
         female: youngGroup.female.loans,
@@ -116,6 +124,9 @@
     ageRocYear: () => v.rocYear,
     youngPerCapita: () => per(v.young.perCapita),
     youngVsPeak: () => v.young.vsPeakRounded,
+    youngVsPeakLine: () => v.young.vsPeakLine,
+    youngPositionValue: () => v.young.position.value,
+    youngPositionLabel: () => v.young.position.label,
     youngEvery: () => v.young.everyLine,
     peakLabel: () => v.peak.label,
     peakPerCapita: () => per(v.peak.perCapita),
@@ -154,11 +165,16 @@
     )
     .join('');
 
+  // 圖例照抄計算那一半的級距，跟格子的深淺用同一份
+  $('heat-legend').innerHTML = v.heat.legend
+    .map((text, level) => `<li><span class="swatch is-level-${level}"></span>${text}</li>`)
+    .join('');
+
   // 顏色深淺表是 HTML 裡寫好的表格（沒有 JavaScript 也看得到），這裡只把數字和深淺換成最新數據
   v.heat.rows.forEach((row) => {
     row.cells.forEach((cell) => {
       const td = document.querySelector(`[data-heat="${row.age}|${cell.name}"]`);
-      if (!td) return;
+      if (!td) throw new Error(`章節三的表格少了 ${row.age} ${cell.name} 這一格：數據的類別變了，要重新產生 chapter3.html 的表格`);
       td.textContent = cell.text;
       td.className = `heat-table__cell is-level-${cell.level}`;
     });

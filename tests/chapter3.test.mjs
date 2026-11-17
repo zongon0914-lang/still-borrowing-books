@@ -128,3 +128,29 @@ test('JavaScript 沒載入時，章節三的表格備用文字跟算出來的一
   }
   assert.ok(html.includes(v.young.everyLine), '生活感換算的備用文字跟數據不一樣');
 });
+
+test('「大約是 35–44 歲（8.9 本）的 1／4」只在章節三的計算產生，章節三的備用文字照抄', async () => {
+  assert.equal(v.young.vsPeakLine, '大約是 35–44 歲（8.9 本）的 1／4');
+  const html = await readFile(new URL('../chapter3.html', import.meta.url), 'utf8');
+  const copies = html.split(`data-stat="youngVsPeakLine">${v.young.vsPeakLine}<`).length - 1;
+  assert.equal(copies, 2, '數字卡和章節結論都要用同一句');
+  assert.doesNotMatch(html, /的 1／<span/, '不要在 HTML 裡自己拼「的 1／N」');
+});
+
+test('數字卡「最少」跟著數據：18–24 歲不是最少時改寫成倒數第幾', async () => {
+  assert.deepEqual(v.young.position, { value: '最少', label: '9 個年齡層裡排最後' });
+  const html = await readFile(new URL('../chapter3.html', import.meta.url), 'utf8');
+  assert.ok(html.includes(`data-stat="youngPositionValue">${v.young.position.value}<`));
+  assert.ok(html.includes(`data-stat="youngPositionLabel">${v.young.position.label}<`));
+  const data = structuredClone(window.LIBRARY_DATA);
+  data.age.groups.find((g) => g.age === '18-24').perCapita = 2.8; // 比 65 歲以上 2.77 多、比 0–5 歲 2.83 少 → 由少到多排第 2
+  assert.deepEqual(window.Chapter3Page.view(data).young.position, { value: '倒數第 2', label: '9 個年齡層裡，人均由少到多排' });
+});
+
+test('顏色深淺表的圖例：HTML 備用文字跟計算的級距一樣（3% 以下、3–6%、6–10%、10–20%、20% 以上）', async () => {
+  assert.deepEqual(v.heat.legend, ['3% 以下', '3–6%', '6–10%', '10–20%', '20% 以上']);
+  const html = await readFile(new URL('../chapter3.html', import.meta.url), 'utf8');
+  const legend = html.match(/<ul class="heat-legend"[^>]*>([\s\S]*?)<\/ul>/)[1];
+  const items = [...legend.matchAll(/<span class="swatch is-level-(\d)"><\/span>([^<]+)<\/li>/g)].map((m) => [Number(m[1]), m[2]]);
+  assert.deepEqual(items, v.heat.legend.map((text, level) => [level, text]));
+});

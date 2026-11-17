@@ -186,19 +186,24 @@ test('程式裡寫死的作品網址（SITE_URL）跟 package.json 的 homepage 
   assert.equal(`https://${window.ScorecardImage.SITE_URL}/`, pkg.homepage);
 });
 
-// 現在的內容每段都有行數上限，最緊的排法一定放得下；這裡多塞一列比較（例如以後加功能），模擬放不下的情況
-test('排版的保險：內容多到最緊的排法也放不下時，推薦書縮成一行加「…」，還是不會壓到頁尾', () => {
+// 現在的內容每段都有行數上限；這裡把每一段都撐到上限（估算、稱號說明、四列比較句都兩行，書名和作者最長），
+// 模擬最擠的情況：推薦書縮成一行加「…」，比較句和稱號說明照樣兩行、不截短（規格使用者故事 49），也不壓到頁尾
+test('排版的保險：每一段都撐到最多行時，只有推薦書縮短，比較句不截短，也不會壓到頁尾', () => {
   const c = content(card({ county: '花蓮縣', age: '65+', range: '13+' }), longest);
-  const long = '這是一段很長很長的說明文字，用來把每一列都撐滿兩行，'.repeat(4);
-  c.estimate = long;
-  c.line = long;
-  c.rows.push({ label: '多一列', text: long });
-  for (const row of c.rows) row.text = long;
+  const twoLines = '這是一段剛好排成兩行的說明文字，用來模擬比較句最長的情況，再多加幾個字讓它撐滿';
+  c.estimate = twoLines;
+  c.line = twoLines;
+  for (const row of c.rows) row.text = twoLines;
   const ops = textOps(c);
   assertInBounds(ops);
+  // 每一段字都完整畫出來（字可以縮小，但不能少字）
+  const drawnOf = (role) => ops.filter((op) => op.role === role).map((op) => op.text).join('');
+  assert.equal(drawnOf('line'), twoLines);
+  assert.equal(drawnOf('estimate'), twoLines);
+  assert.equal(drawnOf('rowText'), twoLines.repeat(c.rows.length));
+  assert.equal(ops.filter((op) => op.role === 'barValue').length, 4, '長條圖四根都要在');
   const titleOps = ops.filter((op) => op.role === 'bookTitle');
   assert.ok(titleOps.length >= 1, '書名還是要畫出來');
-  assert.ok(titleOps[titleOps.length - 1].text.endsWith('…'));
 });
 
 // ---------- 長條圖（docs/spec-polish.md 使用者故事 44–49） ----------

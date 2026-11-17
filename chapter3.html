@@ -64,12 +64,12 @@
         <span class="stat__label">18–24 歲平均每人一年借的書</span>
       </p>
       <p class="stat">
-        <span class="stat__value">最少</span>
-        <span class="stat__label">9 個年齡層裡排最後</span>
+        <span class="stat__value" data-stat="youngPositionValue">最少</span>
+        <span class="stat__label" data-stat="youngPositionLabel">9 個年齡層裡排最後</span>
       </p>
       <p class="stat">
         <span class="stat__value">1／<span data-stat="youngVsPeak">4</span></span>
-        <span class="stat__label">大約是 <span data-stat="peakLabel">35–44 歲</span>的 1／<span data-stat="youngVsPeak">4</span></span>
+        <span class="stat__label" data-stat="youngVsPeakLine">大約是 35–44 歲（8.9 本）的 1／4</span>
       </p>
     </div>
 
@@ -109,7 +109,7 @@
 
     <figure class="chart-card heat-card">
       <figcaption id="heat-caption">台北市各年齡層借的紙本書，各類別占多少（<span data-stat="ageYear">2024</span> 年）。顏色越深，代表這個年齡借這一類的比例越高</figcaption>
-      <ul class="heat-legend" aria-label="圖例">
+      <ul class="heat-legend" id="heat-legend" aria-label="圖例">
         <li><span class="swatch is-level-0"></span>3% 以下</li>
         <li><span class="swatch is-level-1"></span>3–6%</li>
         <li><span class="swatch is-level-2"></span>6–10%</li>
@@ -261,7 +261,7 @@
       <h2 id="conclusion-title">所以，我們這一代，還借書嗎？</h2>
       <p class="conclusion__answer">還借，但在台北的公共圖書館，我們是所有年齡層裡借得最少的一群。</p>
       <p>
-        <span data-stat="ageYear">2024</span> 年 18–24 歲平均每人借了 <span data-stat="youngPerCapita">2.2</span> 本紙本書，大約是 <span data-stat="peakLabel">35–44 歲</span>的 1／<span data-stat="youngVsPeak">4</span>。而我們真的拿起書時，比所有讀者的平均更常往哲學（含心理學）和社會科學的書架走。
+        <span data-stat="ageYear">2024</span> 年 18–24 歲平均每人借了 <span data-stat="youngPerCapita">2.2</span> 本紙本書，<span data-stat="youngVsPeakLine">大約是 35–44 歲（8.9 本）的 1／4</span>。而我們真的拿起書時，比所有讀者的平均更常往哲學（含心理學）和社會科學的書架走。
       </p>
       <p class="note">
         要公平地看這個數字：大學生還能用學校的圖書館，那些借閱不在北市圖的統計裡；而且北市圖的讀者不一定都住在台北，這裡是除以台北的人口來估算。

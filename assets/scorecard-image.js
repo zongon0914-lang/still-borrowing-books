@@ -135,8 +135,8 @@
     { gap: 0.75, bookTitle: [44, 40, 36], titleLines: 3, metaLines: 2 },
     { gap: 0.5, bookTitle: [38, 34, 30], titleLines: 3, metaLines: 1 },
     { gap: 0.5, bookTitle: [30], titleLines: 1, metaLines: 1 },
-    // 最後的保險：說明和比較句也各縮成一行（放不下就加「…」），長條圖排密一點
-    { gap: 0.5, bookTitle: [30], titleLines: 1, metaLines: 1, textLines: 1, barRow: 40 },
+    // 最後的保險：字再縮小一號、長條圖排密一點。稱號、比較句、長條圖、網址都不截短（規格使用者故事 49），只有推薦書會縮成一行
+    { gap: 0.5, bookTitle: [30], titleLines: 1, metaLines: 1, barRow: 38, small: true },
   ];
   // 長條圖每一列的高度、名稱和本數欄的寬度、橫條的粗細和最短長度
   const BAR_ROW = 50;
@@ -187,19 +187,20 @@
       }
     };
 
+    // 最緊的排法：每段字改用比較小的那幾個字級（先試大的，放不下再小）
+    const sizes = (normal, small) => (density.small ? small : normal);
     text('header', c.header, 30, 'sans', 400, 'inkSoft', 1.5);
     text('heading', c.heading, 48, 'serif', 700, 'ink');
     gap(40);
     text('booksLead', c.booksLead, 34, 'sans', 400, 'inkSoft', 1.3);
-    block('booksValue', c.booksValue, [150, 120, 96], 1, 'serif', 700, 'accent', 1.2);
-    block('who', c.who, [32, 28], 1, 'sans', 400, 'ink', 1.5);
-    const textLines = density.textLines || 2;
-    if (c.estimate) block('estimate', c.estimate, [30, 26], textLines, 'sans', 700, 'accent', 1.5);
+    block('booksValue', c.booksValue, sizes([150, 120, 96], [96, 80]), 1, 'serif', 700, 'accent', 1.2);
+    block('who', c.who, sizes([32, 28], [28, 24]), 1, 'sans', 400, 'ink', 1.5);
+    if (c.estimate) block('estimate', c.estimate, sizes([30, 26], [26, 22]), 2, 'sans', 700, 'accent', 1.5);
     gap(20);
     rule();
     gap(44);
-    block('title', c.title, [76, 64, 54], 1, 'serif', 700, 'accent', 1.3);
-    block('line', c.line, [40, 34], textLines, 'serif', 400, 'ink', 1.45);
+    block('title', c.title, sizes([76, 64, 54], [54, 46]), 1, 'serif', 700, 'accent', 1.3);
+    block('line', c.line, sizes([40, 34], [32, 28]), 2, 'serif', 400, 'ink', 1.45);
     gap(24);
     rule();
     gap(32);
@@ -208,8 +209,8 @@
     rule();
     gap(32);
     for (const row of c.rows) {
-      block('rowLabel', row.label, [30, 26], 1, 'sans', 700, 'ink', 1.45);
-      block('rowText', row.text, [34, 30], textLines, 'serif', 400, 'ink', 1.45);
+      block('rowLabel', row.label, sizes([30, 26], [26, 22]), 1, 'sans', 700, 'ink', 1.45);
+      block('rowText', row.text, sizes([34, 30], [28, 24]), 2, 'serif', 400, 'ink', 1.45);
       gap(22);
     }
     rule();

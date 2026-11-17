@@ -77,18 +77,31 @@
   const latest = data.national[data.national.length - 1];
   const first = data.national[0];
 
-  /** 最新一年人均借閱第一名的縣市（首頁章節二卡片的小數字） */
-  const perCapitaIn = (county, year) => county.years.find((y) => y.year === year).perCapita;
-  const topCounty = data.counties.reduce((a, b) => (perCapitaIn(b, latest.year) > perCapitaIn(a, latest.year) ? b : a));
-  /** 台北 18–24 歲的人均借閱（首頁章節三卡片的小數字） */
-  const youngGroup = data.age.groups.find((g) => g.age === data.age.youngGroup);
+  /**
+   * 首頁章節卡的小數字（計算的那一半：只吃數據，Node 裡可測，見 tests/home.test.mjs）。
+   * 章節二卡片：最新一年人均借閱第一名的縣市；章節三卡片：台北 18–24 歲的人均借閱。
+   */
+  function homeTeasers(d) {
+    const year = d.national[d.national.length - 1].year;
+    const perCapitaIn = (county) => county.years.find((y) => y.year === year).perCapita;
+    const top = d.counties.reduce((a, b) => (perCapitaIn(b) > perCapitaIn(a) ? b : a));
+    const young = d.age.groups.find((g) => g.age === d.age.youngGroup);
+    return {
+      topCountyShort: top.name.replace(/[市縣]$/, ''),
+      topCountyPerCapita: perCapitaIn(top).toFixed(1),
+      youngPerCapita: young.perCapita.toFixed(1),
+    };
+  }
 
-  window.Site = { data, formatBig, byYear, fillStats, drawWhenSeen, revealOnMobile, latest, first };
+  window.Site = { data, formatBig, byYear, fillStats, drawWhenSeen, revealOnMobile, homeTeasers, latest, first };
 
+  if (typeof document === 'undefined') return; // Node 測試：到這裡就好
+
+  const teasers = homeTeasers(data);
   fillStats({
-    topCountyShort: () => topCounty.name.replace(/[市縣]$/, ''),
-    topCountyPerCapita: () => perCapitaIn(topCounty, latest.year).toFixed(1),
-    youngPerCapita: () => youngGroup.perCapita.toFixed(1),
+    topCountyShort: () => teasers.topCountyShort,
+    topCountyPerCapita: () => teasers.topCountyPerCapita,
+    youngPerCapita: () => teasers.youngPerCapita,
     ageYear: () => data.age.year,
     latestYear: () => latest.year,
     firstYear: () => first.year,

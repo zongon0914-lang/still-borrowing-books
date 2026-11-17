@@ -9,6 +9,12 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 
 const html = await readFile(new URL('../index.html', import.meta.url), 'utf8');
+const window = {};
+for (const file of ['data.js', 'site.js']) {
+  const text = await readFile(new URL(`../assets/${file}`, import.meta.url), 'utf8');
+  new Function('window', text)(window);
+}
+const teasers = window.Site.homeTeasers(window.LIBRARY_DATA);
 const card = (href) => {
   const m = html.match(new RegExp(`<a class="question-card[^"]*" href="${href}">([\\s\\S]*?)</a>`));
   assert.ok(m, `首頁找不到 ${href} 的卡片`);
@@ -32,6 +38,18 @@ test('章節三卡片：2.2 本（台北 18–24 歲人均借閱），不用占�
   const c = card('chapter3.html');
   assert.equal(stat(c, 'youngPerCapita'), '2.2');
   assert.doesNotMatch(c, /%/);
+});
+
+test('卡片的數字由數據算出來：新北 8.7 本是第一名、台北 18–24 歲 2.2 本', () => {
+  assert.deepEqual(teasers, { topCountyShort: '新北', topCountyPerCapita: '8.7', youngPerCapita: '2.2' });
+});
+
+test('第一名換人時，章節二卡片跟著換（台東縣 2025 年改成 10 本 → 台東 10.0 本）', () => {
+  const data = structuredClone(window.LIBRARY_DATA);
+  data.counties.find((c) => c.name === '台東縣').years.find((y) => y.year === 2025).perCapita = 10;
+  const t = window.Site.homeTeasers(data);
+  assert.equal(t.topCountyShort, '台東');
+  assert.equal(t.topCountyPerCapita, '10.0');
 });
 
 test('卡片上的數字都由 site.js 填入（每個 data-stat 名稱在 site.js 都有）', async () => {

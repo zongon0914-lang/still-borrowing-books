@@ -69,3 +69,19 @@ test('指線從標籤邊上畫到縣市裡面', () => {
     assert.ok(onEdge, `${l.name} 的指線不在標籤邊上`);
   }
 });
+
+// 新北 2014 年 8,771,101 冊 ÷ 3,966,818 人 ≈ 2.211 本；2025 年 35,301,750 ÷ 4,044,831 ≈ 8.727 本；8.727 ÷ 2.211 ≈ 3.95 倍
+test('「變成幾倍」：新北 3.95 倍說「將近 4 倍」；4.3 倍不會說成「將近 4 倍」', () => {
+  const { timesText } = window.Chapter2Page;
+  const ntpc = window.LIBRARY_DATA.counties.find((c) => c.name === '新北市');
+  const at = (year) => ntpc.years.find((y) => y.year === year).perCapita;
+  assert.equal(timesText(at(2025) / at(2014)), '將近 4 倍');
+  assert.equal(timesText(4.3), '約 4.3 倍');
+  assert.equal(timesText(4.02), '約 4 倍');
+  assert.equal(timesText(3.5), '約 3.5 倍');
+});
+
+test('章節二的備用文字跟算出來的倍數一樣', async () => {
+  const html = await readFile(new URL('../chapter2.html', import.meta.url), 'utf8');
+  assert.ok(html.includes('<span data-stat="ntpcTimes">將近 4 倍</span>'));
+});

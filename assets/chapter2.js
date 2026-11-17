@@ -120,7 +120,18 @@
     return picks.map((p) => labels.find((l) => l.name === p.county.name));
   }
 
-  window.Chapter2Page = { mapLabels };
+  /**
+   * 「變成幾倍」的說法：差一點點到整數時說「將近 4 倍」，剛好是整數說「約 4 倍」，其他寫一位小數「約 4.3 倍」。
+   * 不會把 4.3 倍說成「將近 4 倍」。
+   */
+  function timesText(ratio) {
+    const n = Math.round(ratio);
+    if (n > ratio && n - ratio < 0.15) return `將近 ${n} 倍`;
+    if (Math.abs(ratio - n) < 0.05) return `約 ${n} 倍`;
+    return `約 ${ratio.toFixed(1)} 倍`;
+  }
+
+  window.Chapter2Page = { mapLabels, timesText };
 
   if (typeof document === 'undefined' || !window.Site) return; // Node 測試，或數據檔沒載入
 
@@ -148,7 +159,7 @@
     nationalValue: () => fmt(latest.printPerCapita),
     ntpcFirst: () => fmt(valueOf(byName('新北市'), first.year)),
     ntpcLatest: () => fmt(valueOf(byName('新北市'))),
-    ntpcTimes: () => Math.round(valueOf(byName('新北市')) / valueOf(byName('新北市'), first.year)),
+    ntpcTimes: () => window.Chapter2Page.timesText(valueOf(byName('新北市')) / valueOf(byName('新北市'), first.year)),
   });
 
   // ---------- 顏色分級：每 2 本一級，地圖和長條圖共用 ----------

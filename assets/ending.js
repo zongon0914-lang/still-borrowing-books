@@ -58,7 +58,7 @@
         caption: `${taipeiAges.year} 年台北 18–24 歲平均每人借的紙本書`,
         text:
           `${taipeiAges.year} 年在台北，18–24 歲平均每人一年借 ${fmt(taipeiAges.young.perCapita)} 本紙本書，是所有年齡層裡最少的，` +
-          `大約是 ${taipeiAges.peak.label}（${fmt(taipeiAges.peak.perCapita)} 本）的 1／${taipeiAges.young.vsPeakRounded}。（年齡資料只有台北市）`,
+          `${taipeiAges.young.vsPeakLine}。（年齡資料只有台北市）`,
         url: 'chapter3.html',
         linkText: '回去看章節三：我們這一代借什麼？',
         holds: taipeiAges.young.leastOfAll,
