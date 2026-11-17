@@ -6,7 +6,7 @@
 
 **Blocked by:** None (can start immediately)
 
-**Status:** 完成（2026-11-17，在 ending 分支）揭曉句由 `Chapter1Page.guess` 產生，測試在 `tests/chapter1-guess.test.mjs`；瀏覽器操作還沒確認。
+**Status:** 已上線（2026-11-17）；完成（在 ending 分支）揭曉句由 `Chapter1Page.guess` 產生，測試在 `tests/chapter1-guess.test.mjs`；瀏覽器操作還沒確認。
 
 - [x] 揭曉句有自動測試，預期值手算：猜 0 本→猜少了 5.8 本；猜 5.8、5.5 本→幾乎猜中；猜 20 本→猜多了 14.2 本；猜 5 本→猜少了 0.8 本
 - [x] 揭曉句不出現責備的字眼（比照成績單的檢查）

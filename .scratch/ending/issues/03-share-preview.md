@@ -6,7 +6,7 @@
 
 **Blocked by:** 01
 
-**Status:** 完成（2026-11-17，在 ending 分支）每頁 `<head>` 加上各自的 Open Graph／Twitter 卡片設定，全站共用 `assets/share-preview.png`（由 `tools/share-preview.html` 截圖產生），測試在 `tests/links.test.mjs`。
+**Status:** 已上線（2026-11-17）；完成（在 ending 分支）每頁 `<head>` 加上各自的 Open Graph／Twitter 卡片設定，全站共用 `assets/share-preview.png`（由 `tools/share-preview.html` 截圖產生），測試在 `tests/links.test.mjs`。
 
 - [x] 每一頁都有分享用的標題、介紹、圖片、網址設定（Open Graph 和 Twitter 卡片），標題和介紹每頁各自寫
 - [x] 預覽圖 1200×630，風格跟首頁一致；任務單上記下它是怎麼產生的，方便數據更新時重做
