@@ -143,3 +143,38 @@ test('從表單來的文字數字也接受（前後空白不影響）；年齡�
   for (const age of AGES) assert.equal(card({ county: '澎湖縣', age, books: 3 }).ok, true, age);
   assert.equal(card({ county: '新北市', age: '18-24', books: 9 }).ageLabel, '18–24 歲');
 });
+
+// 推薦書候選（規格使用者故事 24、28）：各年齡層 2024 年「不分性別」借閱冊數前三類，手查數據排出來：
+const TOP3 = {
+  '0-5': ['語言文學', '學齡前', '自然科學'],
+  '6-11': ['語言文學', '自然科學', '藝術'],
+  '12-17': ['語言文學', '藝術', '自然科學'],
+  '18-24': ['語言文學', '社會科學', '應用科學'],
+  '25-34': ['語言文學', '應用科學', '社會科學'],
+  '35-44': ['語言文學', '應用科學', '社會科學'],
+  '45-54': ['語言文學', '社會科學', '應用科學'],
+  '55-64': ['語言文學', '應用科學', '藝術'],
+  '65+': ['語言文學', '應用科學', '藝術'],
+};
+test('推薦書候選：9 個年齡層都不是空的，每本書都屬於該年齡層最常借的前三類，三類的書單都合進來', () => {
+  for (const [age, top3] of Object.entries(TOP3)) {
+    const r = card({ county: '新北市', age, books: 3 }).recommend;
+    assert.deepEqual(r.categories, top3, age);
+    assert.equal(r.books.length, 30, `${age}：三類各 10 本`);
+    for (const b of r.books) {
+      assert.ok(top3.includes(b.category), `${age}：${b.title} 屬於 ${b.category}`);
+      assert.ok(b.title && b.author, `${age}：書名和作者都要有`);
+    }
+    for (const name of top3) assert.ok(r.books.some((b) => b.category === name), `${age} 缺 ${name}`);
+  }
+  // 語言文學第一名、學齡前第一名都在 0–5 歲的候選裡（手查書單）
+  const little = card({ county: '新北市', age: '0-5', books: 0 }).recommend.books.map((b) => b.title);
+  assert.ok(little.includes('小老鼠愛數學'));
+});
+
+test('0 本也有推薦書；連到年齡工具的網址帶入讀者的年齡層', () => {
+  const zero = card({ county: '連江縣', age: '18-24', books: 0 });
+  assert.ok(zero.recommend.books.length > 0);
+  assert.equal(zero.recommend.ageUrl, 'age.html?age=18-24');
+  assert.equal(card({ county: '新北市', age: '65+', range: '0' }).recommend.ageUrl, 'age.html?age=65%2B');
+});

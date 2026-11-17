@@ -50,6 +50,17 @@
   const invalid = (message) => ({ ok: false, message });
 
   /**
+   * 推薦書候選（規格使用者故事 24、28）：這個年齡層借最多的前三類，各類熱門書單合在一起。
+   * 只給候選清單；「隨機挑一本」和「換一本」在畫面那一半，所以測試結果固定。
+   */
+  function recommendOf(data, group) {
+    const categories = [...group.all.categories].sort((a, b) => b.loans - a.loans).slice(0, 3).map((c) => c.name);
+    const books = categories.flatMap((name) =>
+      data.books.categories.find((c) => c.name === name).books.map((b) => ({ title: b.title, author: b.author, category: name })));
+    return { categories, books, ageUrl: `age.html?age=${encodeURIComponent(group.age)}` };
+  }
+
+  /**
    * @param {object} data window.LIBRARY_DATA
    * @param {{county: string, age: string, books?: number|string, range?: string}} input
    *   books 是讀者填的本數；改選範圍時給 range（'0'、'1-5'、'6-12'、'13+'），books 就不看
@@ -97,6 +108,7 @@
         beaten: others.filter((c) => c.perCapita < books).map((c) => c.name),
       },
       title: titleOf(books, national),
+      recommend: recommendOf(data, group),
     };
   }
 
@@ -127,6 +139,41 @@
       ? `你<strong>還差 ${one(cmp.short)} 本</strong>就追上`
       : `你是它的 <strong>${cmp.times.toFixed(2)} 倍</strong>`;
 
+  // ---------- 推薦書：隨機挑一本、「換一本」 ----------
+  let candidates = [];
+  let shown = -1;
+
+  /** 隨機挑一本，跟現在這本不同（候選只有一本時就是那本） */
+  function pickIndex() {
+    if (candidates.length < 2) return 0;
+    let i;
+    do i = Math.floor(Math.random() * candidates.length); while (i === shown);
+    return i;
+  }
+
+  /** 把一本推薦書畫上去。之後要加「去借這本」按鈕，就在這裡依 book 更新 #sc-book-actions 裡的連結 */
+  function showBook(book) {
+    $('sc-book-title').textContent = book.title;
+    $('sc-book-meta').textContent = `${book.author}・${book.category}類熱門書`;
+  }
+
+  function nextBook() {
+    shown = pickIndex();
+    showBook(candidates[shown]);
+  }
+
+  $('sc-book-next').addEventListener('click', nextBook);
+
+  function renderRecommend(c) {
+    candidates = c.recommend.books;
+    shown = -1;
+    $('sc-book-label').textContent = `推薦你借這本（${c.ageLabel}最常借的前三類：${c.recommend.categories.join('、')}）`;
+    $('sc-book-next').hidden = candidates.length < 2;
+    $('sc-book-age').href = c.recommend.ageUrl;
+    $('sc-book-age').textContent = `看 ${c.ageLabel}完整的類別排行和書單 →`;
+    nextBook();
+  }
+
   function render(c) {
     const booksText = `${c.books} 本`;
     $('sc-books-line').innerHTML = c.estimated
@@ -149,6 +196,8 @@
     else beatText = `贏過 ${beaten.length} 個縣市：${beaten.map(esc).join('、')}。`;
     $('sc-rank').innerHTML =
       `你可以排全台<strong>第 ${c.rank.position} 名</strong>（${all} 個縣市加上你，共 ${c.rank.of} 名）。${beatText}`;
+
+    renderRecommend(c);
 
     $('sc-source').textContent =
       `縣市和全國比較用 ${c.year} 年的數據：公共圖書館紙本書借閱冊數 ÷ 人口。資料來源見「資料來源與 AI 使用說明」。`;
