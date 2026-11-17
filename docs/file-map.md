@@ -23,17 +23,18 @@ tools/geo/counties-10t.json ──tools/build-map.mjs──> assets/taiwan-map.j
 
 | 頁面 | 專用程式 | 計算那一半（Node 裡可測） | 測試 |
 |---|---|---|---|
-| `index.html` | 無 | | `links.test.mjs` |
+| `index.html`（卡片：一、二、三、結語、換你回答） | 無 | | `links.test.mjs` |
 | `chapter1.html` 一年借幾本 | `chapter1.js` | 無（只畫圖） | `data.test.mjs` |
 | `chapter2.html` 哪裡最愛借 | `taiwan-map.js`、`chapter2.js` | 無（只畫圖） | `data.test.mjs` |
 | `county.html?county=…` | `county.js` | `CountyPage.view` | `county.test.mjs` |
 | `chapter3.html` 我們借什麼 | `chapter3.js` | `Chapter3Page.view` | `chapter3.test.mjs`、`age.test.mjs` |
+| `ending.html` 結語：所以，還借書嗎？ | `chapter3.js`、`ending.js` | `EndingPage.view` | `ending.test.mjs`、`links.test.mjs` |
 | `age.html?age=…&sex=…` | `chapter3.js`、`age.js` | `AgePage.view` | `age-tool.test.mjs` |
 | `category.html?category=…` | `category.js` | `CategoryPage.view` | `category.test.mjs`、`books.test.mjs` |
 | `scorecard.html` 借書成績單 | `chapter3.js`、`scorecard.js`、`scorecard-image.js` | `Scorecard.compute`、`Scorecard.libraryLink`、`ScorecardImage.content` / `layout` | `scorecard*.test.mjs`、`library.test.mjs` |
 | `sources.html` 資料來源與 AI 使用說明 | 無 | | `sources.test.mjs` |
 
-`chapter3.js` 也給成績單和年齡工具用（年齡層名稱、網址），所以要比它們先載入。
+`chapter3.js` 也給成績單、年齡工具和結語用（年齡層名稱、網址、「18–24 歲是不是借得最少」），所以要比它們先載入。結語的三個發現和整體答案只在 `EndingPage.view` 產生；`ending.html` 裡的備用文字要跟它一樣（`ending.test.mjs` 會比對）。
 
 ## 檢查
 
