@@ -1,0 +1,61 @@
+# 檔案地圖
+
+改東西之前先看這頁，找到要動的檔案就直接打開，不用整個資料夾掃一遍。各檔案開頭的註解寫了它做什麼；指令在 `package.json` 的 `scripts`。
+
+## 網站是純靜態的
+
+沒有後端、沒有打包工具。瀏覽器直接載入根目錄的 `.html` 和 `assets/`，GitHub Pages 從 `main` 的根目錄發布。數據在開發時就整理好，寫進 `assets/data.js`（`window.LIBRARY_DATA`），網站不即時抓 API。
+
+## 數據怎麼來
+
+```
+tools/raw/*.json ──tools/clean-data.mjs（整理、核對）──tools/build-data.mjs──> assets/data.js
+tools/geo/counties-10t.json ──tools/build-map.mjs──> assets/taiwan-map.js
+```
+
+- `assets/data.js`、`assets/taiwan-map.js` 是產生出來的：改 `tools/raw/` 或 `tools/clean-data.mjs`，再跑 `npm.cmd run build-data`（或 `build-map`）。
+- `tools/raw/` 大多是政府開放資料原檔；`county-libraries.json`（22 縣市圖書館查詢網址）是人工核對的。
+- `tools/fetch-*.mjs` 重新下載原檔，平常不用跑。
+
+## 哪一頁用哪些程式
+
+每一頁都先載入 `data.js` 和 `site.js`（共用：數字格式、把 `data-stat` 欄位填上數字）。
+
+| 頁面 | 專用程式 | 計算那一半（Node 裡可測） | 測試 |
+|---|---|---|---|
+| `index.html` | 無 | | `links.test.mjs` |
+| `chapter1.html` 一年借幾本 | `chapter1.js` | 無（只畫圖） | `data.test.mjs` |
+| `chapter2.html` 哪裡最愛借 | `taiwan-map.js`、`chapter2.js` | 無（只畫圖） | `data.test.mjs` |
+| `county.html?county=…` | `county.js` | `CountyPage.view` | `county.test.mjs` |
+| `chapter3.html` 我們借什麼 | `chapter3.js` | `Chapter3Page.view` | `chapter3.test.mjs`、`age.test.mjs` |
+| `age.html?age=…&sex=…` | `chapter3.js`、`age.js` | `AgePage.view` | `age-tool.test.mjs` |
+| `category.html?category=…` | `category.js` | `CategoryPage.view` | `category.test.mjs`、`books.test.mjs` |
+| `scorecard.html` 借書成績單 | `chapter3.js`、`scorecard.js`、`scorecard-image.js` | `Scorecard.compute`、`Scorecard.libraryLink`、`ScorecardImage.content` / `layout` | `scorecard*.test.mjs`、`library.test.mjs` |
+| `sources.html` 資料來源與 AI 使用說明 | 無 | | `sources.test.mjs` |
+
+`chapter3.js` 也給成績單和年齡工具用（年齡層名稱、網址），所以要比它們先載入。
+
+## 檢查
+
+| 檢查 | 怎麼跑 | 看什麼 |
+|---|---|---|
+| 全部自動測試 | `npm.cmd test`（commit 前和推上 GitHub 時也會自動跑） | 數據對不對、站內連結、每頁內容、成績單所有組合、用詞 |
+| 線上網站 | `npm.cmd run check-online` | 線上每頁點得通，加上 22 縣市圖書館連結（`tools/check-libraries.mjs`） |
+| 手機寬度 | 瀏覽器打開 `tools/check-mobile.html` | 每頁 320／375px 不左右捲動、不卡在「載入中」 |
+| 成績單操作 | 瀏覽器打開 `tools/check-scorecard.html` | 填表、換一本、借書連結、1080×1920 圖片 |
+
+`tests/crawl.mjs` 是 `links.test.mjs` 用的站內爬蟲；`tools/live-version.mjs` 讓 `check-online` 先等 GitHub Pages 換成新版本。
+
+## 文件
+
+- 規格：`docs/spec.md`（整個網站）、`docs/spec-scorecard.md`（借書成績單）
+- 上線步驟和出問題時怎麼辦：`docs/deploy.md`
+- 用詞：`GLOSSARY.md`；寫程式的規則：`CODING_STANDARDS.md`
+- 任務：`.scratch/<功能>/issues/`（見 `docs/agents/issue-tracker.md`）
+
+## 容易踩到的地方
+
+- **本機預覽要用網址開。** `.claude/launch.json` 的 `site` 用 `python -m http.server 8123`。`tools/check-*.html` 雙擊打開會讀不到其他頁面。port 寫死在參數裡，8123 被別的預覽（例如另一個 worktree）佔住時，伺服器會起不來。
+- **瀏覽器會快取 `assets/*.js`。** 改完程式在預覽裡看起來沒變，先強制重新整理（`Ctrl + F5`）。
+- **GitHub 分大小寫，Windows 不分。** 檔名大小寫打錯，本機正常、線上 404；`npm.cmd test` 會抓到。
+- **推 `main` 就是更新正式網站。** 推之前先問使用者。
