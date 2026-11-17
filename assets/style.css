@@ -405,7 +405,7 @@ h2 {
 .age-bars li.is-young .rank-bars__bar { background: var(--accent); opacity: 1; }
 .age-bars li.is-young .rank-bars__name,
 .age-bars li.is-young .rank-bars__value { color: var(--accent); font-weight: 700; }
-.age-bars li.placeholder, .pair-bars li.placeholder, .age-tops li.placeholder { display: block; }
+.age-bars li.placeholder, .pair-bars li.placeholder { display: block; }
 
 /* 18–24 歲 vs 所有讀者：每個類別兩條長條 */
 .swatch.is-young, .pair-bars__bar.is-young { background: var(--accent); }
@@ -428,25 +428,27 @@ h2 {
 .pair-bars__value { text-align: right; font-variant-numeric: tabular-nums; line-height: 1.25; color: var(--ink-soft); font-size: 0.75rem; }
 .pair-bars__value strong { color: var(--accent); }
 
-/* 每個年齡層最常借的前三類 */
-.age-tops {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(9.5rem, 1fr));
-  gap: 0.75rem;
-  font-family: var(--sans);
-  font-size: 0.875rem;
-}
-.age-top { background: #fffdf8; border: 1px solid var(--rule); border-radius: 4px; padding: 0.75rem; }
-.age-top.is-young { border-color: var(--accent); box-shadow: inset 0 3px 0 var(--accent); }
-.age-top__label { display: block; font-weight: 700; color: var(--ink); text-decoration: none; margin-bottom: 0.25rem; }
-.age-top__label:hover { color: var(--accent); }
-.age-top__label small { margin-left: 0.4rem; font-weight: 400; color: var(--accent); font-size: 0.75rem; }
-.age-top ol { margin: 0; padding-left: 1.25rem; line-height: 1.8; }
-.age-top ol a { color: var(--ink); }
-.age-top ol span { color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+/* 章節三：年齡 × 類別的顏色深淺表（用地圖同一組 5 階藍，不新增顏色） */
+.heat-legend { list-style: none; margin: 0 0 0.75rem; padding: 0; display: flex; flex-wrap: wrap; gap: 0.25rem 0.9rem; font-family: var(--sans); font-size: 0.75rem; color: var(--ink-soft); }
+.heat-legend li { display: flex; align-items: center; gap: 0.35rem; }
+.swatch.is-level-0, .heat-table__cell.is-level-0 { background: var(--bin-0); }
+.swatch.is-level-1, .heat-table__cell.is-level-1 { background: var(--bin-1); }
+.swatch.is-level-2, .heat-table__cell.is-level-2 { background: var(--bin-2); }
+.swatch.is-level-3, .heat-table__cell.is-level-3 { background: var(--bin-3); color: #fff; }
+.swatch.is-level-4, .heat-table__cell.is-level-4 { background: var(--bin-4); color: #fff; }
+.heat-scroll { overflow-x: auto; max-width: 100%; -webkit-overflow-scrolling: touch; }
+.heat-scroll:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.heat-table { border-collapse: separate; border-spacing: 2px; font-family: var(--sans); font-size: 0.75rem; font-variant-numeric: tabular-nums; min-width: 100%; }
+.heat-table th { font-weight: 400; color: var(--ink-soft); white-space: nowrap; }
+.heat-table thead th { padding: 0 0.15rem 0.25rem; vertical-align: bottom; writing-mode: vertical-rl; text-orientation: upright; letter-spacing: 0.05em; }
+.heat-table thead th:first-child { writing-mode: horizontal-tb; text-align: left; }
+.heat-table th a { color: var(--ink); text-decoration: none; }
+.heat-table th a:hover { color: var(--accent); text-decoration: underline; }
+.heat-table tbody th { text-align: left; padding-right: 0.4rem; position: sticky; left: 0; background: #fffdf8; }
+.heat-table tbody th small { display: block; font-size: 0.625rem; color: var(--accent); }
+.heat-table__cell { text-align: center; padding: 0.35rem 0.25rem; min-width: 2.6rem; border-radius: 2px; color: var(--ink); }
+.heat-table tr.is-young th a { color: var(--accent); font-weight: 700; }
+.heat-table tr.is-young .heat-table__cell { box-shadow: inset 0 0 0 2px var(--accent); font-weight: 700; }
 
 /* 結論 */
 .conclusion {
@@ -632,6 +634,13 @@ h2 {
 .ai-split li { margin: 0.5rem 0; }
 
 /* ---------- 結語 ---------- */
+/* 總答案放在標題正下方，手機第一個畫面就看得到 */
+.ending-answer { margin: 0.5rem 0 1.5rem; padding: 1rem 1.25rem; background: #fffdf8; border: 1px solid var(--rule); border-left: 4px solid var(--accent); border-radius: 4px; }
+.ending-answer .conclusion__answer { margin: 0 0 0.5rem; font-size: clamp(1.375rem, 6vw, 1.75rem); }
+.ending-answer__lead { margin: 0; font-family: var(--sans); font-size: 0.9375rem; color: var(--ink-soft); }
+.ending-answer + .ending-findings { margin-top: 1rem; }
+/* 首頁大數字下面的總答案 */
+.cover__answer { margin: 0 0 1rem; font-size: clamp(1.25rem, 5.5vw, 1.5rem); font-weight: 700; line-height: 1.5; color: var(--accent); }
 .ending-findings { list-style: none; margin: 2rem 0; padding: 0; display: grid; gap: 1.25rem; }
 .ending-finding {
   padding: 1.25rem;

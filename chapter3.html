@@ -49,49 +49,40 @@
     <h1>我們這一代借什麼？</h1>
 
     <p class="note data-scope">
-      <strong>先說清楚：</strong>這一章的年齡資料只有<strong>台北市</strong>，
-      來自臺北市立圖書館 <span data-stat="ageRocYear">113</span> 年度（<span data-stat="ageYear">2024</span> 年）年刊。
-      前兩章的全國和縣市資料到 2025 年，這一章是 2024 年。
+      <strong>先說清楚：</strong>這一章的年齡資料只有<strong>台北市</strong>，來自臺北市立圖書館 <span data-stat="ageRocYear">113</span> 年度（<span data-stat="ageYear">2024</span> 年）年刊。前兩章的全國和縣市資料到 2025 年，這一章是 2024 年。
     </p>
 
     <p class="lead drop-cap">
-      <span data-stat="ageYear">2024</span> 年，北市圖借出的紙本書裡，
-      18 到 24 歲、也就是大學生年紀的我們，一共借了
-      <strong><span data-stat="youngLoans">31.8 萬</span>冊</strong>，
-      只占全部的 <span data-stat="youngShare">2.5%</span>：每 <span data-stat="youngPerBook">40</span> 本書裡，還不到 1 本是我們借的。
+      <span data-stat="ageYear">2024</span> 年在台北，18 到 24 歲、也就是大學生年紀的我們，平均每人一年只借了 <strong><span data-stat="youngPerCapita">2.2</span> 本</strong>紙本書，是所有年齡層裡最少的。換句話說，<span data-stat="youngEvery">台北 18–24 歲平均大約每 5 個半月才借 1 本</span>。
     </p>
 
     <div class="stat-row">
       <p class="stat">
-        <span class="stat__value"><span data-stat="youngLoans">31.8 萬</span>冊</span>
-        <span class="stat__label">18–24 歲一年借的書</span>
+        <span class="stat__value"><span data-stat="youngPerCapita">2.2</span> 本</span>
+        <span class="stat__label">18–24 歲平均每人一年借的書</span>
       </p>
       <p class="stat">
-        <span class="stat__value"><span data-stat="youngShare">2.5%</span></span>
-        <span class="stat__label">占全部借閱</span>
+        <span class="stat__value">最少</span>
+        <span class="stat__label">9 個年齡層裡排最後</span>
       </p>
       <p class="stat">
-        <span class="stat__value">1／<span data-stat="youngVsPeak">10</span></span>
-        <span class="stat__label">只有 <span data-stat="peakLabel">35–44 歲</span>的十分之一</span>
+        <span class="stat__value">1／<span data-stat="youngVsPeak">4</span></span>
+        <span class="stat__label">大約是 <span data-stat="peakLabel">35–44 歲</span>的 1／<span data-stat="youngVsPeak">4</span></span>
       </p>
     </div>
 
-    <h2>各年齡層一年借幾冊？</h2>
+    <h2>各年齡層平均每人借幾本？</h2>
 
     <figure class="chart-card">
-      <figcaption>台北市各年齡層讀者借閱冊數（<span data-stat="ageYear">2024</span> 年，紙本，男女合計）</figcaption>
+      <figcaption>台北市各年齡層人均借閱（<span data-stat="ageYear">2024</span> 年，紙本，男女合計）</figcaption>
       <ol class="rank-bars age-bars" id="age-bars">
         <li class="placeholder">圖表載入中…</li>
       </ol>
-      <p class="chart-source">點年齡可以看那個年齡層最常借什麼。資料來源：臺北市立圖書館《113年度臺北市立圖書館年刊》各年齡層讀者借閱類別統計</p>
+      <p class="chart-source">人均借閱 = 這個年齡層借的紙本書 ÷ 台北這個年齡層的人口。點年齡可以看那個年齡層最常借什麼。資料來源：臺北市立圖書館《113年度臺北市立圖書館年刊》各年齡層讀者借閱類別統計；內政部 2024 年底單一年齡人口</p>
     </figure>
 
     <p>
-      借最多的是 <span data-stat="peakLabel">35–44 歲</span>（<span data-stat="peakLoans">327.0 萬</span>冊），
-      接著是 45–54 歲。
-      國小學童（6–11 歲）也借了很多。
-      可是一上國中，借閱量就掉了一半以上（12–17 歲只有 <span data-stat="teensLoans">63.0 萬</span>冊），
-      到了 18–24 歲又再少一半，掉到 6 歲以上最低的位置。
+      各年齡層的人數不一樣，所以這裡比的是「平均每人借幾本」。借最多的是國小學童（<span data-stat="topLabel">6–11 歲</span>，<span data-stat="topPerCapita">11.1</span> 本），但其中有一部分是爸媽幫忙借的；成年人裡借最多的是 <span data-stat="peakLabel">35–44 歲</span>（<span data-stat="peakPerCapita">8.9</span> 本）。一上國中，人均借閱就掉了一半以上，到了 18–24 歲又再少一半，掉到所有年齡層最低的位置。
     </p>
 
     <h2>我們借的書，跟大家有什麼不一樣？</h2>
@@ -109,28 +100,169 @@
     </figure>
 
     <p>
-      跟所有讀者一樣，我們最常借的還是語言文學（小說、散文都在這一類）。
-      不同的是，跟所有讀者的平均比起來，我們更常借<strong><span data-stat="standoutNames">哲學和社會科學</span></strong>：
-      <span data-stat="standoutDetail">哲學占 7.4%（所有讀者是 5.1%）；社會科學占 12.3%（所有讀者是 9.9%）</span>。
-      在圖書分類裡，心理學也歸在哲學類。
+      跟所有讀者一樣，我們最常借的還是語言文學（小說、散文都在這一類）。不同的是，跟所有讀者的平均比起來，我們更常借<strong><span data-stat="standoutNames">哲學和社會科學</span></strong>：<span data-stat="standoutDetail">哲學占 7.4%（所有讀者是 5.1%）；社會科學占 12.3%（所有讀者是 9.9%）</span>。在圖書分類裡，心理學也歸在哲學類。
     </p>
 
-    <h2>每個年齡層最常借的前三類</h2>
-    <ol class="age-tops" id="age-tops">
-      <li class="placeholder">載入中…</li>
-    </ol>
+    <h2>每個年齡層都借什麼？</h2>
+
+    <figure class="chart-card heat-card">
+      <figcaption id="heat-caption">台北市各年齡層借的紙本書，各類別占多少（<span data-stat="ageYear">2024</span> 年）。顏色越深，代表這個年齡借這一類的比例越高</figcaption>
+      <ul class="heat-legend" aria-label="圖例">
+        <li><span class="swatch is-level-0"></span>3% 以下</li>
+        <li><span class="swatch is-level-1"></span>3–6%</li>
+        <li><span class="swatch is-level-2"></span>6–10%</li>
+        <li><span class="swatch is-level-3"></span>10–20%</li>
+        <li><span class="swatch is-level-4"></span>20% 以上</li>
+      </ul>
+      <div class="heat-scroll" tabindex="0" role="region" aria-labelledby="heat-caption">
+          <table class="heat-table" aria-labelledby="heat-caption">
+            <thead>
+              <tr>
+                <th scope="col">年齡</th>
+                <th scope="col"><a href="category.html?category=學齡前">學齡前</a></th>
+                <th scope="col"><a href="category.html?category=總類">總類</a></th>
+                <th scope="col"><a href="category.html?category=哲學">哲學</a></th>
+                <th scope="col"><a href="category.html?category=宗教">宗教</a></th>
+                <th scope="col"><a href="category.html?category=自然科學">自然科學</a></th>
+                <th scope="col"><a href="category.html?category=應用科學">應用科學</a></th>
+                <th scope="col"><a href="category.html?category=社會科學">社會科學</a></th>
+                <th scope="col"><a href="category.html?category=史地">史地</a></th>
+                <th scope="col"><a href="category.html?category=語言文學">語言文學</a></th>
+                <th scope="col"><a href="category.html?category=藝術">藝術</a></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row"><a href="age.html?age=0-5">0–5 歲</a></th>
+                <td class="heat-table__cell is-level-3" data-heat="0-5|學齡前">11.9%</td>
+                <td class="heat-table__cell is-level-1" data-heat="0-5|總類">3.0%</td>
+                <td class="heat-table__cell is-level-0" data-heat="0-5|哲學">1.9%</td>
+                <td class="heat-table__cell is-level-0" data-heat="0-5|宗教">0.5%</td>
+                <td class="heat-table__cell is-level-2" data-heat="0-5|自然科學">7.4%</td>
+                <td class="heat-table__cell is-level-2" data-heat="0-5|應用科學">6.1%</td>
+                <td class="heat-table__cell is-level-2" data-heat="0-5|社會科學">6.8%</td>
+                <td class="heat-table__cell is-level-1" data-heat="0-5|史地">4.2%</td>
+                <td class="heat-table__cell is-level-4" data-heat="0-5|語言文學">53.5%</td>
+                <td class="heat-table__cell is-level-1" data-heat="0-5|藝術">4.7%</td>
+              </tr>
+              <tr>
+                <th scope="row"><a href="age.html?age=6-11">6–11 歲</a></th>
+                <td class="heat-table__cell is-level-0" data-heat="6-11|學齡前">2.4%</td>
+                <td class="heat-table__cell is-level-0" data-heat="6-11|總類">2.6%</td>
+                <td class="heat-table__cell is-level-0" data-heat="6-11|哲學">1.8%</td>
+                <td class="heat-table__cell is-level-0" data-heat="6-11|宗教">1.4%</td>
+                <td class="heat-table__cell is-level-3" data-heat="6-11|自然科學">14.7%</td>
+                <td class="heat-table__cell is-level-1" data-heat="6-11|應用科學">4.3%</td>
+                <td class="heat-table__cell is-level-2" data-heat="6-11|社會科學">6.5%</td>
+                <td class="heat-table__cell is-level-2" data-heat="6-11|史地">7.1%</td>
+                <td class="heat-table__cell is-level-4" data-heat="6-11|語言文學">50.1%</td>
+                <td class="heat-table__cell is-level-2" data-heat="6-11|藝術">9.0%</td>
+              </tr>
+              <tr>
+                <th scope="row"><a href="age.html?age=12-17">12–17 歲</a></th>
+                <td class="heat-table__cell is-level-0" data-heat="12-17|學齡前">1.1%</td>
+                <td class="heat-table__cell is-level-0" data-heat="12-17|總類">1.8%</td>
+                <td class="heat-table__cell is-level-1" data-heat="12-17|哲學">3.5%</td>
+                <td class="heat-table__cell is-level-0" data-heat="12-17|宗教">1.1%</td>
+                <td class="heat-table__cell is-level-3" data-heat="12-17|自然科學">10.8%</td>
+                <td class="heat-table__cell is-level-1" data-heat="12-17|應用科學">5.8%</td>
+                <td class="heat-table__cell is-level-2" data-heat="12-17|社會科學">7.3%</td>
+                <td class="heat-table__cell is-level-2" data-heat="12-17|史地">8.6%</td>
+                <td class="heat-table__cell is-level-4" data-heat="12-17|語言文學">48.0%</td>
+                <td class="heat-table__cell is-level-3" data-heat="12-17|藝術">11.9%</td>
+              </tr>
+              <tr class="is-young">
+                <th scope="row"><a href="age.html?age=18-24">18–24 歲</a><small>年輕世代</small></th>
+                <td class="heat-table__cell is-level-0" data-heat="18-24|學齡前">2.5%</td>
+                <td class="heat-table__cell is-level-0" data-heat="18-24|總類">1.7%</td>
+                <td class="heat-table__cell is-level-2" data-heat="18-24|哲學">7.4%</td>
+                <td class="heat-table__cell is-level-0" data-heat="18-24|宗教">1.5%</td>
+                <td class="heat-table__cell is-level-2" data-heat="18-24|自然科學">6.7%</td>
+                <td class="heat-table__cell is-level-3" data-heat="18-24|應用科學">11.0%</td>
+                <td class="heat-table__cell is-level-3" data-heat="18-24|社會科學">12.3%</td>
+                <td class="heat-table__cell is-level-2" data-heat="18-24|史地">7.7%</td>
+                <td class="heat-table__cell is-level-4" data-heat="18-24|語言文學">39.3%</td>
+                <td class="heat-table__cell is-level-2" data-heat="18-24|藝術">9.9%</td>
+              </tr>
+              <tr>
+                <th scope="row"><a href="age.html?age=25-34">25–34 歲</a></th>
+                <td class="heat-table__cell is-level-1" data-heat="25-34|學齡前">3.5%</td>
+                <td class="heat-table__cell is-level-0" data-heat="25-34|總類">1.3%</td>
+                <td class="heat-table__cell is-level-2" data-heat="25-34|哲學">9.8%</td>
+                <td class="heat-table__cell is-level-0" data-heat="25-34|宗教">1.6%</td>
+                <td class="heat-table__cell is-level-1" data-heat="25-34|自然科學">5.4%</td>
+                <td class="heat-table__cell is-level-3" data-heat="25-34|應用科學">13.5%</td>
+                <td class="heat-table__cell is-level-3" data-heat="25-34|社會科學">12.4%</td>
+                <td class="heat-table__cell is-level-2" data-heat="25-34|史地">7.1%</td>
+                <td class="heat-table__cell is-level-4" data-heat="25-34|語言文學">35.9%</td>
+                <td class="heat-table__cell is-level-2" data-heat="25-34|藝術">9.4%</td>
+              </tr>
+              <tr>
+                <th scope="row"><a href="age.html?age=35-44">35–44 歲</a></th>
+                <td class="heat-table__cell is-level-1" data-heat="35-44|學齡前">3.3%</td>
+                <td class="heat-table__cell is-level-0" data-heat="35-44|總類">2.1%</td>
+                <td class="heat-table__cell is-level-1" data-heat="35-44|哲學">5.1%</td>
+                <td class="heat-table__cell is-level-0" data-heat="35-44|宗教">1.7%</td>
+                <td class="heat-table__cell is-level-2" data-heat="35-44|自然科學">9.5%</td>
+                <td class="heat-table__cell is-level-2" data-heat="35-44|應用科學">9.8%</td>
+                <td class="heat-table__cell is-level-2" data-heat="35-44|社會科學">9.7%</td>
+                <td class="heat-table__cell is-level-2" data-heat="35-44|史地">7.8%</td>
+                <td class="heat-table__cell is-level-4" data-heat="35-44|語言文學">42.5%</td>
+                <td class="heat-table__cell is-level-2" data-heat="35-44|藝術">8.5%</td>
+              </tr>
+              <tr>
+                <th scope="row"><a href="age.html?age=45-54">45–54 歲</a></th>
+                <td class="heat-table__cell is-level-0" data-heat="45-54|學齡前">1.5%</td>
+                <td class="heat-table__cell is-level-0" data-heat="45-54|總類">2.5%</td>
+                <td class="heat-table__cell is-level-1" data-heat="45-54|哲學">5.7%</td>
+                <td class="heat-table__cell is-level-0" data-heat="45-54|宗教">1.8%</td>
+                <td class="heat-table__cell is-level-2" data-heat="45-54|自然科學">8.9%</td>
+                <td class="heat-table__cell is-level-3" data-heat="45-54|應用科學">11.5%</td>
+                <td class="heat-table__cell is-level-3" data-heat="45-54|社會科學">11.8%</td>
+                <td class="heat-table__cell is-level-2" data-heat="45-54|史地">9.5%</td>
+                <td class="heat-table__cell is-level-4" data-heat="45-54|語言文學">36.0%</td>
+                <td class="heat-table__cell is-level-3" data-heat="45-54|藝術">11.0%</td>
+              </tr>
+              <tr>
+                <th scope="row"><a href="age.html?age=55-64">55–64 歲</a></th>
+                <td class="heat-table__cell is-level-0" data-heat="55-64|學齡前">2.2%</td>
+                <td class="heat-table__cell is-level-0" data-heat="55-64|總類">1.8%</td>
+                <td class="heat-table__cell is-level-2" data-heat="55-64|哲學">6.4%</td>
+                <td class="heat-table__cell is-level-0" data-heat="55-64|宗教">2.1%</td>
+                <td class="heat-table__cell is-level-2" data-heat="55-64|自然科學">6.0%</td>
+                <td class="heat-table__cell is-level-3" data-heat="55-64|應用科學">14.8%</td>
+                <td class="heat-table__cell is-level-3" data-heat="55-64|社會科學">10.8%</td>
+                <td class="heat-table__cell is-level-3" data-heat="55-64|史地">10.6%</td>
+                <td class="heat-table__cell is-level-4" data-heat="55-64|語言文學">33.7%</td>
+                <td class="heat-table__cell is-level-3" data-heat="55-64|藝術">11.5%</td>
+              </tr>
+              <tr>
+                <th scope="row"><a href="age.html?age=65%2B">65 歲以上</a></th>
+                <td class="heat-table__cell is-level-0" data-heat="65+|學齡前">2.9%</td>
+                <td class="heat-table__cell is-level-0" data-heat="65+|總類">2.5%</td>
+                <td class="heat-table__cell is-level-1" data-heat="65+|哲學">4.3%</td>
+                <td class="heat-table__cell is-level-0" data-heat="65+|宗教">1.6%</td>
+                <td class="heat-table__cell is-level-2" data-heat="65+|自然科學">7.9%</td>
+                <td class="heat-table__cell is-level-3" data-heat="65+|應用科學">12.0%</td>
+                <td class="heat-table__cell is-level-2" data-heat="65+|社會科學">9.0%</td>
+                <td class="heat-table__cell is-level-2" data-heat="65+|史地">9.9%</td>
+                <td class="heat-table__cell is-level-4" data-heat="65+|語言文學">39.5%</td>
+                <td class="heat-table__cell is-level-3" data-heat="65+|藝術">10.5%</td>
+              </tr>
+            </tbody>
+          </table>
+      </div>
+      <p class="chart-source">每一列加起來是 100%。表格可以左右滑；點類別名稱可以看那一類的熱門書單，點年齡可以看那個年齡層的結果頁。</p>
+    </figure>
 
     <section class="conclusion" aria-labelledby="conclusion-title">
       <h2 id="conclusion-title">所以，我們這一代，還借書嗎？</h2>
-      <p class="conclusion__answer">還借，但在台北的公共圖書館，我們是 6 歲以上借得最少的一群。</p>
+      <p class="conclusion__answer">還借，但在台北的公共圖書館，我們是所有年齡層裡借得最少的一群。</p>
       <p>
-        <span data-stat="ageYear">2024</span> 年 18–24 歲借了 <span data-stat="youngLoans">31.8 萬</span>冊，
-        只占 <span data-stat="youngShare">2.5%</span>，大約是 <span data-stat="peakLabel">35–44 歲</span>的十分之一。
-        而我們真的拿起書時，比所有讀者的平均更常往哲學（含心理學）和社會科學的書架走。
+        <span data-stat="ageYear">2024</span> 年 18–24 歲平均每人借了 <span data-stat="youngPerCapita">2.2</span> 本紙本書，大約是 <span data-stat="peakLabel">35–44 歲</span>的 1／<span data-stat="youngVsPeak">4</span>。而我們真的拿起書時，比所有讀者的平均更常往哲學（含心理學）和社會科學的書架走。
       </p>
       <p class="note">
-        要公平地看這個數字：這裡算的是「借了幾冊」，不是「每人借幾本」，各年齡層的人數本來就不一樣；
-        而且大學生還能用學校的圖書館，那些借閱不在北市圖的統計裡。
+        要公平地看這個數字：大學生還能用學校的圖書館，那些借閱不在北市圖的統計裡；而且北市圖的讀者不一定都住在台北，這裡是除以台北的人口來估算。
       </p>
     </section>
     <p class="ending-link">三章看完了，回頭看整個答案 → <a href="ending.html">結語</a></p>

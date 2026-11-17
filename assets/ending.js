@@ -6,8 +6,6 @@
   const ANSWER = '還借，只是我們借得比誰都少。';
 
   const fmt = (n) => n.toFixed(1);
-  const wan = (n) => (n / 1e4).toFixed(1) + ' 萬';
-  const pct = (n) => (n * 100).toFixed(1);
 
   /** @param {object} data window.LIBRARY_DATA */
   function view(data) {
@@ -36,7 +34,7 @@
         caption: `${latest.year} 年全國平均每人借的紙本書`,
         text:
           `疫情那年（${covid.year} 年）跌到平均每人 ${fmt(covid.printPerCapita)} 本紙本書，` +
-          `${latest.year} 年回升到 ${fmt(latest.printPerCapita)} 本${isRecord ? '，是十年新高' : ''}。`,
+          `${latest.year} 年回升到 ${fmt(latest.printPerCapita)} 本${isRecord ? `，是 ${national[0].year}–${latest.year} 年最高` : ''}。`,
         url: 'chapter1.html',
         linkText: '回去看章節一：台灣人一年借幾本書？',
         holds: isRecord && covid.printPerCapita < latest.printPerCapita,
@@ -55,15 +53,15 @@
       },
       {
         title: '我們這一代借得最少',
-        value: pct(taipeiAges.young.share),
-        unit: '%',
-        caption: `${taipeiAges.year} 年北市圖的紙本借閱裡，18–24 歲借的比例`,
+        value: fmt(taipeiAges.young.perCapita),
+        unit: '本',
+        caption: `${taipeiAges.year} 年台北 18–24 歲平均每人借的紙本書`,
         text:
-          `${taipeiAges.year} 年在台北，18–24 歲一年借了 ${wan(taipeiAges.young.loans)}冊紙本書，只占全部的 ${pct(taipeiAges.young.share)}%，` +
-          `是 6 歲以上借得最少的一群。（年齡資料只有台北市）`,
+          `${taipeiAges.year} 年在台北，18–24 歲平均每人一年借 ${fmt(taipeiAges.young.perCapita)} 本紙本書，是所有年齡層裡最少的，` +
+          `大約是 ${taipeiAges.peak.label}（${fmt(taipeiAges.peak.perCapita)} 本）的 1／${taipeiAges.young.vsPeakRounded}。（年齡資料只有台北市）`,
         url: 'chapter3.html',
         linkText: '回去看章節三：我們這一代借什麼？',
-        holds: taipeiAges.young.leastAmongReaders,
+        holds: taipeiAges.young.leastOfAll,
       },
     ];
 
