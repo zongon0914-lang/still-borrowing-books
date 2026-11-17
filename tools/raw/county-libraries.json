@@ -1,0 +1,32 @@
+{
+  "說明": "人工整理：22 縣市公共圖書館的館藏查詢網址，每一筆都實際打開核對過（2026-11-17，測試書名「原子習慣」）。titleUrl 是能用書名直接查的網址格式，{title} 換成 encodeURIComponent(書名)；查不到這種格式的縣市只給 searchUrl（館藏查詢頁）。system：A 是凌網 HyLib 新版查詢（單頁應用，要在瀏覽器裡才看得到結果）、B 是舊版 WebPAC search.cfm（一定要帶 s0=0&w=0，連江縣少了會「參數錯誤」）、C 是新北 Miracle（找不到能帶書名的網址，舊網址 webpac.tphcc.gov.tw 會轉到 http，不要用）。",
+  "source": {
+    "title": "各縣市公共圖書館館藏查詢系統",
+    "publisher": "22 縣市公共圖書館",
+    "checked": "2026-11-17"
+  },
+  "counties": [
+    { "county": "基隆市", "name": "基隆市公共圖書館", "system": "B", "titleUrl": "https://webpac.klccab.gov.tw/webpac/search.cfm?m=ss&k0={title}&t0=k&c0=and&s0=0&w=0" },
+    { "county": "臺北市", "name": "臺北市立圖書館", "system": "A", "titleUrl": "https://book.tpml.edu.tw/search?searchField=FullText&searchInput={title}" },
+    { "county": "新北市", "name": "新北市立圖書館", "system": "C", "searchUrl": "https://webpac.ntpclib.gov.tw/Miracle_rwd/" },
+    { "county": "桃園市", "name": "桃園市立圖書館", "system": "A", "titleUrl": "https://webpac.typl.gov.tw/search?searchField=FullText&searchInput={title}" },
+    { "county": "新竹市", "name": "新竹市圖書館", "system": "A", "titleUrl": "https://webpac.hccg.gov.tw/search?searchField=FullText&searchInput={title}" },
+    { "county": "新竹縣", "name": "新竹縣公共圖書館", "system": "A", "titleUrl": "https://webpac.hchcc.gov.tw/search?searchField=FullText&searchInput={title}" },
+    { "county": "苗栗縣", "name": "苗栗縣公共圖書館", "system": "A", "titleUrl": "https://webpacx.miaoli.gov.tw/search?searchField=FullText&searchInput={title}" },
+    { "county": "臺中市", "name": "臺中市立圖書館", "system": "A", "titleUrl": "https://webpac.taichung.gov.tw/search?searchField=FullText&searchInput={title}" },
+    { "county": "彰化縣", "name": "彰化縣公共圖書館", "system": "B", "titleUrl": "https://library.toread.bocach.gov.tw/webpac_rwd/search.cfm?m=ss&k0={title}&t0=k&c0=and&s0=0&w=0" },
+    { "county": "南投縣", "name": "南投縣政府公共圖書館", "system": "B", "titleUrl": "https://webpac.nthcc.gov.tw/webpac/search.cfm?m=ss&k0={title}&t0=k&c0=and&s0=0&w=0" },
+    { "county": "雲林縣", "name": "雲林縣公共圖書館", "system": "A", "titleUrl": "https://webpacx.ylccb.gov.tw/search?searchField=FullText&searchInput={title}" },
+    { "county": "嘉義市", "name": "嘉義市公共圖書館", "system": "A", "titleUrl": "https://webpacx.chiayi.gov.tw/search?searchField=FullText&searchInput={title}" },
+    { "county": "嘉義縣", "name": "嘉義縣立圖書館", "system": "A", "titleUrl": "https://lib.cycab.gov.tw/search?searchField=FullText&searchInput={title}" },
+    { "county": "臺南市", "name": "臺南市立圖書館", "system": "B", "titleUrl": "https://lib.tnml.tn.edu.tw/webpac/search.cfm?m=ss&k0={title}&t0=k&c0=and&s0=0&w=0" },
+    { "county": "高雄市", "name": "高雄市立圖書館", "system": "A", "titleUrl": "https://webpacx.ksml.edu.tw/search?searchField=FullText&searchInput={title}" },
+    { "county": "屏東縣", "name": "屏東縣圖書館", "system": "A", "titleUrl": "https://library.pthg.gov.tw/search?searchField=FullText&searchInput={title}" },
+    { "county": "宜蘭縣", "name": "宜蘭縣圖書館", "system": "A", "titleUrl": "https://webpac.ilccb.gov.tw/search?searchField=FullText&searchInput={title}" },
+    { "county": "花蓮縣", "name": "花蓮縣文化局圖書館", "system": "A", "titleUrl": "https://center.hccc.gov.tw/search?searchField=FullText&searchInput={title}" },
+    { "county": "臺東縣", "name": "臺東縣立圖書館", "system": "A", "titleUrl": "https://libraryx.ccl.ttct.edu.tw/search?searchField=FullText&searchInput={title}" },
+    { "county": "澎湖縣", "name": "澎湖縣圖書館", "system": "A", "titleUrl": "https://webpac.phlib.nat.gov.tw/search?searchField=FullText&searchInput={title}" },
+    { "county": "金門縣", "name": "金門縣公共圖書館", "system": "A", "titleUrl": "https://webpacx.km.edu.tw/search?searchField=FullText&searchInput={title}" },
+    { "county": "連江縣", "name": "連江縣圖書館", "system": "B", "titleUrl": "https://matsucc.e2center.com.tw/webpac/search.cfm?m=ss&k0={title}&t0=k&c0=and&s0=0&w=0" }
+  ]
+}

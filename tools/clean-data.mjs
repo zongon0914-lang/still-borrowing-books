@@ -237,8 +237,44 @@ export function buildBooksData(raw, categories) {
   };
 }
 
-/** 網站用的全部乾淨數據：全國、縣市、年齡（含台北各年齡層人口）、書單 */
+// ---------- 借書成績單：各縣市圖書館借書連結 ----------
+
+const LIBRARIES_RAW_FILE = fileURLToPath(new URL('./raw/county-libraries.json', import.meta.url));
+
+/** 讀取人工整理的 22 縣市圖書館館藏查詢網址 */
+export function loadLibrariesRaw(file = LIBRARIES_RAW_FILE) {
+  return JSON.parse(readFileSync(file, 'utf8'));
+}
+
+/**
+ * 核對 22 縣市都剛好一筆、名稱照網站的縣市寫法、網址都是 https，
+ * 而且每一筆只有「書名網址格式（含一個 {title}）」或「館藏查詢頁」其中一種。
+ */
+export function buildLibrariesData(raw) {
+  const counties = COUNTIES.map((county) => {
+    const rows = raw.counties.filter((r) => r.county === county);
+    if (rows.length !== 1) throw new Error(`「${county}」的圖書館應該剛好一筆，現在有 ${rows.length} 筆`);
+    const { name, titleUrl, searchUrl } = rows[0];
+    if (!name?.trim()) throw new Error(`「${county}」沒有圖書館名稱`);
+    if (Boolean(titleUrl) === Boolean(searchUrl)) throw new Error(`「${county}」要有 titleUrl 或 searchUrl 其中一個`);
+    const url = titleUrl || searchUrl;
+    if (!url.startsWith('https://')) throw new Error(`「${county}」的網址不是 https：${url}`);
+    if (titleUrl && titleUrl.split('{title}').length !== 2) throw new Error(`「${county}」的 titleUrl 要剛好有一個 {title}`);
+    if (searchUrl?.includes('{title}')) throw new Error(`「${county}」的 searchUrl 不該有 {title}`);
+    return titleUrl ? { county, name, titleUrl } : { county, name, searchUrl };
+  });
+  const extra = raw.counties.filter((r) => !COUNTIES.includes(r.county)).map((r) => r.county);
+  if (extra.length) throw new Error(`圖書館資料有網站沒有的縣市：${extra.join('、')}`);
+  return { source: raw.source, counties };
+}
+
+/** 網站用的全部乾淨數據：全國、縣市、年齡（含台北各年齡層人口）、書單、各縣市圖書館借書連結 */
 export function buildSiteData() {
   const age = addPopulation(buildAgeData(loadAgeRaw()), loadPopulationRaw());
-  return { ...buildCleanData(loadRaw()), age, books: buildBooksData(loadBooksRaw(), age.categories) };
+  return {
+    ...buildCleanData(loadRaw()),
+    age,
+    books: buildBooksData(loadBooksRaw(), age.categories),
+    libraries: buildLibrariesData(loadLibrariesRaw()),
+  };
 }

@@ -122,7 +122,20 @@
     };
   }
 
-  window.Scorecard = { compute, RANGES, YEAR };
+  /**
+   * 「到〇〇圖書館借這本 →」（規格使用者故事 26、27）：能用書名查的縣市，網址直接帶入書名；
+   * 不行的縣市（新北）打開館藏查詢頁。找不到縣市時回傳 null。
+   * @returns {{ name: string, label: string, url: string, withTitle: boolean } | null}
+   */
+  function libraryLink(data, countyName, bookTitle) {
+    const lib = data.libraries.counties.find((l) => l.county === countyName);
+    if (!lib) return null;
+    const withTitle = Boolean(lib.titleUrl);
+    const url = withTitle ? lib.titleUrl.replace('{title}', () => encodeURIComponent(bookTitle)) : lib.searchUrl;
+    return { name: lib.name, label: `到${lib.name}借這本 →`, url, withTitle };
+  }
+
+  window.Scorecard = { compute, libraryLink, RANGES, YEAR };
 
   if (typeof document === 'undefined' || !window.Site) return; // Node 測試，或數據檔沒載入
 
@@ -161,10 +174,22 @@
     return i;
   }
 
-  /** 把一本推薦書畫上去。之後要加「去借這本」按鈕，就在這裡依 book 更新 #sc-book-actions 裡的連結 */
+  let countyName = '';
+
+  /** 把一本推薦書畫上去，「到〇〇圖書館借這本 →」跟著這本書換（在新分頁打開） */
   function showBook(book) {
     $('sc-book-title').textContent = book.title;
     $('sc-book-meta').textContent = `${book.author}・${book.category}類熱門書`;
+    const lib = libraryLink(data, countyName, book.title);
+    const borrow = $('sc-book-borrow');
+    borrow.hidden = !lib;
+    $('sc-book-borrow-note').textContent = '';
+    if (!lib) return;
+    borrow.href = lib.url;
+    borrow.textContent = lib.label;
+    $('sc-book-borrow-note').textContent = lib.withTitle
+      ? '會在新分頁打開這本書在圖書館的查詢結果；圖書館網站有時開得比較慢。'
+      : `${lib.name}的網站沒辦法直接帶入書名，會打開館藏查詢頁，請輸入書名「${book.title}」查詢。`;
   }
 
   function nextBook() {
@@ -177,6 +202,7 @@
   function renderRecommend(c) {
     candidates = c.recommend.books;
     shown = -1;
+    countyName = c.county.name;
     $('sc-book-label').textContent = `推薦你借這本（${c.ageLabel}最常借的前三類：${c.recommend.categories.join('、')}）`;
     $('sc-book-next').hidden = candidates.length < 2;
     $('sc-book-age').href = c.recommend.ageUrl;

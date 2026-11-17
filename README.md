@@ -18,7 +18,7 @@
 | `index.html`、`chapter*.html`、`sources.html` | 網站頁面 |
 | `county.html` | 縣市細節頁範本，網址寫 `county.html?county=新北市` 決定顯示哪個縣市 |
 | `assets/` | 樣式、程式，以及自動產生的 `data.js` |
-| `tools/raw/` | 「公共圖書館統計」開放資料原始檔（2014–2025）、北市圖年齡表、國圖書單、台北各歲人口（`taipei-pop-2024.json`） |
+| `tools/raw/` | 「公共圖書館統計」開放資料原始檔（2014–2025）、北市圖年齡表、國圖書單、台北各歲人口（`taipei-pop-2024.json`）、22 縣市圖書館查詢網址（`county-libraries.json`，人工核對） |
 | `tools/clean-data.mjs` | 資料整理模組：原始資料 → 網站用的乾淨數據 |
 | `tools/geo/` | 台灣 22 縣市界線（taiwan-atlas，MIT 授權；原始資料為內政部國土測繪中心） |
 | `tools/build-map.mjs` | 把縣市界線轉成地圖用的 SVG 路徑，寫進 `assets/taiwan-map.js` |

@@ -2,7 +2,8 @@
 // 來源：政府資料開放平台「公共圖書館統計」（國立公共資訊圖書館）；
 //       臺北市立圖書館《113年度臺北市立圖書館年刊》各年齡層讀者借閱類別統計；
 //       內政部「村里戶數、單一年齡人口」113 年 12 月臺北市人口；
-//       國家圖書館《113年臺灣閱讀風貌及全民閱讀力年度報告》各類別圖書借閱排行
+//       國家圖書館《113年臺灣閱讀風貌及全民閱讀力年度報告》各類別圖書借閱排行；
+//       22 縣市公共圖書館館藏查詢網址（人工核對，2026-11-17）
 window.LIBRARY_DATA = {
   "national": [
     {
@@ -4048,6 +4049,125 @@ window.LIBRARY_DATA = {
             "author": "陳德政"
           }
         ]
+      }
+    ]
+  },
+  "libraries": {
+    "source": {
+      "title": "各縣市公共圖書館館藏查詢系統",
+      "publisher": "22 縣市公共圖書館",
+      "checked": "2026-11-17"
+    },
+    "counties": [
+      {
+        "county": "基隆市",
+        "name": "基隆市公共圖書館",
+        "titleUrl": "https://webpac.klccab.gov.tw/webpac/search.cfm?m=ss&k0={title}&t0=k&c0=and&s0=0&w=0"
+      },
+      {
+        "county": "臺北市",
+        "name": "臺北市立圖書館",
+        "titleUrl": "https://book.tpml.edu.tw/search?searchField=FullText&searchInput={title}"
+      },
+      {
+        "county": "新北市",
+        "name": "新北市立圖書館",
+        "searchUrl": "https://webpac.ntpclib.gov.tw/Miracle_rwd/"
+      },
+      {
+        "county": "桃園市",
+        "name": "桃園市立圖書館",
+        "titleUrl": "https://webpac.typl.gov.tw/search?searchField=FullText&searchInput={title}"
+      },
+      {
+        "county": "新竹市",
+        "name": "新竹市圖書館",
+        "titleUrl": "https://webpac.hccg.gov.tw/search?searchField=FullText&searchInput={title}"
+      },
+      {
+        "county": "新竹縣",
+        "name": "新竹縣公共圖書館",
+        "titleUrl": "https://webpac.hchcc.gov.tw/search?searchField=FullText&searchInput={title}"
+      },
+      {
+        "county": "苗栗縣",
+        "name": "苗栗縣公共圖書館",
+        "titleUrl": "https://webpacx.miaoli.gov.tw/search?searchField=FullText&searchInput={title}"
+      },
+      {
+        "county": "臺中市",
+        "name": "臺中市立圖書館",
+        "titleUrl": "https://webpac.taichung.gov.tw/search?searchField=FullText&searchInput={title}"
+      },
+      {
+        "county": "彰化縣",
+        "name": "彰化縣公共圖書館",
+        "titleUrl": "https://library.toread.bocach.gov.tw/webpac_rwd/search.cfm?m=ss&k0={title}&t0=k&c0=and&s0=0&w=0"
+      },
+      {
+        "county": "南投縣",
+        "name": "南投縣政府公共圖書館",
+        "titleUrl": "https://webpac.nthcc.gov.tw/webpac/search.cfm?m=ss&k0={title}&t0=k&c0=and&s0=0&w=0"
+      },
+      {
+        "county": "雲林縣",
+        "name": "雲林縣公共圖書館",
+        "titleUrl": "https://webpacx.ylccb.gov.tw/search?searchField=FullText&searchInput={title}"
+      },
+      {
+        "county": "嘉義市",
+        "name": "嘉義市公共圖書館",
+        "titleUrl": "https://webpacx.chiayi.gov.tw/search?searchField=FullText&searchInput={title}"
+      },
+      {
+        "county": "嘉義縣",
+        "name": "嘉義縣立圖書館",
+        "titleUrl": "https://lib.cycab.gov.tw/search?searchField=FullText&searchInput={title}"
+      },
+      {
+        "county": "臺南市",
+        "name": "臺南市立圖書館",
+        "titleUrl": "https://lib.tnml.tn.edu.tw/webpac/search.cfm?m=ss&k0={title}&t0=k&c0=and&s0=0&w=0"
+      },
+      {
+        "county": "高雄市",
+        "name": "高雄市立圖書館",
+        "titleUrl": "https://webpacx.ksml.edu.tw/search?searchField=FullText&searchInput={title}"
+      },
+      {
+        "county": "屏東縣",
+        "name": "屏東縣圖書館",
+        "titleUrl": "https://library.pthg.gov.tw/search?searchField=FullText&searchInput={title}"
+      },
+      {
+        "county": "宜蘭縣",
+        "name": "宜蘭縣圖書館",
+        "titleUrl": "https://webpac.ilccb.gov.tw/search?searchField=FullText&searchInput={title}"
+      },
+      {
+        "county": "花蓮縣",
+        "name": "花蓮縣文化局圖書館",
+        "titleUrl": "https://center.hccc.gov.tw/search?searchField=FullText&searchInput={title}"
+      },
+      {
+        "county": "臺東縣",
+        "name": "臺東縣立圖書館",
+        "titleUrl": "https://libraryx.ccl.ttct.edu.tw/search?searchField=FullText&searchInput={title}"
+      },
+      {
+        "county": "澎湖縣",
+        "name": "澎湖縣圖書館",
+        "titleUrl": "https://webpac.phlib.nat.gov.tw/search?searchField=FullText&searchInput={title}"
+      },
+      {
+        "county": "金門縣",
+        "name": "金門縣公共圖書館",
+        "titleUrl": "https://webpacx.km.edu.tw/search?searchField=FullText&searchInput={title}"
+      },
+      {
+        "county": "連江縣",
+        "name": "連江縣圖書館",
+        "titleUrl": "https://matsucc.e2center.com.tw/webpac/search.cfm?m=ss&k0={title}&t0=k&c0=and&s0=0&w=0"
       }
     ]
   }

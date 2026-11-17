@@ -50,6 +50,19 @@ test('借書成績單同齡人比較用的台北各年齡人口有列出（名�
   assert.match(text, /同齡人/);
 });
 
+test('借書成績單的各縣市圖書館借書連結有列出（名稱、核對日期、22 個查詢系統的連結、用在哪裡）', () => {
+  const src = data.libraries.source;
+  assert.ok(text.includes(src.title), src.title);
+  assert.ok(text.includes(src.publisher.replace(/\s+/g, '')), src.publisher);
+  assert.match(text, /2026-11-17/);
+  assert.match(text, /到〇〇圖書館借這本/);
+  for (const lib of data.libraries.counties) {
+    const site = `${new URL(lib.titleUrl || lib.searchUrl).origin}/`;
+    assert.ok([...hrefs].some((h) => h.startsWith(site)), `缺${lib.name}（${lib.county}）查詢系統的連結：${site}`);
+    assert.ok(text.includes(lib.name), `缺${lib.name}`);
+  }
+});
+
 test('地圖的縣市界線來源有列出', () => {
   assert.match(text, /內政部國土測繪中心/);
   assert.match(text, /taiwan-atlas/);
