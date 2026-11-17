@@ -106,12 +106,17 @@ npm.cmd run check-online
    git push
    ```
 
-4. 等 1～3 分鐘，打開作品連結重新整理（看不到新內容就按 `Ctrl + F5` 強制重新整理）。
-5. 再跑一次線上檢查：
+4. 跑線上檢查。push 完可以馬上跑：它會先確認線上已經換成新版本（GitHub Pages 要 1～3 分鐘），還沒換好就每 30 秒再看一次，最多等 5 分鐘，換好了才開始檢查：
 
    ```powershell
    npm.cmd run check-online
    ```
+
+5. 用瀏覽器打開手機版檢查，等它跑完（約 1 分鐘），看到「✔ 全部通過」就代表每一頁在手機寬度都不會左右捲動：
+
+   <https://zongon0914-lang.github.io/still-borrowing-books/tools/check-mobile.html>
+
+6. 打開作品連結看一次（看不到新內容就按 `Ctrl + F5` 強制重新整理）。
 
 作品連結永遠不變，評審點開看到的就是最新版本。
 
@@ -120,6 +125,7 @@ npm.cmd run check-online
 | 狀況 | 怎麼辦 |
 |---|---|
 | 打開連結是 404 | Pages 剛開或剛更新，等幾分鐘；仍不行就到 Settings → Pages 看 Branch 是不是 `main`、`/ (root)` |
+| `check-online` 說等了 5 分鐘還是舊版本 | 到儲存庫頁面 → 上方 **Actions**，看「pages build and deployment」有沒有紅色叉叉；沒有的話過幾分鐘再跑一次 |
 | 本機正常，線上某個檔案壞掉 | 多半是檔名大小寫不一致（GitHub 分大小寫，Windows 不分）。`npm.cmd test` 會指出是哪一個 |
 | `git push` 被拒絕（rejected） | 有人在 GitHub 網頁上改過檔案。先跑 `git pull --rebase`，再 `git push` |
 | 圖表沒出來、只顯示數字表格 | 圖表程式從網路載入失敗，重新整理；網站本身沒壞 |
