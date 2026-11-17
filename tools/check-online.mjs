@@ -32,8 +32,7 @@ const result = spawnSync(process.execPath, ['--test', testFile], {
   env: { ...process.env, SITE_URL: url },
 });
 
-console.log('
-檢查 22 縣市圖書館的借書連結（測試書名「原子習慣」）…');
+console.log('\n檢查 22 縣市圖書館的借書連結（測試書名「原子習慣」）…');
 const librariesOk = report(await checkLibraryLinks(loadCounties()));
 process.exit(result.status === 0 && librariesOk ? 0 : 1);
 
