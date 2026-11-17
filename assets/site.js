@@ -59,10 +59,24 @@
     }
   }
 
+  /**
+   * 手機上點了、選了之後，結果出現在畫面外時，把畫面捲到結果（章節二點縣市、年齡工具選年齡）。
+   * 只在手機寬度、而且結果不在畫面裡時才捲；桌機或已經看得到就不動。
+   * 開了「減少動態效果」就直接跳過去，不慢慢滑。
+   */
+  function revealOnMobile(el) {
+    if (!el || !window.matchMedia || !matchMedia('(max-width: 767px)').matches) return;
+    const rect = el.getBoundingClientRect();
+    const visible = rect.top >= 0 && rect.top < window.innerHeight * 0.85;
+    if (visible) return;
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    el.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+  }
+
   const latest = data.national[data.national.length - 1];
   const first = data.national[0];
 
-  window.Site = { data, formatBig, byYear, fillStats, drawWhenSeen, latest, first };
+  window.Site = { data, formatBig, byYear, fillStats, drawWhenSeen, revealOnMobile, latest, first };
 
   fillStats({
     latestYear: () => latest.year,

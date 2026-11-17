@@ -18,12 +18,26 @@
     const sentence = {
       close: '幾乎猜中！你對台灣人借書的印象很準。',
       over: `你猜多了 ${gap} 本，看來你身邊都是愛借書的人。`,
-      under: `你猜少了 ${gap} 本，台灣人其實比你想的更常去圖書館。`,
+      under: `你猜少了 ${gap} 本，台灣人其實比你想的更常借書。`,
     }[kind];
     return { year: latest.year, answer: (answerTenths / 10).toFixed(1), kind, sentence };
   }
 
-  window.Chapter1Page = { guess };
+  /**
+   * 折線圖縱軸的刻度：同一張圖用同一種單位，不會從「萬」跳到「億」。
+   * 6,000 萬 → 「0.6 億」；1.4 億 → 「1.4 億」；1,500 萬（用「萬」時）→ 「1,500 萬」。最多兩位小數，去掉多餘的 0。
+   * @param {number} n 刻度的值（冊）
+   * @param {'億'|'萬'} unit 這張圖用的單位
+   */
+  function axisTick(n, unit) {
+    if (n === 0) return '0';
+    if (unit === '億') return `${Number((n / 1e8).toFixed(2))} 億`;
+    return `${Math.round(n / 1e4).toLocaleString('en-US')} 萬`;
+  }
+  /** 整張圖最大值過 1 億就整張用「億」，不然用「萬」 */
+  const axisUnit = (values) => (Math.max(...values) >= 1e8 ? '億' : '萬');
+
+  window.Chapter1Page = { guess, axisTick, axisUnit };
 
   if (typeof document === 'undefined' || !window.Site) return; // 在 Node 測試裡：到這裡就好
 
@@ -170,6 +184,7 @@
   // reveal：給 true 就從左到右畫出來（只有紙本折線圖會，其他圖直接顯示）
   function lineChart(canvasId, values, lineColor, label, labels, reveal) {
     const marked = labels.map((l) => l.year);
+    const unit = window.Chapter1Page.axisUnit(values);
     return new Chart(document.getElementById(canvasId), {
       type: 'line',
       data: {
@@ -205,7 +220,7 @@
           x: { grid: { display: false } },
           y: {
             beginAtZero: true,
-            ticks: { callback: (v) => formatBig(v) },
+            ticks: { callback: (v) => window.Chapter1Page.axisTick(v, unit) },
             grid: { color: color('--rule') },
           },
         },

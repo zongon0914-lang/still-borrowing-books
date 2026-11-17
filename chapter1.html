@@ -32,6 +32,8 @@
         <a href="chapter1.html" aria-current="page">一年借幾本</a>
         <a href="chapter2.html">哪裡最愛借</a>
         <a href="chapter3.html">我們借什麼</a>
+        <a href="ending.html">結語</a>
+        <a href="scorecard.html">成績單</a>
         <a href="sources.html">資料來源與 AI 使用說明</a>
       </nav>
     </div>
@@ -62,8 +64,7 @@
       </div>
       <div class="guess__result" id="guess-result" aria-live="polite">
         <p class="guess__answer">
-          答案是 <strong><span id="guess-answer">5.8</span> 本</strong>。
-          <span class="guess__sentence" id="guess-sentence"></span>
+          答案是 <strong><span id="guess-answer">5.8</span> 本</strong>。<span class="guess__sentence" id="guess-sentence"></span>
         </p>
         <button class="button button--quiet guess__again" type="button" id="guess-again" hidden>再猜一次</button>
       </div>
@@ -71,8 +72,7 @@
 
     <p class="lead drop-cap">
       全台灣的公共圖書館，在 <span data-stat="latestYear">2025</span> 年一共借出
-      <strong><span data-stat="latestPrint">1.35 億</span>冊</strong>紙本書。
-      <span class="guess-spoiler">平均下來，每個台灣人一年借了
+      <strong><span data-stat="latestPrint">1.35 億</span>冊</strong>紙本書。<span class="guess-spoiler">平均下來，每個台灣人一年借了
       <strong><span data-stat="latestPerCapita">5.8</span> 本</strong>。</span>
     </p>
 
@@ -87,13 +87,12 @@
       </p>
       <p class="stat">
         <span class="stat__value"><span data-stat="printGrowthTimes">2.1</span> 倍</span>
-        <span class="stat__label">十二年間紙本借閱冊數成長</span>
+        <span class="stat__label"><span data-stat="latestYear">2025</span> 年紙本借閱冊數是 <span data-stat="firstYear">2014</span> 年的</span>
       </p>
     </div>
 
     <p class="note">
-      「人均借閱」就是平均每人借幾本 = 全國紙本借閱冊數 ÷ 公共圖書館服務的人口。
-      這是把所有人平均分攤的數字，不代表每個人真的都借了這麼多本。
+      「人均借閱」就是平均每人借幾本 = 全國紙本借閱冊數 ÷ 公共圖書館服務的人口。這是把所有人平均分攤的數字，不代表每個人真的都借了這麼多本。
     </p>
 
     <h2>紙本書：疫情跌一跤，之後一路衝上新高</h2>
@@ -116,21 +115,15 @@
     </figure>
 
     <p>
-      從 2014 年到 2019 年，紙本借閱冊數每年都在增加。
-      到了疫情升溫的 2021 年，紙本借閱冊數掉到
-      <strong><span data-stat="covidPrint">7,125 萬</span>冊</strong>，
-      比前一年少了約 <span data-stat="covidDropPct">13</span>%，
-      是這十二年裡唯一一次大跌。
+      從 2014 年到 2019 年，紙本借閱冊數每年都在增加。到了疫情升溫的 2021 年，紙本借閱冊數掉到
+      <strong><span data-stat="covidPrint">7,125 萬</span>冊</strong>，比前一年少了約 <span data-stat="covidDropPct">13</span>%，是這十二年裡唯一一次大跌。
     </p>
     <p>
-      疫情過後，紙本借閱冊數不但回來了，還一路創新高：
-      <span data-stat="latestYear">2025</span> 年的冊數是
-      <span data-stat="firstYear">2014</span> 年的 <span data-stat="printGrowthTimes">2.1</span> 倍。
-      這波成長並不是每個縣市都一樣，有些地方特別突出，
-      我們在<a href="chapter2.html">第二章</a>會看到。
+      疫情過後，紙本借閱冊數不但回來了，還一路創新高：<span data-stat="latestYear">2025</span> 年的冊數是
+      <span data-stat="firstYear">2014</span> 年的 <span data-stat="printGrowthTimes">2.1</span> 倍。這波成長並不是每個縣市都一樣，有些地方特別突出，我們在<a href="chapter2.html">第二章</a>會看到。
     </p>
 
-    <h2>電子書：十年長了二十幾倍，今年第一次停下來</h2>
+    <h2>電子書：2014 到 2024 年長了二十幾倍，2025 年第一次停下來</h2>
 
     <figure class="chart-card">
       <figcaption>全國公共圖書館電子書借閱冊數（2014–2025）</figcaption>
@@ -151,21 +144,16 @@
 
     <p>
       2014 年，電子書一年只借出不到 80 萬冊；到了 2024 年，已經有
-      <strong><span data-stat="ebook2024">1,980 萬</span>冊</strong>，
-      大約是 2014 年的 <span data-stat="ebookGrowthTimes">25</span> 倍。
-      疫情那一年，紙本跌、電子書卻翻倍成長。
+      <strong><span data-stat="ebook2024">1,980 萬</span>冊</strong>，大約是 2014 年的 <span data-stat="ebookGrowthTimes">25</span> 倍。疫情那一年，紙本跌、電子書卻翻倍成長。
     </p>
     <p>
       但 2025 年，電子書借閱第一次小幅下滑，比 2024 年少了約
       <span data-stat="ebookLatestDropPct">3.5</span>%，降到
-      <span data-stat="ebookLatest">1,911 萬</span>冊。
-      電子書的熱潮是到頂了，還是只是暫時休息？還要再看幾年。
+      <span data-stat="ebookLatest">1,911 萬</span>冊。電子書的熱潮是到頂了，還是只是暫時休息？還要再看幾年。
     </p>
 
     <p class="note">
-      為什麼紙本和電子書分開算？國家圖書館公布的總數把兩者加在一起，
-      但開放資料是分開列的。本作品寫「借閱冊數」時，一律註明是紙本還是電子書，避免混在一起比較。
-      「借閱冊數」是借出去的書本總數；「借閱人次」是借書這個動作發生幾次，一個人一次借 5 本只算 1 人次。
+      為什麼紙本和電子書分開算？國家圖書館公布的總數把兩者加在一起，但開放資料是分開列的。本作品寫「借閱冊數」時，一律註明是紙本還是電子書，避免混在一起比較。「借閱冊數」是借出去的書本總數；「借閱人次」是借書這個動作發生幾次，一個人一次借 5 本只算 1 人次。
     </p>
 
     <nav class="chapter-nav" aria-label="章節導覽">

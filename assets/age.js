@@ -4,7 +4,7 @@
 (function () {
   const SEXES = ['all', 'female', 'male'];
   const SEX_LABEL = { all: '', female: '女性', male: '男性' };
-  /** 結果頁只列第一名類別的前 5 本，完整 10 本在類別頁 */
+  /** 結果頁只列「特別愛借」那一類的前 5 本，完整 10 本在類別頁 */
   const BOOKS_SHOWN = 5;
 
   /** 某個性別的所有讀者，各類別借了多少：把 9 個年齡層加起來（男女合計直接用年刊的總計） */
@@ -50,24 +50,33 @@
       .sort((a, b) => b.loans - a.loans)
       .map((c) => ({ ...c, overall: overallShare(c.name), url: categoryUrl(c.name) }));
     const top = ranking[0];
-    const books = data.books.categories.find((c) => c.name === top.name).books.slice(0, BOOKS_SHOWN);
     // 每個年齡層的第一名都是語言文學，所以另外找「占比比所有讀者多最多個百分點」的類別（不含第一名）。
     // 用百分點差、不用倍數：小類別（例如宗教）倍數一放大就很誇張
     const gap = (c) => c.share - c.overall;
     const standout = ranking.slice(1).reduce((a, b) => (gap(b) > gap(a) ? b : a));
+    // 書單跟著「特別愛借」那一類換：每個年齡最常借的都是語言文學，跟著第一名的話，換年齡書單都一樣
+    const books = data.books.categories.find((c) => c.name === standout.name).books.slice(0, BOOKS_SHOWN);
+    const label = ageLabel(age) + SEX_LABEL[sex];
+    const compareLabel = `台北所有${SEX_LABEL[sex]}讀者`;
+    const pct = (n) => (n * 100).toFixed(1) + '%';
 
     return {
       found: true,
       age,
       sex,
       ageLabel: ageLabel(age),
-      label: ageLabel(age) + SEX_LABEL[sex],
-      compareLabel: `台北所有${SEX_LABEL[sex]}讀者`,
+      label,
+      compareLabel,
       loans: summary.loans,
       ranking,
       top,
       books,
       standout,
+      /** 「特別愛借」是什麼意思：頁面上解釋用的一句話 */
+      standoutMeaning: `「特別愛借」是指：跟${compareLabel}比，這一類在 ${label}借的書裡占的比例高出最多（最常借的${top.name}除外），不一定是借最多的。`,
+      standoutLine:
+        `${label}借的書裡，${standout.name}占 ${pct(standout.share)}，${compareLabel}是 ${pct(standout.overall)}，` +
+        `多了 ${(gap(standout) * 100).toFixed(1)} 個百分點。`,
     };
   }
 
@@ -98,7 +107,8 @@
     if (!pointed) return;
     const age = form.querySelector('input[name="age"]:checked');
     const sex = form.querySelector('input[name="sex"]:checked');
-    if (age) location.href = resultUrl(age.value, sex ? sex.value : 'all');
+    // 「#result」讓結果頁知道是剛選完的，手機上要捲到結果（頁面上沒有這個 id，瀏覽器不會自己跳）
+    if (age) location.href = resultUrl(age.value, sex ? sex.value : 'all') + '#result';
   });
 
   if (!v.found) {
@@ -124,7 +134,7 @@
 
   $('age-lead').innerHTML =
     `${data.age.year} 年，${esc(who)}的讀者在北市圖一共借了 <strong>${wan(v.loans)}冊</strong>書，` +
-    `最常借的是<strong>${esc(v.top.name)}</strong>，占 <strong>${pct(v.top.share)}</strong>。`;
+    `最常借的是<strong>${esc(v.top.name)}</strong>，占 <strong>${pct(v.top.share)}</strong>；比其他人特別愛借的是<strong>${esc(v.standout.name)}</strong>。`;
 
   $('legend-self').textContent = v.label;
   $('legend-compare').textContent = v.compareLabel;
@@ -145,14 +155,13 @@
     .join('');
 
   const s = v.standout;
-  $('age-standout').innerHTML = `<p class="note">
-      每個年齡層最常借的都是語言文學。跟${esc(v.compareLabel)}比，${esc(v.label)}特別多借的是
-      <a href="${s.url}"><strong>${esc(s.name)}</strong></a>：
-      占 ${pct(s.share)}，${esc(v.compareLabel)}是 ${pct(s.overall)}，多了 ${((s.share - s.overall) * 100).toFixed(1)} 個百分點。
-    </p>`;
+  $('age-picks').innerHTML =
+    `<p class="age-pick"><span class="age-pick__label">最常借</span><a href="${v.top.url}">${esc(v.top.name)}</a><span class="age-pick__value">${pct(v.top.share)}</span></p>` +
+    `<p class="age-pick is-standout"><span class="age-pick__label">比其他人特別愛借</span><a href="${s.url}">${esc(s.name)}</a><span class="age-pick__value">${pct(s.share)}</span></p>`;
+  $('age-standout').innerHTML = `<p class="note">${esc(v.standoutLine)}${esc(v.standoutMeaning)}</p>`;
 
   const src = data.books;
-  $('age-books-title').textContent = `最常借的${v.top.name}：全國借最多的 ${v.books.length} 本`;
+  $('age-books-title').textContent = `特別愛借的${s.name}：全國借最多的 ${v.books.length} 本`;
   $('age-books').innerHTML = v.books
     .map((b) => {
       const i = b.title.indexOf('：');
@@ -169,7 +178,8 @@
     .join('');
   $('age-books-source').innerHTML =
     `書單是全國公共圖書館所有年齡的排行，不是只有${esc(v.label)}：國家圖書館《${esc(src.source.title)}》，` +
-    `${src.rocYear} 年（${src.year} 年）。<a href="${v.top.url}">看${esc(v.top.name)}完整前 10 名 →</a>`;
+    `${src.rocYear} 年（${src.year} 年）。<a href="${s.url}">看${esc(s.name)}完整前 10 名 →</a>`;
 
   $('age-result').hidden = false;
+  if (location.hash === '#result') window.Site.revealOnMobile($('age-result'));
 })();

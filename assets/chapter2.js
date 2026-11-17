@@ -1,6 +1,6 @@
 // 章節二：22 縣市人均借閱地圖、排行長條
 (function () {
-  const { data, fillStats, drawWhenSeen, latest, first } = window.Site;
+  const { data, fillStats, drawWhenSeen, revealOnMobile, latest, first } = window.Site;
   const map = window.TAIWAN_MAP;
 
   const YEAR = latest.year;
@@ -23,6 +23,8 @@
     taipeiRank: () => rankOf('台北市'),
     nationalValue: () => fmt(latest.printPerCapita),
     ntpcFirst: () => fmt(valueOf(byName('新北市'), first.year)),
+    ntpcLatest: () => fmt(valueOf(byName('新北市'))),
+    ntpcTimes: () => Math.round(valueOf(byName('新北市')) / valueOf(byName('新北市'), first.year)),
   });
 
   // ---------- 顏色分級：每 2 本一級，地圖和長條圖共用 ----------
@@ -104,7 +106,7 @@
     readout.innerHTML =
       `<strong>${name}</strong>：每人 <strong>${fmt(valueOf(c))}</strong> 本（第 ${rankOf(name)} 名）` +
       (c.excludesNationalLibrary ? '<br><small>已扣除國立館</small>' : '') +
-      `<br><a href="${countyUrl(name)}">看 ${name} 十年變化 →</a>`;
+      `<br><a href="${countyUrl(name)}">看 ${name} ${first.year}–${YEAR} 年的變化 →</a>`;
     svg.querySelectorAll('.is-active').forEach((n) => n.classList.remove('is-active'));
     svg.querySelector(`[data-county="${name}"]`)?.classList.add('is-active');
     bars.querySelectorAll('.is-active').forEach((n) => n.classList.remove('is-active'));
@@ -135,6 +137,7 @@
         e.preventDefault();
         selected = c.name;
         show(c.name);
+        revealOnMobile(readout); // 手機上地圖下面才是數字，點了要捲過去才看得到
       }
     });
     svg.append(link);

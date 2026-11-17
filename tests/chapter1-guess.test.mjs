@@ -73,3 +73,24 @@ test('猜 5 本：猜少了 0.8 本', () => {
   assert.equal(r.kind, 'under');
   assert.match(r.sentence, /猜少了 0\.8 本/);
 });
+
+test('猜少時說「更常借書」，不說「更常去圖書館」（數據是借閱冊數，不是去圖書館的次數）', () => {
+  const r = reveal(0);
+  assert.match(r.sentence, /更常借書/);
+  assert.doesNotMatch(r.sentence, /圖書館/);
+});
+
+// 縱軸刻度：紙本折線圖 2014–2025 從 6,486 萬到 1.35 億冊，整張用「億」；電子書最多 1,980 萬冊，整張用「萬」
+test('縱軸刻度同一張圖用同一種單位：6,000 萬寫成 0.6 億、1.4 億寫成 1.4 億', () => {
+  const { axisTick, axisUnit } = window.Chapter1Page;
+  const print = window.LIBRARY_DATA.national.map((r) => r.printLoans);
+  const ebook = window.LIBRARY_DATA.national.map((r) => r.ebookLoans);
+  assert.equal(axisUnit(print), '億');
+  assert.equal(axisUnit(ebook), '萬');
+  assert.deepEqual(
+    [0, 2e7, 6e7, 8e7, 1e8, 1.2e8, 1.4e8].map((n) => axisTick(n, '億')),
+    ['0', '0.2 億', '0.6 億', '0.8 億', '1 億', '1.2 億', '1.4 億'],
+  );
+  assert.equal(axisTick(1.25e8, '億'), '1.25 億');
+  assert.deepEqual([0, 5e6, 1.5e7, 2e7].map((n) => axisTick(n, '萬')), ['0', '500 萬', '1,500 萬', '2,000 萬']);
+});

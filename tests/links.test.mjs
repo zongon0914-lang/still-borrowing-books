@@ -146,3 +146,28 @@ test('章節一、二、三和結語標出進度 1／4 到 4／4，其他頁沒�
   }
   for (const page of Object.keys(expected)) assert.ok(site.pages.has(page), `首頁點不到 ${page}`);
 });
+
+// 規格 docs/spec-polish.md 使用者故事 24、25：每一頁的導覽列一致，都有結語和成績單；成績單頁回到結語
+const NAV = [
+  ['chapter1.html', '一年借幾本'],
+  ['chapter2.html', '哪裡最愛借'],
+  ['chapter3.html', '我們借什麼'],
+  ['ending.html', '結語'],
+  ['scorecard.html', '成績單'],
+  ['sources.html', '資料來源與 AI 使用說明'],
+];
+
+test('每一頁的導覽列都一樣，有三章、結語、成績單和資料來源', () => {
+  for (const [page, html] of site.html) {
+    const nav = html.match(/<nav class="site-nav"[^>]*>([\s\S]*?)<\/nav>/);
+    assert.ok(nav, `${page} 沒有導覽列`);
+    const links = [...nav[1].matchAll(/<a href="([^"]+)"[^>]*>([^<]+)<\/a>/g)].map((m) => [m[1], m[2]]);
+    assert.deepEqual(links, NAV, `${page} 的導覽列不一樣`);
+  }
+});
+
+test('成績單頁的返回連結回到結語', () => {
+  const html = site.html.get('scorecard.html');
+  const nav = html.match(/<nav class="chapter-nav"[^>]*>([\s\S]*?)<\/nav>/)[1];
+  assert.match(nav, /<a href="ending\.html">← 回到：所以，還借書嗎？<\/a>/);
+});

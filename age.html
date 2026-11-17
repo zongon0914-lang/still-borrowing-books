@@ -32,6 +32,8 @@
         <a href="chapter1.html">一年借幾本</a>
         <a href="chapter2.html">哪裡最愛借</a>
         <a href="chapter3.html">我們借什麼</a>
+        <a href="ending.html">結語</a>
+        <a href="scorecard.html">成績單</a>
         <a href="sources.html">資料來源與 AI 使用說明</a>
       </nav>
     </div>
@@ -50,8 +52,7 @@
     <h1 id="age-title">跟你同年齡的人都借什麼？</h1>
 
     <p class="note data-scope">
-      <strong>先說清楚：</strong>年齡資料只有<strong>台北市</strong>，
-      來自臺北市立圖書館 113 年度（2024 年）年刊，算的是紙本書的借閱冊數。
+      <strong>先說清楚：</strong>年齡資料只有<strong>台北市</strong>，來自臺北市立圖書館 113 年度（2024 年）年刊，算的是紙本書的借閱冊數。
     </p>
 
     <!-- 沒有 JS 也能用：一般的表單，送出後網址變成 age.html?age=…&sex=… -->
@@ -89,6 +90,7 @@
 
     <section class="age-result" id="age-result" hidden aria-live="polite">
       <p class="lead" id="age-lead"></p>
+      <div class="age-picks" id="age-picks"></div>
 
       <figure class="chart-card">
         <figcaption id="age-ranking-caption">借的書各類別占多少</figcaption>
@@ -102,19 +104,17 @@
 
       <div class="age-standout" id="age-standout"></div>
 
-      <h2 id="age-books-title">最常借的類別：熱門書</h2>
+      <h2 id="age-books-title">特別愛借的類別：熱門書</h2>
       <ol class="book-list" id="age-books"></ol>
       <p class="chart-source" id="age-books-source"></p>
 
       <p class="age-share">
-        想分享這個結果？直接複製這一頁的網址就可以。
-        <a href="#age-picker">換一個年齡再看 ↑</a>
+        想分享這個結果？直接複製這一頁的網址就可以。<a href="#age-picker">換一個年齡再看 ↑</a>
       </p>
     </section>
 
     <nav class="chapter-nav" aria-label="章節導覽">
-      <a href="chapter3.html">← 回到：我們這一代借什麼？</a>
-      <a href="index.html">回首頁</a>
+      <a href="chapter3.html">← 回到：我們這一代借什麼？</a><a href="index.html">回首頁</a>
     </nav>
   </main>
 
