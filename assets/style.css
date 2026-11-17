@@ -198,6 +198,27 @@ h2 {
 .data-table th:first-child, .data-table td:first-child { text-align: left; }
 .table-scroll { overflow-x: auto; }
 
+/* ---------- 章節一：先猜再看 ---------- */
+.guess {
+  margin: 1.5rem 0 2rem;
+  padding: 1rem;
+  background: var(--paper-deep);
+  border-radius: 4px;
+  font-family: var(--sans);
+}
+.guess__question { margin: 0 0 0.75rem; font-family: var(--serif); font-size: 1.25rem; font-weight: 700; line-height: 1.6; }
+.guess__play { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 0.75rem; }
+.guess__play[hidden], .guess__result[hidden], .guess .button[hidden] { display: none; }
+.guess__label { font-size: 0.9375rem; color: var(--ink-soft); }
+/* 拉桿佔滿一行剩下的寬度；高度加大讓手指好按 */
+.guess__range { flex: 1 1 10rem; min-width: 0; height: 2.75rem; margin: 0; accent-color: var(--accent); touch-action: pan-y; }
+.guess__range:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+.guess__value { min-width: 4.5em; font-size: 1.25rem; font-weight: 700; font-variant-numeric: tabular-nums; color: var(--accent); }
+.guess .button { border: 1px solid var(--accent); font-size: 1rem; cursor: pointer; }
+.guess__result { margin-top: 0.75rem; }
+.guess__answer { margin: 0 0 0.75rem; line-height: 1.7; }
+.guess__answer strong { color: var(--accent); font-size: 1.25rem; }
+
 /* ---------- 章節二：地圖與排行 ---------- */
 .bin-0 { fill: var(--bin-0); background: var(--bin-0); }
 .bin-1 { fill: var(--bin-1); background: var(--bin-1); }
