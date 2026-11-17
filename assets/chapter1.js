@@ -56,6 +56,7 @@
     const range = document.getElementById('guess-range');
     const value = document.getElementById('guess-value');
     const result = document.getElementById('guess-result');
+    const answer = document.getElementById('guess-answer');
     const sentence = document.getElementById('guess-sentence');
     const revealButton = document.getElementById('guess-reveal');
     const again = document.getElementById('guess-again');
@@ -64,7 +65,9 @@
     range.addEventListener('input', showValue);
 
     revealButton.addEventListener('click', () => {
-      sentence.textContent = window.Chapter1Page.guess(data, Number(range.value)).sentence;
+      const revealed = window.Chapter1Page.guess(data, Number(range.value));
+      answer.textContent = revealed.answer;
+      sentence.textContent = revealed.sentence;
       result.hidden = false;
       again.hidden = false;
       revealButton.hidden = true;
@@ -129,25 +132,32 @@
   const highlightRadius = (highlightYears) => (ctx) =>
     highlightYears.includes(Number(years[ctx.dataIndex])) ? 6 : 3;
 
-  // 從左到右一年一年畫出線（Chart.js 官方「progressive line」寫法）：每個點等前一個點畫好才出發
+  // 從左到右畫出線：每個點一開始就在正確位置（所以畫的途中滑到任何一年都有提示框），
+  // 只是把畫線的範圍從左邊慢慢打開。提示框在這之後才畫，不會被遮住。
   const DRAW_MS = 1600;
-  const step = DRAW_MS / years.length;
-  const startOnce = (key) => (ctx) => {
-    if (ctx.type !== 'data' || ctx[key]) return 0;
-    ctx[key] = true;
-    return ctx.index * step;
-  };
-  const previousY = (ctx) =>
-    ctx.index === 0
-      ? ctx.chart.scales.y.getPixelForValue(0)
-      : ctx.chart.getDatasetMeta(ctx.datasetIndex).data[ctx.index - 1].getProps(['y'], true).y;
-  const drawLeftToRight = {
-    x: { type: 'number', easing: 'linear', duration: step, from: NaN, delay: startOnce('xStarted') },
-    y: { type: 'number', easing: 'linear', duration: step, from: previousY, delay: startOnce('yStarted') },
+  const revealLeftToRight = () => {
+    let start = null;
+    return {
+      id: 'revealLeftToRight',
+      beforeDatasetsDraw(chart) {
+        start ??= performance.now();
+        const progress = Math.min((performance.now() - start) / DRAW_MS, 1);
+        const { left, width } = chart.chartArea;
+        const { ctx } = chart;
+        ctx.save();
+        ctx.beginPath();
+        ctx.rect(0, 0, left + width * progress + 8, chart.height); // +8：最右邊的點不被切一半
+        ctx.clip();
+        if (progress < 1) requestAnimationFrame(() => chart.draw());
+      },
+      afterDatasetsDraw(chart) {
+        chart.ctx.restore();
+      },
+    };
   };
 
-  // animations：不給就是沒有開場動畫（只有紙本折線圖會畫出來，其他圖直接顯示）
-  function lineChart(canvasId, values, lineColor, label, labels, animations) {
+  // reveal：給 true 就從左到右畫出來（只有紙本折線圖會，其他圖直接顯示）
+  function lineChart(canvasId, values, lineColor, label, labels, reveal) {
     const marked = labels.map((l) => l.year);
     return new Chart(document.getElementById(canvasId), {
       type: 'line',
@@ -168,8 +178,7 @@
       },
       options: {
         maintainAspectRatio: false,
-        animation: animations ? {} : false,
-        animations: animations || {},
+        animation: false,
         interaction: { mode: 'index', intersect: false }, // 滑到（或點到）某一年附近就顯示
         layout: { padding: { top: 24 } },
         plugins: {
@@ -190,11 +199,12 @@
           },
         },
       },
-      plugins: [yearLabels(labels)],
+      // 年份標註排在 reveal 前面：它也在打開的範圍裡畫，線畫到那一年才出現
+      plugins: reveal ? [yearLabels(labels), revealLeftToRight()] : [yearLabels(labels)],
     });
   }
 
-  const printChart = (animations) => lineChart(
+  const printChart = (reveal) => lineChart(
     'print-chart',
     data.national.map((r) => r.printLoans),
     color('--chart-print'),
@@ -203,12 +213,12 @@
       { year: COVID_YEAR, text: `${COVID_YEAR} 疫情谷底`, below: true },
       { year: latest.year, text: `${latest.year} 新高` },
     ],
-    animations,
+    reveal,
   );
   // 捲到才建圖：之前畫布是空的，捲到時線從 2014 畫到 2025；開了減少動態效果就直接建好完整的圖
   drawWhenSeen(
     document.getElementById('print-chart'),
-    () => printChart(drawLeftToRight),
+    () => printChart(true),
     () => printChart(),
   );
 

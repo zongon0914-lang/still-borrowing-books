@@ -81,6 +81,21 @@ test('數據改變、發現不再成立時，會標成不成立', () => {
   assert.deepEqual(changed.findings.map((f) => f.holds), [false, false, false]);
 });
 
+test('第 1 名換人時，發現二的句子跟著寫新的第 1 名；不是新高時不寫「十年新高」', () => {
+  const data = structuredClone(window.LIBRARY_DATA);
+  // 讓臺中市 2025 年變成 9 本：超過新北 8.73，臺中變第 1 名
+  data.counties.find((c) => c.name === '臺中市').years.find((y) => y.year === 2025).perCapita = 9;
+  // 讓 2024 年變 9 本：2025 年 5.8 本不再是最高
+  data.national.find((r) => r.year === 2024).printPerCapita = 9;
+  const [changedTrend, changedWhere] = window.EndingPage.view(data).findings;
+  assert.equal(changedWhere.value, '9.0');
+  assert.match(changedWhere.text, /第 1 名是臺中市，平均每人 9\.0 本/);
+  assert.match(changedWhere.caption, /臺中市平均每人/);
+  assert.doesNotMatch(changedWhere.text + changedWhere.caption, /新北/);
+  assert.doesNotMatch(changedTrend.text, /十年新高/);
+  assert.equal(changedWhere.holds, true); // 臺中第一、臺北不是第一：發現仍成立
+});
+
 test('JavaScript 沒載入時，HTML 的備用文字跟算出來的一樣（三個發現和答案都完整）', async () => {
   const html = await readFile(new URL('../ending.html', import.meta.url), 'utf8');
   for (const f of v.findings) {
@@ -90,4 +105,9 @@ test('JavaScript 沒載入時，HTML 的備用文字跟算出來的一樣（三�
     assert.ok(html.includes(`<a href="${f.url}" data-part="linkText">`), `${f.title} 沒有連到 ${f.url}`);
   }
   assert.ok(html.includes(`data-ending-answer>${v.answer}<`), '整體答案的備用文字跟程式不一樣');
+});
+
+test('主要按鈕寫「換你回答：你還借書嗎？ →」，連到借書成績單（規格第 12 條）', async () => {
+  const html = await readFile(new URL('../ending.html', import.meta.url), 'utf8');
+  assert.match(html, /<a class="button button--big" href="scorecard\.html">換你回答：你還借書嗎？ →<\/a>/);
 });
