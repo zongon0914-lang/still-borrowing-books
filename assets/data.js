@@ -183,7 +183,7 @@ window.LIBRARY_DATA = {
       ]
     },
     {
-      "name": "臺北市",
+      "name": "台北市",
       "excludesNationalLibrary": false,
       "years": [
         {
@@ -651,7 +651,7 @@ window.LIBRARY_DATA = {
       ]
     },
     {
-      "name": "臺中市",
+      "name": "台中市",
       "excludesNationalLibrary": true,
       "years": [
         {
@@ -1119,7 +1119,7 @@ window.LIBRARY_DATA = {
       ]
     },
     {
-      "name": "臺南市",
+      "name": "台南市",
       "excludesNationalLibrary": false,
       "years": [
         {
@@ -1509,7 +1509,7 @@ window.LIBRARY_DATA = {
       ]
     },
     {
-      "name": "臺東縣",
+      "name": "台東縣",
       "excludesNationalLibrary": false,
       "years": [
         {
@@ -3441,7 +3441,7 @@ window.LIBRARY_DATA = {
         "api": "https://www.ris.gov.tw/rs-opendata/api/v1/datastore/ODRP014/11312?page=1"
       },
       "year": 2024,
-      "city": "臺北市",
+      "city": "台北市",
       "total": 2490869
     }
   },
@@ -4065,7 +4065,7 @@ window.LIBRARY_DATA = {
         "titleUrl": "https://webpac.klccab.gov.tw/webpac/search.cfm?m=ss&k0={title}&t0=k&c0=and&s0=0&w=0"
       },
       {
-        "county": "臺北市",
+        "county": "台北市",
         "name": "臺北市立圖書館",
         "titleUrl": "https://book.tpml.edu.tw/search?searchField=FullText&searchInput={title}"
       },
@@ -4095,7 +4095,7 @@ window.LIBRARY_DATA = {
         "titleUrl": "https://webpacx.miaoli.gov.tw/search?searchField=FullText&searchInput={title}"
       },
       {
-        "county": "臺中市",
+        "county": "台中市",
         "name": "臺中市立圖書館",
         "titleUrl": "https://webpac.taichung.gov.tw/search?searchField=FullText&searchInput={title}"
       },
@@ -4125,7 +4125,7 @@ window.LIBRARY_DATA = {
         "titleUrl": "https://lib.cycab.gov.tw/search?searchField=FullText&searchInput={title}"
       },
       {
-        "county": "臺南市",
+        "county": "台南市",
         "name": "臺南市立圖書館",
         "titleUrl": "https://lib.tnml.tn.edu.tw/webpac/search.cfm?m=ss&k0={title}&t0=k&c0=and&s0=0&w=0"
       },
@@ -4150,7 +4150,7 @@ window.LIBRARY_DATA = {
         "titleUrl": "https://center.hccc.gov.tw/search?searchField=FullText&searchInput={title}"
       },
       {
-        "county": "臺東縣",
+        "county": "台東縣",
         "name": "臺東縣立圖書館",
         "titleUrl": "https://libraryx.ccl.ttct.edu.tw/search?searchField=FullText&searchInput={title}"
       },

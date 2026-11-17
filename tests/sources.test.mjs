@@ -84,7 +84,7 @@ test('名詞解釋跟 GLOSSARY.md 一致（每個名詞的解釋整段照抄）'
 
 test('說明為什麼紙本和電子書分開、為什麼扣除國立館、為什麼年份不同', () => {
   assert.match(text, /紙本和電子書為什麼分開/);
-  for (const county of ['新北', '臺中', '南投']) assert.ok(text.includes(county), county);
+  for (const county of ['新北', '台中', '南投']) assert.ok(text.includes(county), county);
   assert.match(text, /不含國立館/);
   assert.match(text, /年份為什麼不一樣/);
   assert.ok(text.includes(`${data.age.year}`));

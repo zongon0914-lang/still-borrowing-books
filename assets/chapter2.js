@@ -19,8 +19,8 @@
     topValue: () => fmt(valueOf(ranked[0])),
     secondName: () => ranked[1].name,
     secondValue: () => fmt(valueOf(ranked[1])),
-    taipeiValue: () => fmt(valueOf(byName('臺北市'))),
-    taipeiRank: () => rankOf('臺北市'),
+    taipeiValue: () => fmt(valueOf(byName('台北市'))),
+    taipeiRank: () => rankOf('台北市'),
     nationalValue: () => fmt(latest.printPerCapita),
     ntpcFirst: () => fmt(valueOf(byName('新北市'), first.year)),
   });

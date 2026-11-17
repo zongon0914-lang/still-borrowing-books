@@ -244,7 +244,7 @@
 
     $('sc-peer-compare').innerHTML =
       `台北 ${esc(c.ageLabel)} ${c.peer.year} 年平均每人借 ${perCapitaText(c.peer.perCapita)} 本，${compareHtml(c.peer.compare)}。` +
-      `<span class="scorecard__fine">只有臺北市、${c.peer.year} 年的數據：北市圖這個年齡層的紙本借閱冊數 ÷ 台北這個年齡層的人口。` +
+      `<span class="scorecard__fine">只有台北市、${c.peer.year} 年的數據：北市圖這個年齡層的紙本借閱冊數 ÷ 台北這個年齡層的人口。` +
       '借書的人不一定住台北，所以這是「平均每個台北人」的算法，跟縣市人均借閱一樣。</span>';
 
     const all = c.rank.of - 1; // 縣市數（名次的總數裡多了一個你）

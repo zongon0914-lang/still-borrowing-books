@@ -6,9 +6,9 @@
 // - 2025 年全國紙本 135,251,757 冊 ÷ 人口 23,299,132 人 ≈ 5.81 → 5.8 本；
 //   其他年最高是 2024 年 128,108,040 ÷ 23,400,220 ≈ 5.47，所以 2025 年是 2014–2025 最高
 // - 2025 年新北紙本 35,301,750 冊 ÷ 人口 4,044,831 人 ≈ 8.73 → 8.7 本，22 縣市第 1 名（見 county.test.mjs）
-// - 2025 年臺北紙本 13,413,178 冊 ÷ 人口 2,439,507 人 ≈ 5.50 → 5.5 本；
-//   排在它前面的是新北 8.73、高雄 19,651,175 ÷ 2,718,545 ≈ 7.23、臺南 11,801,492 ÷ 1,852,477 ≈ 6.37、
-//   臺中 17,897,588 ÷ 2,868,465 ≈ 6.24，所以臺北第 5 名
+// - 2025 年台北紙本 13,413,178 冊 ÷ 人口 2,439,507 人 ≈ 5.50 → 5.5 本；
+//   排在它前面的是新北 8.73、高雄 19,651,175 ÷ 2,718,545 ≈ 7.23、台南 11,801,492 ÷ 1,852,477 ≈ 6.37、
+//   台中 17,897,588 ÷ 2,868,465 ≈ 6.24，所以台北第 5 名
 // - 北市圖 2024 年 18–24 歲借了 317,624 冊 ÷ 台北 18–24 歲人口 145,692 人 ≈ 2.18 → 2.2 本，
 //   比 0–5 歲 2.83、65 歲以上 2.77…每一組都低；35–44 歲 3,270,426 ÷ 367,072 ≈ 8.91，8.91 ÷ 2.18 ≈ 4.1 → 1／4（見 chapter3.test.mjs）
 import { test } from 'node:test';
@@ -55,7 +55,7 @@ test('發現二：愛借書的不一定是台北，新北第一約 8.7 本、台
   assert.equal(where.value, '8.7');
   assert.match(where.text, /新北市/);
   assert.match(where.text, /第 1 名/);
-  assert.match(where.text, /臺北市約 5\.5 本/);
+  assert.match(where.text, /台北市約 5\.5 本/);
   assert.match(where.text, /第 5 名/);
 });
 
@@ -86,8 +86,8 @@ test('數據改變、發現不再成立時，會標成不成立', () => {
   const data = structuredClone(window.LIBRARY_DATA);
   // 讓 2024 年比 2025 年多：2025 不再是十年新高
   data.national.find((r) => r.year === 2024).printPerCapita = 9;
-  // 讓臺北市 2025 年變成 10 本：超過新北，新北不再是第一名
-  data.counties.find((c) => c.name === '臺北市').years.find((y) => y.year === 2025).perCapita = 10;
+  // 讓台北市 2025 年變成 10 本：超過新北，新北不再是第一名
+  data.counties.find((c) => c.name === '台北市').years.find((y) => y.year === 2025).perCapita = 10;
   // 讓 18–24 歲人均 3 本：比 0–5 歲 2.83、65 歲以上 2.77 多，不再是所有年齡層最少
   data.age.groups.find((g) => g.age === '18-24').perCapita = 3;
   const changed = window.EndingPage.view(data);
@@ -96,17 +96,17 @@ test('數據改變、發現不再成立時，會標成不成立', () => {
 
 test('第 1 名換人時，發現二的句子跟著寫新的第 1 名；不是新高時不寫「最高」', () => {
   const data = structuredClone(window.LIBRARY_DATA);
-  // 讓臺中市 2025 年變成 9 本：超過新北 8.73，臺中變第 1 名
-  data.counties.find((c) => c.name === '臺中市').years.find((y) => y.year === 2025).perCapita = 9;
+  // 讓台中市 2025 年變成 9 本：超過新北 8.73，台中變第 1 名
+  data.counties.find((c) => c.name === '台中市').years.find((y) => y.year === 2025).perCapita = 9;
   // 讓 2024 年變 9 本：2025 年 5.8 本不再是最高
   data.national.find((r) => r.year === 2024).printPerCapita = 9;
   const [changedTrend, changedWhere] = window.EndingPage.view(data).findings;
   assert.equal(changedWhere.value, '9.0');
-  assert.match(changedWhere.text, /第 1 名是臺中市，平均每人 9\.0 本/);
-  assert.match(changedWhere.caption, /臺中市平均每人/);
+  assert.match(changedWhere.text, /第 1 名是台中市，平均每人 9\.0 本/);
+  assert.match(changedWhere.caption, /台中市平均每人/);
   assert.doesNotMatch(changedWhere.text + changedWhere.caption, /新北/);
   assert.doesNotMatch(changedTrend.text, /最高/);
-  assert.equal(changedWhere.holds, true); // 臺中第一、臺北不是第一：發現仍成立
+  assert.equal(changedWhere.holds, true); // 台中第一、台北不是第一：發現仍成立
 });
 
 test('JavaScript 沒載入時，HTML 的備用文字跟算出來的一樣（三個發現和答案都完整）', async () => {

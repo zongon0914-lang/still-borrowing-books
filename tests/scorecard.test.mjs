@@ -71,13 +71,13 @@ test('稱號和一句話在每個邊界都正確，一句話裡的數字依輸�
     999: ['每週一本俱樂部', '你一個人抵 172 個台灣人'],
   };
   for (const [books, [name, line]] of Object.entries(expected)) {
-    const c = exact('臺中市', Number(books));
+    const c = exact('台中市', Number(books));
     assert.equal(c.title.name, name, `${books} 本`);
     assert.equal(c.title.line, line, `${books} 本`);
   }
 });
 
-// 2025 年人均高於 5 本的縣市（手數）：臺北 5.50、新北 8.73、桃園 5.42、臺中 6.24、臺南 6.37、高雄 7.23，共 6 個
+// 2025 年人均高於 5 本的縣市（手數）：台北 5.50、新北 8.73、桃園 5.42、台中 6.24、台南 6.37、高雄 7.23，共 6 個
 // 人均最低的 4 個：連江 1.67、花蓮 1.69、嘉義縣 1.69、宜蘭 1.79；第 5 低是基隆 2.58
 test('名次：剛好等於某縣市人均時，不算贏也不算輸', () => {
   // 把雲林（4.93）改成剛好 5 本，其他照舊
@@ -185,14 +185,14 @@ test('0 本也有推薦書；連到年齡工具的網址帶入讀者的年齡層
 
 // 跟台北同齡人比（2024 年）。18–24 歲手算：
 // 借閱冊數（北市圖年刊年度統計-9）：女 179,054 + 男 138,570 = 317,624 冊
-// 人口（內政部 113 年 12 月，臺北市 456 里加總）：18 歲 19,201 + 19 歲 18,593 + 20 歲 19,100 + 21 歲 19,551
+// 人口（內政部 113 年 12 月，台北市 456 里加總）：18 歲 19,201 + 19 歲 18,593 + 20 歲 19,100 + 21 歲 19,551
 //   + 22 歲 21,182 + 23 歲 21,749 + 24 歲 26,316 = 145,692 人
 // 317,624 ÷ 145,692：145,692 × 2 = 291,384，餘 26,240；26,240 ÷ 145,692 ≈ 0.180 → 約 2.18 本
 // 9 本 ÷ 2.18 ≈ 4.13 倍；0 本還差 2.2 本
 test('跟台北同齡人比：18–24 歲台北 2024 年平均每人借約 2.18 本，9 本是它的 4.13 倍，0 本還差 2.2 本', () => {
   const c = exact('新北市', 9);
   assert.equal(c.peer.year, 2024);
-  assert.equal(c.peer.city, '臺北市');
+  assert.equal(c.peer.city, '台北市');
   assert.equal(c.peer.age, '18-24');
   assert.equal(c.peer.loans, 317624);
   assert.equal(c.peer.population, 145692);
@@ -202,7 +202,7 @@ test('跟台北同齡人比：18–24 歲台北 2024 年平均每人借約 2.18 
 });
 
 // 台北 2024 年底各年齡層人口（內政部 113 年 12 月，人工逐歲加總核對過）；65+ 含 100 歲以上 1,125 人。
-// 9 組合計 2,490,869 = 臺北市 456 里「人口數合計」加總。
+// 9 組合計 2,490,869 = 台北市 456 里「人口數合計」加總。
 const TAIPEI_POPULATION = {
   '0-5': 97752, '6-11': 136839, '12-17': 129544, '18-24': 145692, '25-34': 284291,
   '35-44': 367072, '45-54': 384065, '55-64': 371156, '65+': 574458,
@@ -210,7 +210,7 @@ const TAIPEI_POPULATION = {
 test('同齡人人均借閱：9 個年齡層都有，人口跟人工加總一樣，每人平均借閱大於 0', () => {
   let total = 0;
   for (const [age, population] of Object.entries(TAIPEI_POPULATION)) {
-    const peer = card({ county: '臺北市', age, books: 3 }).peer;
+    const peer = card({ county: '台北市', age, books: 3 }).peer;
     assert.equal(peer.population, population, age);
     assert.ok(peer.perCapita > 0 && Number.isFinite(peer.perCapita), `${age}：${peer.perCapita}`);
     total += population;
@@ -227,7 +227,7 @@ test('差距四捨五入後是 0 時說「跟它差不多」，不會出現「�
   assert.equal(c.peer.perCapita.toFixed(1), '3.0');
   assert.equal(c.peer.compare.text, '跟它差不多');
   assert.equal(c.county.compare.text, '跟它差不多');
-  assert.equal(card({ county: '臺北市', age: '25-34', range: '1-5' }).peer.compare.text, '跟它差不多');
+  assert.equal(card({ county: '台北市', age: '25-34', range: '1-5' }).peer.compare.text, '跟它差不多');
   assert.doesNotMatch(JSON.stringify(c), /0\.0 本|1\.00 倍/);
 
   const data = structuredClone(window.LIBRARY_DATA);
@@ -246,7 +246,7 @@ test('名次：一個縣市都還沒贏過時，成績單附上鼓勵的話', ()
 // 稱號門檻是固定的整數，靠的是數據：全國 2025 年人均約 5.805 本、冠軍新北約 8.73 本。
 // 數據更新後門檻不再成立時，這個測試會失敗，提醒要改稱號表。
 test('稱號門檻跟數據對得上：「超越全台平均」從剛超過全國人均開始，「比冠軍新北還能借」從剛超過新北開始，而且新北是第一名', () => {
-  const titleAt = (books) => exact('臺中市', books).title.name;
+  const titleAt = (books) => exact('台中市', books).title.name;
   const firstBooks = (name) => { for (let b = 0; b < 100; b++) if (titleAt(b) === name) return b; return null; };
   const d = window.LIBRARY_DATA;
   const national = d.national.find((r) => r.year === 2025).printPerCapita;
@@ -258,6 +258,6 @@ test('稱號門檻跟數據對得上：「超越全台平均」從剛超過全�
   assert.ok(aboveNational - 1 < national && national < aboveNational, `全國人均 ${national} 應落在 ${aboveNational - 1}～${aboveNational} 本之間`);
   const aboveTop = firstBooks('比冠軍新北還能借');
   assert.ok(aboveTop - 1 < top.v && top.v < aboveTop, `新北人均 ${top.v} 應落在 ${aboveTop - 1}～${aboveTop} 本之間`);
-  assert.equal(exact('臺中市', aboveTop).rank.position, 1);
-  assert.equal(exact('臺中市', aboveTop - 1).rank.position, 2);
+  assert.equal(exact('台中市', aboveTop).rank.position, 1);
+  assert.equal(exact('台中市', aboveTop - 1).rank.position, 2);
 });

@@ -14,10 +14,10 @@ const urlFor = (name) => `?county=${encodeURIComponent(name)}`;
 
 // 規格書上的 22 縣市（獨立寫一份，不從資料讀）
 const COUNTIES = [
-  '基隆市', '臺北市', '新北市', '桃園市', '新竹市', '新竹縣',
-  '苗栗縣', '臺中市', '彰化縣', '南投縣', '雲林縣',
-  '嘉義市', '嘉義縣', '臺南市', '高雄市', '屏東縣',
-  '宜蘭縣', '花蓮縣', '臺東縣',
+  '基隆市', '台北市', '新北市', '桃園市', '新竹市', '新竹縣',
+  '苗栗縣', '台中市', '彰化縣', '南投縣', '雲林縣',
+  '嘉義市', '嘉義縣', '台南市', '高雄市', '屏東縣',
+  '宜蘭縣', '花蓮縣', '台東縣',
   '澎湖縣', '金門縣', '連江縣',
 ];
 
@@ -39,19 +39,19 @@ test('22 個縣市的名次剛好是 1 到 22', () => {
   assert.deepEqual(ranks, Array.from({ length: 22 }, (_, i) => i + 1));
 });
 
-test('新北市 2025 年約 8.7 本、第 1 名，全國平均約 5.8；臺北市約 5.5 本、低於全國平均', () => {
+test('新北市 2025 年約 8.7 本、第 1 名，全國平均約 5.8；台北市約 5.5 本、低於全國平均', () => {
   const ntpc = page(urlFor('新北市'));
   assert.equal(ntpc.latest.perCapita.toFixed(1), '8.7');
   assert.equal(ntpc.latest.national.toFixed(1), '5.8');
   assert.equal(ntpc.rank, 1);
-  const tpe = page(urlFor('臺北市'));
+  const tpe = page(urlFor('台北市'));
   assert.equal(tpe.latest.perCapita.toFixed(1), '5.5');
   assert.ok(tpe.latest.perCapita < tpe.latest.national);
 });
 
-test('只有新北、臺中、南投註明已扣除國立館', () => {
+test('只有新北、台中、南投註明已扣除國立館', () => {
   const marked = COUNTIES.filter((name) => page(urlFor(name)).notes.some((n) => n.includes('國立館')));
-  assert.deepEqual(marked, ['新北市', '臺中市', '南投縣']);
+  assert.deepEqual(marked, ['新北市', '台中市', '南投縣']);
 });
 
 test('只有新北加上成長原因的中性註解', () => {
@@ -60,13 +60,16 @@ test('只有新北加上成長原因的中性註解', () => {
   assert.deepEqual(marked, ['新北市']);
 });
 
-test('網址寫「台」或「臺」都找得到同一個縣市', () => {
-  assert.equal(page(urlFor('台北市')).name, '臺北市');
-  assert.equal(page(urlFor('台東縣')).name, '臺東縣');
+test('縣市名稱一律寫「台」；舊網址寫「臺」也打得開，頁面顯示「台」', () => {
+  assert.equal(page(urlFor('台北市')).name, '台北市');
+  assert.equal(page(urlFor('臺北市')).name, '台北市');
+  assert.equal(page(`?county=${encodeURIComponent('臺東縣')}`).name, '台東縣');
+  assert.equal(page('?county=%E8%87%BA%E4%B8%AD%E5%B8%82').name, '台中市'); // 以前分享出去的網址：臺中市
+  for (const name of COUNTIES) assert.doesNotMatch(name, /臺/, name);
 });
 
 test('網址沒有縣市、或縣市名稱不對時，顯示友善訊息', () => {
-  for (const search of ['', '?county=', '?county=火星市', '?city=臺北市', '?county=%E0%A4%A']) {
+  for (const search of ['', '?county=', '?county=火星市', '?city=台北市', '?county=%E0%A4%A']) {
     const v = page(search);
     assert.equal(v.found, false, `「${search}」不應該找得到`);
     assert.ok(v.message.length > 0, `「${search}」沒有訊息`);

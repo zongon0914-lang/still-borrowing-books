@@ -70,7 +70,7 @@ const toPath = (pts) => {
 };
 
 const counties = topo.objects.counties.geometries.map((g) => {
-  const name = g.properties.COUNTYNAME.replace(/^台/, '臺');
+  const name = g.properties.COUNTYNAME.replace(/^臺/, '台'); // 縣市名稱一律寫「台」，跟 assets/data.js 一致
   const polygons = (g.type === 'Polygon' ? [g.arcs] : g.arcs).map((rings) => rings.map(ring));
 
   let shapes = polygons.map((rings) => ({ rings, size: area(rings[0]) }));

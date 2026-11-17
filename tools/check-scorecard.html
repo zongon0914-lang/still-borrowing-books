@@ -49,10 +49,10 @@
 
     // 讀者會填的幾種組合：有能帶書名的縣市、只有查詢頁的新北、借 0 本、用範圍估算
     const CASES = [
-      { name: '臺北市・18–24 歲・填 3 本', county: '臺北市', age: '18-24', books: '3' },
+      { name: '台北市・18–24 歲・填 3 本', county: '台北市', age: '18-24', books: '3' },
       { name: '新北市・65 歲以上・選「13 本以上」', county: '新北市', age: '65+', range: '13+' },
       { name: '連江縣・6–11 歲・填 0 本', county: '連江縣', age: '6-11', books: '0' },
-      { name: '臺南市・25–34 歲・填 120 本', county: '臺南市', age: '25-34', books: '120' },
+      { name: '台南市・25–34 歲・填 120 本', county: '台南市', age: '25-34', books: '120' },
     ];
 
     /** 打開一份新的成績單頁，等它的程式準備好 */
@@ -146,7 +146,7 @@
       const frame = await openScorecard();
       try {
         const doc = frame.contentDocument;
-        fill(doc, { county: '臺北市', age: '18-24' }); // 沒填本數
+        fill(doc, { county: '台北市', age: '18-24' }); // 沒填本數
         await wait(50);
         const problems = [];
         if (!doc.getElementById('sc-result').hidden) problems.push('沒填本數也出現了成績單');

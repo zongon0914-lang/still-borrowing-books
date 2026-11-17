@@ -24,9 +24,15 @@ function toNumber(text) {
   return n;
 }
 
-/** 原始列的「縣市別」長這樣：「2025-全國」「2025-新北市(不含國立館)」 */
+/**
+ * 縣市名稱一律寫「台」（GLOSSARY.md「台（用字）」）：政府資料寫「臺北市」，網站寫「台北市」。
+ * 只用在縣市名稱；圖書館、書、報告的正式名稱照原文，不經過這裡。
+ */
+export const countyName = (name) => name.replace(/臺/g, '台');
+
+/** 原始列的「縣市別」長這樣：「2025-全國」「2025-新北市(不含國立館)」，回傳時縣市名稱已轉成「台」 */
 function areaName(row) {
-  return row['縣市別'].replace(/^\d{4}-/, '');
+  return countyName(row['縣市別'].replace(/^\d{4}-/, ''));
 }
 
 function pickRow(rows, name, year) {
@@ -37,13 +43,13 @@ function pickRow(rows, name, year) {
 
 /** 網站列出的 22 縣市（由北到南、本島到離島） */
 export const COUNTIES = [
-  '基隆市', '臺北市', '新北市', '桃園市', '新竹市', '新竹縣', '苗栗縣', '臺中市',
-  '彰化縣', '南投縣', '雲林縣', '嘉義市', '嘉義縣', '臺南市', '高雄市', '屏東縣',
-  '宜蘭縣', '花蓮縣', '臺東縣', '澎湖縣', '金門縣', '連江縣',
+  '基隆市', '台北市', '新北市', '桃園市', '新竹市', '新竹縣', '苗栗縣', '台中市',
+  '彰化縣', '南投縣', '雲林縣', '嘉義市', '嘉義縣', '台南市', '高雄市', '屏東縣',
+  '宜蘭縣', '花蓮縣', '台東縣', '澎湖縣', '金門縣', '連江縣',
 ];
 
 /** 這三個縣市的原始資料把轄區內的國立館算進去，人均借閱一律改用「不含國立館」那一列 */
-export const EXCLUDE_NATIONAL_LIBRARY = ['新北市', '臺中市', '南投縣'];
+export const EXCLUDE_NATIONAL_LIBRARY = ['新北市', '台中市', '南投縣'];
 
 export function buildCleanData(rawByYear) {
   const years = Object.keys(rawByYear)
@@ -188,7 +194,7 @@ export function addPopulation(age, pop) {
 
   return {
     ...age,
-    population: { source: pop.source, year: pop.year, city: pop.city, total },
+    population: { source: pop.source, year: pop.year, city: countyName(pop.city), total },
     groups: age.groups.map((g) => {
       const population = sum(agesIn(g.age, pop.ages).map((a) => byAge.get(a)));
       return { ...g, population, perCapita: g.all.loans / population };
@@ -252,7 +258,7 @@ export function loadLibrariesRaw(file = LIBRARIES_RAW_FILE) {
  */
 export function buildLibrariesData(raw) {
   const counties = COUNTIES.map((county) => {
-    const rows = raw.counties.filter((r) => r.county === county);
+    const rows = raw.counties.filter((r) => countyName(r.county) === county);
     if (rows.length !== 1) throw new Error(`「${county}」的圖書館應該剛好一筆，現在有 ${rows.length} 筆`);
     const { name, titleUrl, searchUrl } = rows[0];
     if (!name?.trim()) throw new Error(`「${county}」沒有圖書館名稱`);
@@ -263,7 +269,7 @@ export function buildLibrariesData(raw) {
     if (searchUrl?.includes('{title}')) throw new Error(`「${county}」的 searchUrl 不該有 {title}`);
     return titleUrl ? { county, name, titleUrl } : { county, name, searchUrl };
   });
-  const extra = raw.counties.filter((r) => !COUNTIES.includes(r.county)).map((r) => r.county);
+  const extra = raw.counties.filter((r) => !COUNTIES.includes(countyName(r.county))).map((r) => r.county);
   if (extra.length) throw new Error(`圖書館資料有網站沒有的縣市：${extra.join('、')}`);
   return { source: raw.source, counties };
 }

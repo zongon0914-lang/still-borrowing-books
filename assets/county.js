@@ -15,7 +15,7 @@
     if (!raw) {
       return { found: false, message: '網址裡沒有指定縣市。請從章節二的地圖或排行選一個縣市。' };
     }
-    const name = raw.replace(/台/g, '臺'); // 「台北市」也找得到「臺北市」
+    const name = raw.replace(/\u81fa/g, '台'); // 縣市名稱一律寫「台」；舊網址用的舊字（U+81FA）也換成「台」，以前分享的連結照樣打得開
     const county = data.counties.find((c) => c.name === name);
     if (!county) {
       return { found: false, message: `找不到「${raw}」這個縣市。請從章節二的地圖或排行重新選一個縣市。` };

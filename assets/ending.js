@@ -21,7 +21,7 @@
     const rankOf = (name) => data.counties.filter((c) => perCapitaOf(c.name) > perCapitaOf(name)).length + 1;
     const topName = data.counties.map((c) => c.name).find((name) => rankOf(name) === 1);
     const top = { name: topName, perCapita: perCapitaOf(topName) };
-    const tpe = { perCapita: perCapitaOf('臺北市'), rank: rankOf('臺北市') };
+    const tpe = { perCapita: perCapitaOf('台北市'), rank: rankOf('台北市') };
 
     // ---------- 發現三：台北各年齡層（章節三） ----------
     const taipeiAges = window.Chapter3Page.view(data);
@@ -46,7 +46,7 @@
         caption: `${latest.year} 年${top.name}平均每人借的紙本書`,
         text:
           `${latest.year} 年人均借閱第 1 名是${top.name}，平均每人 ${fmt(top.perCapita)} 本紙本書；` +
-          `臺北市約 ${fmt(tpe.perCapita)} 本，在 ${data.counties.length} 縣市中排第 ${tpe.rank} 名。`,
+          `台北市約 ${fmt(tpe.perCapita)} 本，在 ${data.counties.length} 縣市中排第 ${tpe.rank} 名。`,
         url: 'chapter2.html',
         linkText: '回去看章節二：哪裡的人最愛借書？',
         holds: tpe.rank > 1,

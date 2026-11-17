@@ -64,9 +64,9 @@ test('每一年都有紙本借閱人次和服務人口，而且人次少於冊�
 
 // ---------- 章節二：22 縣市 ----------
 const COUNTY_NAMES = [
-  '基隆市', '臺北市', '新北市', '桃園市', '新竹縣', '新竹市', '苗栗縣', '臺中市',
-  '彰化縣', '南投縣', '雲林縣', '嘉義縣', '嘉義市', '臺南市', '高雄市', '屏東縣',
-  '宜蘭縣', '花蓮縣', '臺東縣', '澎湖縣', '金門縣', '連江縣',
+  '基隆市', '台北市', '新北市', '桃園市', '新竹縣', '新竹市', '苗栗縣', '台中市',
+  '彰化縣', '南投縣', '雲林縣', '嘉義縣', '嘉義市', '台南市', '高雄市', '屏東縣',
+  '宜蘭縣', '花蓮縣', '台東縣', '澎湖縣', '金門縣', '連江縣',
 ];
 
 test('22 個縣市都在，一個不少，也沒有重複', () => {
@@ -90,15 +90,15 @@ test('2025 年人均借閱：新北第一（約 8.7）、高雄第二（約 7.2�
   assert.deepEqual(ranked.slice(0, 2).map((c) => c.name), ['新北市', '高雄市']);
   assert.equal(perCapita2025('新北市').toFixed(1), '8.7');
   assert.equal(perCapita2025('高雄市').toFixed(1), '7.2');
-  assert.equal(perCapita2025('臺北市').toFixed(1), '5.5');
+  assert.equal(perCapita2025('台北市').toFixed(1), '5.5');
 });
 
 test('新北、台中、南投標明用的是「不含國立館」的數字，其他縣市沒有', () => {
   const marked = data.counties.filter((c) => c.excludesNationalLibrary).map((c) => c.name);
-  assert.deepEqual(marked.sort(), ['南投縣', '新北市', '臺中市'].sort());
+  assert.deepEqual(marked.sort(), ['南投縣', '新北市', '台中市'].sort());
   // 期望值是人工對照 2025 年原始資料「不含國立館」那一列算出來的（冊數 ÷ 服務轄區人口）；
   // 如果誤用含國立館那一列，會變成 新北 8.9、台中 7.0、南投 2.6
-  assert.equal(perCapita2025('臺中市').toFixed(1), '6.2');
+  assert.equal(perCapita2025('台中市').toFixed(1), '6.2');
   assert.equal(perCapita2025('南投縣').toFixed(1), '2.1');
 });
 

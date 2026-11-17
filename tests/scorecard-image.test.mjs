@@ -52,7 +52,7 @@ test('0 本：圖片上都是「還差幾本」，沒有「0 倍」', () => {
 });
 
 test('選了範圍：圖片註明「依我選的範圍估算」', () => {
-  const c = content(card({ county: '臺東縣', range: '6-12' }), book);
+  const c = content(card({ county: '台東縣', range: '6-12' }), book);
   assert.equal(c.booksValue, '9 本');
   assert.match(c.estimate, /依我選的範圍「6–12 本」估算/);
 });

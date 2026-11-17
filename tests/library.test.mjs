@@ -15,9 +15,9 @@ const data = window.LIBRARY_DATA;
 const link = (county, title) => window.Scorecard.libraryLink(data, county, title);
 
 const COUNTIES = [
-  '基隆市', '臺北市', '新北市', '桃園市', '新竹市', '新竹縣', '苗栗縣', '臺中市',
-  '彰化縣', '南投縣', '雲林縣', '嘉義市', '嘉義縣', '臺南市', '高雄市', '屏東縣',
-  '宜蘭縣', '花蓮縣', '臺東縣', '澎湖縣', '金門縣', '連江縣',
+  '基隆市', '台北市', '新北市', '桃園市', '新竹市', '新竹縣', '苗栗縣', '台中市',
+  '彰化縣', '南投縣', '雲林縣', '嘉義市', '嘉義縣', '台南市', '高雄市', '屏東縣',
+  '宜蘭縣', '花蓮縣', '台東縣', '澎湖縣', '金門縣', '連江縣',
 ];
 // 只有新北市立圖書館的查詢系統找不到能帶入書名的網址（2026-11-17 核對）
 const SEARCH_PAGE_ONLY = ['新北市'];
@@ -37,15 +37,15 @@ test('22 縣市都有圖書館名稱和 https 借書連結，標籤是「到〇�
   assert.equal(data.libraries.counties.length, 22);
 });
 
-test('臺北市（新版查詢系統）：一按就是《原子習慣》的查詢結果', () => {
-  const l = link('臺北市', ATOMIC);
+test('台北市（新版查詢系統）：一按就是《原子習慣》的查詢結果', () => {
+  const l = link('台北市', ATOMIC);
   assert.equal(l.name, '臺北市立圖書館');
   assert.equal(l.withTitle, true);
   assert.equal(l.url, `https://book.tpml.edu.tw/search?searchField=FullText&searchInput=${ATOMIC_ENCODED}`);
 });
 
-test('臺南市（舊版查詢系統）：書名帶在 k0，後面一定有 s0=0&w=0', () => {
-  const l = link('臺南市', ATOMIC);
+test('台南市（舊版查詢系統）：書名帶在 k0，後面一定有 s0=0&w=0', () => {
+  const l = link('台南市', ATOMIC);
   assert.equal(l.name, '臺南市立圖書館');
   assert.equal(l.withTitle, true);
   assert.equal(l.url, `https://lib.tnml.tn.edu.tw/webpac/search.cfm?m=ss&k0=${ATOMIC_ENCODED}&t0=k&c0=and&s0=0&w=0`);
