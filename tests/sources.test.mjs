@@ -41,6 +41,15 @@ test('類別頁書單用的國圖閱讀報告有列出，並附上原始連結�
   assert.ok(hrefs.has(src.archiveUrl), '缺國圖報告的備份連結');
 });
 
+test('借書成績單同齡人比較用的台北各年齡人口有列出（名稱、發布單位、年份、連結、用在哪裡）', () => {
+  const src = data.age.population.source;
+  assert.ok(text.includes(src.title), src.title);
+  assert.ok(text.includes(src.publisher), src.publisher);
+  assert.ok(hrefs.has(src.url), '缺台北人口資料的連結');
+  assert.match(text, /113年12月/);
+  assert.match(text, /同齡人/);
+});
+
 test('地圖的縣市界線來源有列出', () => {
   assert.match(text, /內政部國土測繪中心/);
   assert.match(text, /taiwan-atlas/);

@@ -18,7 +18,7 @@
 | `index.html`、`chapter*.html`、`sources.html` | 網站頁面 |
 | `county.html` | 縣市細節頁範本，網址寫 `county.html?county=新北市` 決定顯示哪個縣市 |
 | `assets/` | 樣式、程式，以及自動產生的 `data.js` |
-| `tools/raw/` | 「公共圖書館統計」開放資料原始檔（2014–2025） |
+| `tools/raw/` | 「公共圖書館統計」開放資料原始檔（2014–2025）、北市圖年齡表、國圖書單、台北各歲人口（`taipei-pop-2024.json`） |
 | `tools/clean-data.mjs` | 資料整理模組：原始資料 → 網站用的乾淨數據 |
 | `tools/geo/` | 台灣 22 縣市界線（taiwan-atlas，MIT 授權；原始資料為內政部國土測繪中心） |
 | `tools/build-map.mjs` | 把縣市界線轉成地圖用的 SVG 路徑，寫進 `assets/taiwan-map.js` |
@@ -33,6 +33,7 @@ npm.cmd run check-online  # 線上版檢查點二：上線的網站每一頁都�
 npm.cmd run build-data    # 原始資料有改時，重新產生 assets/data.js
 npm.cmd run build-map     # 縣市界線有改時，重新產生 assets/taiwan-map.js
 npm.cmd run fetch-raw     # 重新從政府 API 下載原始資料（平常不用）
+npm.cmd run fetch-population  # 重新下載台北 2024 年底各歲人口，存成 tools/raw/taipei-pop-2024.json（平常不用）
 ```
 
 手機版檢查不是指令，是用瀏覽器打開一個網頁，等它跑完看結果（約 1 分鐘）：

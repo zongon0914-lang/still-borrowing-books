@@ -178,3 +178,39 @@ test('0 本也有推薦書；連到年齡工具的網址帶入讀者的年齡層
   assert.equal(zero.recommend.ageUrl, 'age.html?age=18-24');
   assert.equal(card({ county: '新北市', age: '65+', range: '0' }).recommend.ageUrl, 'age.html?age=65%2B');
 });
+
+// 跟台北同齡人比（2024 年）。18–24 歲手算：
+// 借閱冊數（北市圖年刊年度統計-9）：女 179,054 + 男 138,570 = 317,624 冊
+// 人口（內政部 113 年 12 月，臺北市 456 里加總）：18 歲 19,201 + 19 歲 18,593 + 20 歲 19,100 + 21 歲 19,551
+//   + 22 歲 21,182 + 23 歲 21,749 + 24 歲 26,316 = 145,692 人
+// 317,624 ÷ 145,692：145,692 × 2 = 291,384，餘 26,240；26,240 ÷ 145,692 ≈ 0.180 → 約 2.18 本
+// 9 本 ÷ 2.18 ≈ 4.13 倍；0 本還差 2.2 本
+test('跟台北同齡人比：18–24 歲台北 2024 年平均每人借約 2.18 本，9 本是它的 4.13 倍，0 本還差 2.2 本', () => {
+  const c = exact('新北市', 9);
+  assert.equal(c.peer.year, 2024);
+  assert.equal(c.peer.city, '臺北市');
+  assert.equal(c.peer.age, '18-24');
+  assert.equal(c.peer.loans, 317624);
+  assert.equal(c.peer.population, 145692);
+  assert.equal(c.peer.perCapita.toFixed(2), '2.18');
+  assert.equal(c.peer.compare.text, '4.13 倍');
+  assert.equal(exact('新北市', 0).peer.compare.text, '還差 2.2 本');
+});
+
+// 台北 2024 年底各年齡層人口（內政部 113 年 12 月，人工逐歲加總核對過）；65+ 含 100 歲以上 1,125 人。
+// 9 組合計 2,490,869 = 臺北市 456 里「人口數合計」加總。
+const TAIPEI_POPULATION = {
+  '0-5': 97752, '6-11': 136839, '12-17': 129544, '18-24': 145692, '25-34': 284291,
+  '35-44': 367072, '45-54': 384065, '55-64': 371156, '65+': 574458,
+};
+test('同齡人人均借閱：9 個年齡層都有，人口跟人工加總一樣，每人平均借閱大於 0', () => {
+  let total = 0;
+  for (const [age, population] of Object.entries(TAIPEI_POPULATION)) {
+    const peer = card({ county: '臺北市', age, books: 3 }).peer;
+    assert.equal(peer.population, population, age);
+    assert.ok(peer.perCapita > 0 && Number.isFinite(peer.perCapita), `${age}：${peer.perCapita}`);
+    total += population;
+  }
+  assert.equal(total, 2490869);
+  assert.equal(window.LIBRARY_DATA.age.population.total, 2490869);
+});

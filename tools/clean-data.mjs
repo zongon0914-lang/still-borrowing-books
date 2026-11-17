@@ -154,6 +154,48 @@ export function buildAgeData(raw) {
   };
 }
 
+// ---------- 借書成績單：台北各年齡層人口（同齡人人均借閱） ----------
+
+const POPULATION_RAW_FILE = fileURLToPath(new URL('./raw/taipei-pop-2024.json', import.meta.url));
+
+/** 讀取 tools/fetch-population.mjs 產生的臺北市每一歲人口 */
+export function loadPopulationRaw(file = POPULATION_RAW_FILE) {
+  return JSON.parse(readFileSync(file, 'utf8'));
+}
+
+/** 北市圖的年齡層「18-24」「65+」→ 包含哪些歲（「100+」算在 65+ 裡） */
+function agesIn(group, ages) {
+  const [from, to] = group.endsWith('+') ? [Number(group.slice(0, -1)), Infinity] : group.split('-').map(Number);
+  return ages.filter((a) => {
+    const n = Number(a.replace('+', ''));
+    return n >= from && n <= to;
+  });
+}
+
+/**
+ * 把台北每一歲人口依北市圖年齡層加總，給每個年齡層加上 population 和 perCapita（借閱冊數 ÷ 人口）。
+ * 核對：每一歲都剛好落在一個年齡層，各歲加起來等於各里「人口數合計」的加總。
+ */
+export function addPopulation(age, pop) {
+  if (pop.year !== age.year) throw new Error(`人口是 ${pop.year} 年、借閱是 ${age.year} 年，年份要一樣`);
+  const byAge = new Map(pop.ages.map((a, i) => [a, pop.male[i] + pop.female[i]]));
+  const used = age.groups.flatMap((g) => agesIn(g.age, pop.ages));
+  if (used.length !== pop.ages.length || new Set(used).size !== used.length) {
+    throw new Error('年齡層沒有剛好涵蓋每一歲（有漏掉或重複）');
+  }
+  const total = sum([...byAge.values()]);
+  if (total !== pop.total) throw new Error(`各歲人口加起來是 ${total}，各里合計是 ${pop.total}，請重新下載`);
+
+  return {
+    ...age,
+    population: { source: pop.source, year: pop.year, city: pop.city, total },
+    groups: age.groups.map((g) => {
+      const population = sum(agesIn(g.age, pop.ages).map((a) => byAge.get(a)));
+      return { ...g, population, perCapita: g.all.loans / population };
+    }),
+  };
+}
+
 // ---------- 類別細節頁：各類熱門書單 ----------
 
 const BOOKS_RAW_FILE = fileURLToPath(new URL('./raw/ncl-books-2024.json', import.meta.url));
@@ -195,8 +237,8 @@ export function buildBooksData(raw, categories) {
   };
 }
 
-/** 網站用的全部乾淨數據：全國、縣市、年齡、書單 */
+/** 網站用的全部乾淨數據：全國、縣市、年齡（含台北各年齡層人口）、書單 */
 export function buildSiteData() {
-  const age = buildAgeData(loadAgeRaw());
+  const age = addPopulation(buildAgeData(loadAgeRaw()), loadPopulationRaw());
   return { ...buildCleanData(loadRaw()), age, books: buildBooksData(loadBooksRaw(), age.categories) };
 }

@@ -107,6 +107,16 @@
         of: data.counties.length + 1,
         beaten: others.filter((c) => c.perCapita < books).map((c) => c.name),
       },
+      // 跟台北同齡人比：北市圖該年齡層借閱冊數 ÷ 台北該年齡層人口（只有台北、2024 年）
+      peer: {
+        year: data.age.year,
+        city: data.age.population.city,
+        age: group.age,
+        loans: group.all.loans,
+        population: group.population,
+        perCapita: group.perCapita,
+        compare: compare(books, group.perCapita),
+      },
       title: titleOf(books, national),
       recommend: recommendOf(data, group),
     };
@@ -188,6 +198,11 @@
     $('sc-national-compare').innerHTML =
       `全國 ${c.year} 年人均借閱 ${one(c.national.perCapita)} 本，${compareHtml(c.national.compare)}。`;
 
+    $('sc-peer-compare').innerHTML =
+      `台北 ${esc(c.ageLabel)} ${c.peer.year} 年平均每人借 ${one(c.peer.perCapita)} 本，${compareHtml(c.peer.compare)}。` +
+      `<span class="scorecard__fine">只有臺北市、${c.peer.year} 年的數據：北市圖這個年齡層的借閱冊數 ÷ 台北這個年齡層的人口。` +
+      '借書的人不一定住台北，所以這是「平均每個台北人」的算法，跟縣市人均借閱一樣。</span>';
+
     const all = data.counties.length;
     const beaten = c.rank.beaten;
     let beatText;
@@ -200,7 +215,8 @@
     renderRecommend(c);
 
     $('sc-source').textContent =
-      `縣市和全國比較用 ${c.year} 年的數據：公共圖書館紙本書借閱冊數 ÷ 人口。資料來源見「資料來源與 AI 使用說明」。`;
+      `縣市和全國比較用 ${c.year} 年的數據：公共圖書館紙本書借閱冊數 ÷ 人口。` +
+      `台北同齡人比較用 ${c.peer.year} 年北市圖年刊和內政部台北人口。資料來源見「資料來源與 AI 使用說明」。`;
 
     $('sc-error').hidden = true;
     $('sc-result').hidden = false;

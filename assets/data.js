@@ -1,6 +1,7 @@
 // 這個檔案由 tools/build-data.mjs 自動產生，請不要手動修改。
 // 來源：政府資料開放平台「公共圖書館統計」（國立公共資訊圖書館）；
 //       臺北市立圖書館《113年度臺北市立圖書館年刊》各年齡層讀者借閱類別統計；
+//       內政部「村里戶數、單一年齡人口」113 年 12 月臺北市人口；
 //       國家圖書館《113年臺灣閱讀風貌及全民閱讀力年度報告》各類別圖書借閱排行
 window.LIBRARY_DATA = {
   "national": [
@@ -2065,7 +2066,9 @@ window.LIBRARY_DATA = {
               "share": 0.04515295898828873
             }
           ]
-        }
+        },
+        "population": 97752,
+        "perCapita": 2.8262030444389885
       },
       {
         "age": "6-11",
@@ -2233,7 +2236,9 @@ window.LIBRARY_DATA = {
               "share": 0.09328375356650004
             }
           ]
-        }
+        },
+        "population": 136839,
+        "perCapita": 11.139010077536375
       },
       {
         "age": "12-17",
@@ -2401,7 +2406,9 @@ window.LIBRARY_DATA = {
               "share": 0.12725296064327327
             }
           ]
-        }
+        },
+        "population": 129544,
+        "perCapita": 4.866230778731551
       },
       {
         "age": "18-24",
@@ -2569,7 +2576,9 @@ window.LIBRARY_DATA = {
               "share": 0.10015154795410262
             }
           ]
-        }
+        },
+        "population": 145692,
+        "perCapita": 2.1801059769925595
       },
       {
         "age": "25-34",
@@ -2737,7 +2746,9 @@ window.LIBRARY_DATA = {
               "share": 0.11176968007641835
             }
           ]
-        }
+        },
+        "population": 284291,
+        "perCapita": 3.025593493990313
       },
       {
         "age": "35-44",
@@ -2905,7 +2916,9 @@ window.LIBRARY_DATA = {
               "share": 0.09873007806856283
             }
           ]
-        }
+        },
+        "population": 367072,
+        "perCapita": 8.909494595065818
       },
       {
         "age": "45-54",
@@ -3073,7 +3086,9 @@ window.LIBRARY_DATA = {
               "share": 0.13151541712783105
             }
           ]
-        }
+        },
+        "population": 384065,
+        "perCapita": 7.718521604415919
       },
       {
         "age": "55-64",
@@ -3241,7 +3256,9 @@ window.LIBRARY_DATA = {
               "share": 0.12500327993344437
             }
           ]
-        }
+        },
+        "population": 371156,
+        "perCapita": 3.867309163801744
       },
       {
         "age": "65+",
@@ -3409,9 +3426,23 @@ window.LIBRARY_DATA = {
               "share": 0.11460577115860147
             }
           ]
-        }
+        },
+        "population": 574458,
+        "perCapita": 2.772550821818131
       }
-    ]
+    ],
+    "population": {
+      "source": {
+        "title": "村里戶數、單一年齡人口（新增區域代碼）",
+        "publisher": "內政部",
+        "month": "113 年 12 月（2024 年底）",
+        "url": "https://data.gov.tw/dataset/77132",
+        "api": "https://www.ris.gov.tw/rs-opendata/api/v1/datastore/ODRP014/11312?page=1"
+      },
+      "year": 2024,
+      "city": "臺北市",
+      "total": 2490869
+    }
   },
   "books": {
     "year": 2024,

@@ -549,6 +549,7 @@ h2 {
 .scorecard__rows dt { font-family: var(--sans); font-weight: 700; font-size: 0.9375rem; }
 .scorecard__rows dd { margin: 0.25rem 0 0; overflow-wrap: anywhere; }
 .scorecard__rows strong { color: var(--accent); }
+.scorecard__fine { display: block; margin-top: 0.25rem; font-family: var(--sans); font-size: 0.8125rem; color: var(--ink-soft); line-height: 1.6; }
 .scorecard__book { padding: 1rem 0; border-bottom: 1px solid var(--rule); }
 .scorecard__book-label { margin: 0; font-family: var(--sans); font-weight: 700; font-size: 0.9375rem; }
 .scorecard__book-title { margin: 0.25rem 0 0; font-size: 1.25rem; font-weight: 700; line-height: 1.5; overflow-wrap: anywhere; }
