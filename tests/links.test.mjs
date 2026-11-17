@@ -76,7 +76,21 @@ test('從首頁到任何第三層頁面（縣市、類別、年齡結果）不�
   }
 });
 
-test('首頁（第四個入口）和章節三都連得到「換你回答」成績單頁，從首頁 1 次點擊就到', () => {
+test('從首頁爬得到結語；首頁和章節三都連到結語，結語連到成績單', () => {
+  assert.ok(site.pages.has('ending.html'), '點不到 ending.html');
+  assert.ok(site.pages.get('index.html').includes('ending.html'), '首頁沒有連到 ending.html');
+  assert.ok(site.pages.get('chapter3.html')?.includes('ending.html'), '章節三沒有連到 ending.html');
+  assert.ok(site.pages.get('ending.html')?.includes('scorecard.html'), '結語沒有連到 scorecard.html');
+});
+
+test('首頁的卡片順序是一、二、三、結語、換你回答', () => {
+  const html = site.html.get('index.html');
+  const list = html.slice(html.indexOf('class="question-list"'));
+  const cards = [...list.matchAll(/class="question-card[^"]*" href="([^"]+)"/g)].map((m) => m[1]);
+  assert.deepEqual(cards, ['chapter1.html', 'chapter2.html', 'chapter3.html', 'ending.html', 'scorecard.html']);
+});
+
+test('首頁（第五個入口）和章節三都連得到「換你回答」成績單頁，從首頁 1 次點擊就到', () => {
   assert.ok(site.pages.get('index.html').includes('scorecard.html'), '首頁沒有連到 scorecard.html');
   assert.ok(site.pages.get('chapter3.html')?.includes('scorecard.html'), '章節三沒有連到 scorecard.html');
   assert.ok(site.pages.has('scorecard.html'), '點不到 scorecard.html');

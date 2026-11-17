@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>所以，還借書嗎？｜我們這一代，還借書嗎？</title>
+  <meta name="description" content="結語：把三章的發現合起來，回答「我們這一代，還借書嗎？」">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&family=Noto+Serif+TC:wght@400;700&display=swap">
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a class="site-title" href="index.html">我們這一代，還借書嗎？</a>
+      <nav class="site-nav" aria-label="主要導覽">
+        <a href="chapter1.html">一年借幾本</a>
+        <a href="chapter2.html">哪裡最愛借</a>
+        <a href="chapter3.html">我們借什麼</a>
+        <a href="sources.html">資料來源與 AI 使用說明</a>
+      </nav>
+    </div>
+  </header>
+
+  <nav class="breadcrumb" aria-label="你在這裡">
+    <ol>
+      <li><a href="index.html">首頁</a></li>
+      <li aria-current="page">所以，還借書嗎？</li>
+    </ol>
+  </nav>
+
+  <main>
+    <p class="chapter-label">結語</p>
+    <h1>所以，還借書嗎？</h1>
+
+    <p class="lead">翻完十年的公開數據，三章各留下一個發現。</p>
+
+    <!-- 下面的文字是備用的：JavaScript 載入後，assets/ending.js 會用數據算出來的內容填上 -->
+    <ol class="ending-findings">
+      <li class="ending-finding" data-finding="0">
+        <p class="ending-finding__number">
+          <span class="ending-finding__value"><span data-part="value">5.8</span><span class="ending-finding__unit" data-part="unit">本</span></span>
+          <span class="ending-finding__caption" data-part="caption">2025 年全國平均每人借的紙本書</span>
+        </p>
+        <h2 class="ending-finding__title" data-part="title">借書沒有退流行</h2>
+        <p data-part="text">疫情那年（2021 年）跌到平均每人 3.0 本紙本書，2025 年回升到 5.8 本，是十年新高。</p>
+        <a href="chapter1.html" data-part="linkText">回去看章節一：台灣人一年借幾本書？</a>
+      </li>
+      <li class="ending-finding" data-finding="1">
+        <p class="ending-finding__number">
+          <span class="ending-finding__value"><span data-part="value">8.7</span><span class="ending-finding__unit" data-part="unit">本</span></span>
+          <span class="ending-finding__caption" data-part="caption">2025 年新北市平均每人借的紙本書</span>
+        </p>
+        <h2 class="ending-finding__title" data-part="title">愛借書的不一定是台北</h2>
+        <p data-part="text">2025 年人均借閱第 1 名是新北市，平均每人 8.7 本紙本書；臺北市約 5.5 本，在 22 縣市中排第 5 名。</p>
+        <a href="chapter2.html" data-part="linkText">回去看章節二：哪裡的人最愛借書？</a>
+      </li>
+      <li class="ending-finding" data-finding="2">
+        <p class="ending-finding__number">
+          <span class="ending-finding__value"><span data-part="value">2.5</span><span class="ending-finding__unit" data-part="unit">%</span></span>
+          <span class="ending-finding__caption" data-part="caption">2024 年北市圖的紙本借閱裡，18–24 歲借的比例</span>
+        </p>
+        <h2 class="ending-finding__title" data-part="title">我們這一代借得最少</h2>
+        <p data-part="text">2024 年在台北，18–24 歲一年借了 31.8 萬冊紙本書，只占全部的 2.5%，是 6 歲以上借得最少的一群。（年齡資料只有台北市）</p>
+        <a href="chapter3.html" data-part="linkText">回去看章節三：我們這一代借什麼？</a>
+      </li>
+    </ol>
+
+    <section class="conclusion" aria-labelledby="ending-answer-title">
+      <h2 id="ending-answer-title">我們這一代，還借書嗎？</h2>
+      <p class="conclusion__answer" data-ending-answer>還借，只是我們借得比誰都少。</p>
+    </section>
+
+    <section class="tool-entry" aria-labelledby="answer-entry-title">
+      <h2 id="answer-entry-title">換你回答：你還借書嗎？</h2>
+      <p>填你住的縣市、年齡層和去年借了幾本書，看你跟家鄉、跟全國比起來怎麼樣。</p>
+      <a class="button button--big" href="scorecard.html">換你回答：拿我的借書成績單 →</a>
+    </section>
+
+    <nav class="chapter-nav" aria-label="章節導覽">
+      <a href="chapter3.html">← 上一章：我們這一代借什麼？</a>
+      <a href="index.html">回首頁 →</a>
+    </nav>
+  </main>
+
+  <footer class="site-footer">
+    <p>115 學年世新大學資訊傳播創意大賞・資訊設計類參賽作品</p>
+    <p>數據來自政府公開資料｜<a href="sources.html">資料來源與 AI 使用說明</a></p>
+  </footer>
+
+  <script src="assets/data.js"></script>
+  <script src="assets/site.js"></script>
+  <script src="assets/chapter3.js"></script>
+  <script src="assets/ending.js"></script>
+</body>
+</html>
