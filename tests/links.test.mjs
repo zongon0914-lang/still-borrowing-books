@@ -56,3 +56,22 @@ test('章節三連得到 9 個年齡層的結果頁', () => {
   const ages = new Set([...html.matchAll(/href="age\.html\?age=([^"&#]+)"/g)].map((m) => decodeURIComponent(m[1])));
   assert.deepEqual([...ages].sort(), ['0-5', '12-17', '18-24', '25-34', '35-44', '45-54', '55-64', '6-11', '65+']);
 });
+
+test('從首頁到任何第三層頁面（縣市、類別、年齡結果）不超過 2 次點擊', () => {
+  // 從首頁一層一層往外走，記下每一頁最少要點幾次才到得了
+  const clicks = new Map([['index.html', 0]]);
+  const queue = ['index.html'];
+  while (queue.length) {
+    const page = queue.shift();
+    for (const target of site.pages.get(page) ?? []) {
+      if (target.endsWith('.html') && !clicks.has(target)) {
+        clicks.set(target, clicks.get(page) + 1);
+        queue.push(target);
+      }
+    }
+  }
+  for (const page of ['county.html', 'category.html', 'age.html']) {
+    assert.ok(clicks.has(page), `首頁點不到 ${page}`);
+    assert.ok(clicks.get(page) <= 2, `${page} 要點 ${clicks.get(page)} 次才到`);
+  }
+});

@@ -10,8 +10,8 @@
   --chart-print: #3e5a6e;  /* 紙本：藍墨 */
   --chart-ebook: #7a8f5b;  /* 電子書：橄欖綠 */
   /* 人均借閱分級（淺 → 深），地圖和排行共用 */
-  --bin-0: #e2d7bf;
-  --bin-1: #c3cdd0;
+  --bin-0: #dfe5e4;
+  --bin-1: #b8c7cd;
   --bin-2: #8ea6b3;
   --bin-3: #5a7d91;
   --bin-4: #2c4a5e;
@@ -97,7 +97,8 @@ main {
   margin: 0;
 }
 
-h1, h2, h3 { line-height: 1.4; font-weight: 700; }
+h1, h2, h3 { line-height: 1.4; font-weight: 700; text-wrap: balance; }
+p, li, dd { text-wrap: pretty; } /* 避免段落最後一行只剩一兩個字 */
 h1 { font-size: clamp(1.75rem, 6vw, 2.5rem); margin: 0.25rem 0 1rem; }
 h2 {
   font-size: 1.375rem;
@@ -105,7 +106,7 @@ h2 {
   padding-top: 1.5rem;
   border-top: 1px solid var(--rule);
 }
-.lead { font-size: 1.125rem; color: var(--ink-soft); }
+.lead { font-size: 1.125rem; color: var(--ink-soft); text-wrap: balance; }
 
 /* 首字放大，像書的章節開頭 */
 .drop-cap::first-letter {
@@ -148,12 +149,25 @@ h2 {
   margin: 1.5rem 0;
 }
 .stat {
+  margin: 0;
   background: var(--paper-deep);
   border-radius: 4px;
   padding: 1rem;
 }
 .stat__value { display: block; font-size: 1.75rem; font-weight: 700; font-variant-numeric: tabular-nums; }
 .stat__label { display: block; font-family: var(--sans); font-size: 0.8125rem; color: var(--ink-soft); }
+/* 手機（窄於 36rem，跟地圖版面同一個分界）：三個數字排成一欄，數字在左、說明在右，不會 2＋1 斷行 */
+@media (max-width: 35.99rem) {
+  .stat-row { grid-template-columns: minmax(0, 1fr); gap: 0.5rem; }
+  .stat {
+    display: grid;
+    grid-template-columns: 6.5rem minmax(0, 1fr);
+    gap: 0.75rem;
+    align-items: center;
+    padding: 0.75rem 1rem;
+  }
+  .stat__value { font-size: 1.5rem; }
+}
 
 /* ---------- 圖表 ---------- */
 .chart-card {
