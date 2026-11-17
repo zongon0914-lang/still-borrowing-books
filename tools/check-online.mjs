@@ -2,11 +2,13 @@
 // 用法：npm.cmd run check-online
 //      （作品連結寫在 package.json 的 homepage；要檢查別的網址就加在後面：npm.cmd run check-online -- 網址）
 // 剛 git push 完也可以直接跑：會先等 GitHub Pages 換成新版本（最多 5 分鐘），再開始檢查。
+// 最後順便檢查 22 縣市圖書館的借書連結還打得開（見 tools/check-libraries.mjs；被網站擋的只警告）。
 import { spawnSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { setTimeout as sleep } from 'node:timers/promises';
 import { siteFilesAt, staleFiles, unpushedCount } from './live-version.mjs';
+import { checkLibraryLinks, loadCounties, report } from './check-libraries.mjs';
 
 const WAIT_SECONDS = 30;
 const MAX_TRIES = 11; // 看 11 次、中間等 10 次 × 30 秒 = 最多等 5 分鐘
@@ -29,7 +31,11 @@ const result = spawnSync(process.execPath, ['--test', testFile], {
   stdio: 'inherit',
   env: { ...process.env, SITE_URL: url },
 });
-process.exit(result.status ?? 1);
+
+console.log('
+檢查 22 縣市圖書館的借書連結（測試書名「原子習慣」）…');
+const librariesOk = report(await checkLibraryLinks(loadCounties()));
+process.exit(result.status === 0 && librariesOk ? 0 : 1);
 
 async function waitForLatest() {
   let expected;

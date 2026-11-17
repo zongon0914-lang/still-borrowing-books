@@ -24,12 +24,14 @@
 | `tools/build-map.mjs` | 把縣市界線轉成地圖用的 SVG 路徑，寫進 `assets/taiwan-map.js` |
 | `tests/` | 檢查點一（數據對不對）、檢查點二（網站點得通） |
 | `tools/check-mobile.html` | 檢查點二・手機版：每一頁用 320px、375px 打開，檢查有沒有左右捲動（用瀏覽器打開，見下方） |
+| `tools/check-scorecard.html` | 借書成績單：自動填表 → 換一本 → 確認借書連結跟著換 → 產生 1080×1920 圖片（用瀏覽器打開，見下方） |
+| `tools/check-libraries.mjs` | 檢查 22 縣市圖書館的借書連結還打得開（`check-online` 會順便跑；被網站擋的只警告） |
 
 ## 常用指令（PowerShell）
 
 ```powershell
 npm.cmd test              # 跑兩個檢查點
-npm.cmd run check-online  # 線上版檢查點二：上線的網站每一頁都點得通（剛 push 完會先等線上更新，最多 5 分鐘）
+npm.cmd run check-online  # 線上版檢查點二：上線的網站每一頁都點得通，再檢查 22 縣市圖書館連結（剛 push 完會先等線上更新，最多 5 分鐘）
 npm.cmd run build-data    # 原始資料有改時，重新產生 assets/data.js
 npm.cmd run build-map     # 縣市界線有改時，重新產生 assets/taiwan-map.js
 npm.cmd run fetch-raw     # 重新從政府 API 下載原始資料（平常不用）
@@ -43,3 +45,9 @@ npm.cmd run setup-hooks   # 每台電腦跑一次：之後每次 commit 前自�
 
 - 線上版：<https://zongon0914-lang.github.io/still-borrowing-books/tools/check-mobile.html>
 - 本機版：先開本機預覽，再打開 `http://localhost:8123/tools/check-mobile.html`（直接雙擊檔案打不開）
+
+成績單檢查也一樣，約 10 秒跑完：
+
+- 線上版：<https://zongon0914-lang.github.io/still-borrowing-books/tools/check-scorecard.html>
+- 本機版：`http://localhost:8123/tools/check-scorecard.html`
+- 剛改完程式卻好像在測舊版：瀏覽器可能還用著舊的 `scorecard.js`，按 `Ctrl + F5` 再跑一次。

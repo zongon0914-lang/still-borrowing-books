@@ -116,6 +116,10 @@ npm.cmd run check-online
 
    <https://zongon0914-lang.github.io/still-borrowing-books/tools/check-mobile.html>
 
+   再打開成績單檢查，看到「✔ 全部通過」就代表填表、換一本、借書連結、存成圖片都正常：
+
+   <https://zongon0914-lang.github.io/still-borrowing-books/tools/check-scorecard.html>
+
 6. 打開作品連結看一次（看不到新內容就按 `Ctrl + F5` 強制重新整理）。
 
 作品連結永遠不變，評審點開看到的就是最新版本。
@@ -127,5 +131,6 @@ npm.cmd run check-online
 | 打開連結是 404 | Pages 剛開或剛更新，等幾分鐘；仍不行就到 Settings → Pages 看 Branch 是不是 `main`、`/ (root)` |
 | `check-online` 說等了 5 分鐘還是舊版本 | 到儲存庫頁面 → 上方 **Actions**，看「pages build and deployment」有沒有紅色叉叉；沒有的話過幾分鐘再跑一次 |
 | 本機正常，線上某個檔案壞掉 | 多半是檔名大小寫不一致（GitHub 分大小寫，Windows 不分）。`npm.cmd test` 會指出是哪一個 |
+| `check-online` 說某個縣市圖書館連結壞掉（✖） | 先用瀏覽器打開那個網址；真的打不開，就到圖書館網站找新的查詢網址，改 `tools/raw/county-libraries.json`，再跑 `npm.cmd run build-data`。只有 ⚠（被擋）不用處理 |
 | `git push` 被拒絕（rejected） | 有人在 GitHub 網頁上改過檔案。先跑 `git pull --rebase`，再 `git push` |
 | 圖表沒出來、只顯示數字表格 | 圖表程式從網路載入失敗，重新整理；網站本身沒壞 |
