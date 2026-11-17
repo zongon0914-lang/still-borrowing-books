@@ -6,9 +6,15 @@
 
 **Blocked by:** 01
 
-**Status:** ready-for-agent
+**Status:** 完成（2026-11-17，在 ending 分支）章節一、二、三和結語的章節標籤旁加上 1／4～4／4，爬網站測試檢查每一頁
 
-- [ ] 四頁的進度文字剛好是 1／4、2／4、3／4、4／4，由自動測試檢查
-- [ ] 其他頁沒有進度文字
+- [x] 四頁的進度文字剛好是 1／4、2／4、3／4、4／4，由自動測試檢查
+- [x] 其他頁沒有進度文字
 - [ ] 手機 375px 寬時，進度和章節標籤排得好看、不擠在一起
-- [ ] `npm.cmd test` 全部通過
+- [x] `npm.cmd test` 全部通過
+
+## 完成紀錄
+
+- 四頁的 `<p class="chapter-label">` 裡加上 `<span class="chapter-progress">1／4</span>`（全形斜線），樣式在 `assets/style.css` 的 `.chapter-progress`：灰字、左邊一條淡紅細線隔開、不換行。
+- `tests/links.test.mjs` 新增一個測試：爬到的每一頁都找 `chapter-progress`，四頁要剛好各一個且文字對，其他頁一個都不能有。共 156 個測試全過。
+- 手機 375px 那格還沒勾：要在瀏覽器裡實際看過（主 session 檢查）。

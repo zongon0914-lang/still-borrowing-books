@@ -95,3 +95,14 @@ test('首頁（第五個入口）和章節三都連得到「換你回答」成�
   assert.ok(site.pages.get('chapter3.html')?.includes('scorecard.html'), '章節三沒有連到 scorecard.html');
   assert.ok(site.pages.has('scorecard.html'), '點不到 scorecard.html');
 });
+
+test('章節一、二、三和結語標出進度 1／4 到 4／4，其他頁沒有進度', () => {
+  // 預期值照規格「章節進度」：讀的順序是一、二、三、結語，共 4 篇
+  const expected = { 'chapter1.html': '1／4', 'chapter2.html': '2／4', 'chapter3.html': '3／4', 'ending.html': '4／4' };
+  for (const [page] of site.pages) {
+    const html = site.html.get(page);
+    const found = [...html.matchAll(/class="chapter-progress"[^>]*>([^<]*)</g)].map((m) => m[1].trim());
+    assert.deepEqual(found, expected[page] ? [expected[page]] : [], `${page} 的進度文字不對`);
+  }
+  for (const page of Object.keys(expected)) assert.ok(site.pages.has(page), `首頁點不到 ${page}`);
+});
