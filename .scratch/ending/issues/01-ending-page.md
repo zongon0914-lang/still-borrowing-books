@@ -6,7 +6,7 @@
 
 **Blocked by:** None (can start immediately)
 
-**Status:** 已上線（2026-11-17）；完成（在 ending 分支）新增 `ending.html` + `assets/ending.js`（`EndingPage.view`），測試在 `tests/ending.test.mjs` 和 `tests/links.test.mjs`；瀏覽器檢查還沒做。
+**Status:** 已上線（2026-11-17）；完成（在 ending 分支）新增 `ending.html` + `assets/ending.js`（`EndingPage.view`），測試在 `tests/ending.test.mjs` 和 `tests/links.test.mjs`；瀏覽器已實測（375px）。
 
 - [x] 首頁卡片順序是一、二、三、結語、換你回答
 - [x] 章節三的「下一章」連到結語；章節結論下面有連到結語的一行，章節結論本身沒改
