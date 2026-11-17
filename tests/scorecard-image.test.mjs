@@ -155,3 +155,39 @@ test('書名太長時縮小字級、最多三行，放不下才加「…」', ()
   const drawn = titleOps.map((op) => op.text).join('');
   assert.ok(drawn === longest.title.replace(/ /g, '') || drawn.endsWith('…') || drawn.replace(/ /g, '') === longest.title.replace(/ /g, ''));
 });
+
+test('0 本排最後一名：圖片上也有跟頁面一樣的鼓勵，不只寫「第 23 名」', () => {
+  const c = content(card({ county: '新北市', books: 0 }), book);
+  assert.match(c.rows[3].text, /第 23 名/);
+  assert.match(c.rows[3].text, /借一本就有機會/);
+  // 有贏過縣市時不用鼓勵
+  assert.doesNotMatch(content(card({ county: '新北市', books: 9 }), book).rows[3].text, /借一本/);
+});
+
+test('比較的說法跟頁面同一個來源：差距四捨五入是 0 時圖片也說「我跟它差不多」', () => {
+  // 澎湖 2025 年人均 ≈ 3.018 本、台北 25–34 歲 2024 年 ≈ 3.026 本：3 本都是「差不多」
+  const c = content(card({ county: '澎湖縣', age: '25-34', books: 3 }), book);
+  assert.match(c.rows[0].text, /我跟它差不多$/);
+  assert.match(c.rows[2].text, /我跟它差不多$/);
+  assert.doesNotMatch(allText(c), /0\.0 本|1\.00 倍/);
+  assert.match(content(card({ county: '新北市', books: 0 }), book).rows[0].text, /我還差 8\.7 本就追上$/);
+});
+
+test('程式裡寫死的作品網址（SITE_URL）跟 package.json 的 homepage 一樣', () => {
+  assert.equal(`https://${window.ScorecardImage.SITE_URL}/`, pkg.homepage);
+});
+
+// 現在的內容每段都有行數上限，最緊的排法一定放得下；這裡多塞一列比較（例如以後加功能），模擬放不下的情況
+test('排版的保險：內容多到最緊的排法也放不下時，推薦書縮成一行加「…」，還是不會壓到頁尾', () => {
+  const c = content(card({ county: '花蓮縣', age: '65+', range: '13+' }), longest);
+  const long = '這是一段很長很長的說明文字，用來把每一列都撐滿兩行，'.repeat(4);
+  c.estimate = long;
+  c.line = long;
+  c.rows.push({ label: '多一列', text: long });
+  for (const row of c.rows) row.text = long;
+  const ops = textOps(c);
+  assertInBounds(ops);
+  const titleOps = ops.filter((op) => op.role === 'bookTitle');
+  assert.ok(titleOps.length >= 1, '書名還是要畫出來');
+  assert.ok(titleOps[titleOps.length - 1].text.endsWith('…'));
+});

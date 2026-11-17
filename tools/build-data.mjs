@@ -12,6 +12,7 @@ const header =
   '//       臺北市立圖書館《113年度臺北市立圖書館年刊》各年齡層讀者借閱類別統計；\n' +
   '//       內政部「村里戶數、單一年齡人口」113 年 12 月臺北市人口；\n' +
   '//       國家圖書館《113年臺灣閱讀風貌及全民閱讀力年度報告》各類別圖書借閱排行；\n' +
-  '//       22 縣市公共圖書館館藏查詢網址（人工核對，2026-11-17）\n';
+  // 核對日期照抄 tools/raw/county-libraries.json 的 source.checked，重新核對後只要改那個檔
+  `//       ${data.libraries.counties.length} 縣市公共圖書館館藏查詢網址（人工核對，${data.libraries.source.checked}）\n`;
 writeFileSync(out, `${header}window.LIBRARY_DATA = ${JSON.stringify(data, null, 2)};\n`, 'utf8');
 console.log(`已寫入 assets/data.js（全國 ${data.national.length} 年、年齡層 ${data.age.groups.length} 組、書單 ${data.books.categories.length} 類）`);

@@ -9,8 +9,9 @@
   /** 作品網址（package.json 的 homepage，不寫 https:// 比較短好抄） */
   const SITE_URL = 'zongon0914-lang.github.io/still-borrowing-books';
 
-  const one = (n) => n.toFixed(1);
-  const compareText = (cmp) => (cmp.times === null ? `我還差 ${one(cmp.short)} 本就追上` : `我是它的 ${cmp.times.toFixed(2)} 倍`);
+  // 比較的說法由 Scorecard.compute() 決定（頁面也用同一句），圖片只加上主詞「我」
+  const perCapitaText = (n) => window.Scorecard.perCapitaText(n);
+  const compareText = (cmp) => `我${cmp.text}`;
 
   /**
    * 圖片上寫的字。用第一人稱「我」，因為圖片是讀者自己分享出去的。
@@ -28,10 +29,10 @@
       title: card.title.name,
       line: card.title.line,
       rows: [
-        { label: `跟${card.county.name}比`, text: `${card.county.name} ${card.year} 年人均借閱 ${one(card.county.perCapita)} 本，${compareText(card.county.compare)}` },
-        { label: '跟全國比', text: `全國 ${card.year} 年人均借閱 ${one(card.national.perCapita)} 本，${compareText(card.national.compare)}` },
-        { label: '跟台北同齡人比', text: `台北 ${card.ageLabel} ${card.peer.year} 年平均每人借 ${one(card.peer.perCapita)} 本，${compareText(card.peer.compare)}` },
-        { label: '如果我是一個縣市', text: `我可以排全台第 ${card.rank.position} 名（共 ${card.rank.of} 名）` },
+        { label: `跟${card.county.name}比`, text: `${card.county.name} ${card.year} 年人均借閱 ${perCapitaText(card.county.perCapita)} 本，${compareText(card.county.compare)}` },
+        { label: '跟全國比', text: `全國 ${card.year} 年人均借閱 ${perCapitaText(card.national.perCapita)} 本，${compareText(card.national.compare)}` },
+        { label: '跟台北同齡人比', text: `台北 ${card.ageLabel} ${card.peer.year} 年平均每人借 ${perCapitaText(card.peer.perCapita)} 本，${compareText(card.peer.compare)}` },
+        { label: '如果我是一個縣市', text: `我可以排全台第 ${card.rank.position} 名（共 ${card.rank.of} 名）${card.rank.cheer ? `，${card.rank.cheer.replace(/。$/, '')}` : ''}` },
       ],
       bookLabel: '推薦我借這本',
       bookTitle: book.title,
@@ -110,7 +111,8 @@
    * @param measure (text, size, family, weight) => 寬度（瀏覽器用畫布量，測試用假尺）
    */
   function layout(c, measure) {
-    // 先用寬鬆的排法；內容太多（長書名、估算、比較排成兩行）擠到頁尾時，改用比較緊的排法
+    // 先用寬鬆的排法；內容太多（長書名、估算、比較排成兩行）擠到頁尾時，改用比較緊的排法。
+    // 最後一種是保險：書名和作者各縮成一行、放不下就加「…」，不會讓字疊在一起
     let ops;
     for (const density of DENSITIES) {
       ops = layoutWith(c, measure, density);
@@ -119,11 +121,12 @@
     return ops.list;
   }
 
-  /** 由鬆到緊的排法：間距、推薦書書名和作者行數 */
+  /** 由鬆到緊的排法：間距、推薦書書名的字級和行數、作者行數 */
   const DENSITIES = [
-    { gap: 1, bookTitle: [56, 48, 42, 36], metaLines: 2 },
-    { gap: 0.75, bookTitle: [44, 40, 36], metaLines: 2 },
-    { gap: 0.5, bookTitle: [38, 34, 30], metaLines: 1 },
+    { gap: 1, bookTitle: [56, 48, 42, 36], titleLines: 3, metaLines: 2 },
+    { gap: 0.75, bookTitle: [44, 40, 36], titleLines: 3, metaLines: 2 },
+    { gap: 0.5, bookTitle: [38, 34, 30], titleLines: 3, metaLines: 1 },
+    { gap: 0.5, bookTitle: [30], titleLines: 1, metaLines: 1 },
   ];
   const FOOTER_TOP = HEIGHT - MARGIN - 32 * 1.3 - 30 * 1.5; // 頁尾兩行（邀請、網址）的上緣
   const FOOTER_RULE = FOOTER_TOP - 28;
@@ -167,7 +170,7 @@
     rule();
     gap(32);
     block('bookLabel', c.bookLabel, [30], 1, 'sans', 700, 'accent', 1.45);
-    block('bookTitle', c.bookTitle, density.bookTitle, 3, 'serif', 700, 'ink', 1.3);
+    block('bookTitle', c.bookTitle, density.bookTitle, density.titleLines, 'serif', 700, 'ink', 1.3);
     block('bookMeta', c.bookMeta, [28, 24], density.metaLines, 'sans', 400, 'inkSoft', 1.45);
     // 最後一行字的下緣（跟測試一樣用 1.2 倍字級算）要在頁尾的線上方，留一點空
     const last = ops[ops.length - 1];

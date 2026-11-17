@@ -22,9 +22,10 @@ test('新北、9 本：約新北人均的 1.03 倍、全國的 1.55 倍，排第
   assert.equal(c.year, 2025);
   assert.equal(c.county.name, '新北市');
   assert.equal(c.county.perCapita.toFixed(2), '8.73');
-  assert.equal(c.county.compare.text, '1.03 倍');
+  assert.equal(c.county.compare.text, '是它的 1.03 倍');
+  assert.equal(c.county.compare.strong, '1.03 倍');
   assert.equal(c.national.perCapita.toFixed(2), '5.81');
-  assert.equal(c.national.compare.text, '1.55 倍');
+  assert.equal(c.national.compare.text, '是它的 1.55 倍');
   assert.equal(c.rank.position, 1);
   assert.equal(c.rank.of, 23); // 22 個縣市加上你
   assert.equal(c.rank.beaten.length, 22); // 9 本 > 新北 8.73 本，22 個縣市全贏
@@ -40,30 +41,33 @@ test('0 本：稱號「還沒開卡的讀者」，比較都是「還差幾本」
   assert.equal(c.title.name, '還沒開卡的讀者');
   assert.equal(c.title.line, '第一本最難，我們幫你挑好了');
   assert.equal(c.county.compare.times, null);
-  assert.equal(c.county.compare.text, '還差 8.7 本');
+  assert.equal(c.county.compare.text, '還差 8.7 本就追上');
+  assert.equal(c.county.compare.strong, '還差 8.7 本');
   assert.equal(c.national.compare.times, null);
-  assert.equal(c.national.compare.text, '還差 5.8 本');
+  assert.equal(c.national.compare.text, '還差 5.8 本就追上');
   assert.doesNotMatch(JSON.stringify(c), /0(\.0+)? 倍/);
   assert.equal(c.rank.position, 23);
   assert.deepEqual(c.rank.beaten, []);
 });
 
 // 稱號表（規格使用者故事 22），一句話裡的數字手算：
-// 全國人均 5.81 本：1 本差 4.8 → 再借 5 本；5 本差 0.8 → 再借 1 本
+// 全國人均 135,251,757 ÷ 23,299,132 ≈ 5.805 本：一句話的數字跟成績單「跟全國比」那一列一樣，不灌水
+// 1 本差 4.805 → 4.8；3 本差 2.805 → 2.8；5 本差 0.805 → 0.8（跟列上的「還差 X 本」相同，不無條件進位）
 // 24 本 ÷ 12 個月 = 2；51 ÷ 12 = 4.25 → 4
-// 52 ÷ 5.81 ≈ 8.96 → 抵 9 個台灣人；999 ÷ 5.81 ≈ 172.1 → 抵 172 個
+// 52 ÷ 5.805 ≈ 8.96 倍 → 只說「抵 8 個」（說 9 個就灌水了）；999 ÷ 5.805 ≈ 172.09 → 抵 172 個
 test('稱號和一句話在每個邊界都正確，一句話裡的數字依輸入算出', () => {
   const expected = {
     0: ['還沒開卡的讀者', '第一本最難，我們幫你挑好了'],
-    1: ['偶爾路過圖書館', '再多借 5 本，就追上全台平均'],
-    5: ['偶爾路過圖書館', '再多借 1 本，就追上全台平均'],
+    1: ['偶爾路過圖書館', '再多借 4.8 本，就追上全台平均'],
+    3: ['偶爾路過圖書館', '再多借 2.8 本，就追上全台平均'],
+    5: ['偶爾路過圖書館', '再多借 0.8 本，就追上全台平均'],
     6: ['超越全台平均', '你比大部分台灣人都愛借書'],
     8: ['超越全台平均', '你比大部分台灣人都愛借書'],
     9: ['比冠軍新北還能借', '全台沒有一個縣市追得上你'],
     23: ['比冠軍新北還能借', '全台沒有一個縣市追得上你'],
     24: ['圖書館常駐居民', '平均每個月借 2 本以上'],
     51: ['圖書館常駐居民', '平均每個月借 4 本以上'],
-    52: ['每週一本俱樂部', '你一個人抵 9 個台灣人'],
+    52: ['每週一本俱樂部', '你一個人抵 8 個台灣人'],
     999: ['每週一本俱樂部', '你一個人抵 172 個台灣人'],
   };
   for (const [books, [name, line]] of Object.entries(expected)) {
@@ -83,7 +87,7 @@ test('名次：剛好等於某縣市人均時，不算贏也不算輸', () => {
   assert.equal(c.rank.position, 7);
   assert.equal(c.rank.beaten.length, 15); // 22 − 6 個比你高 − 雲林平手
   assert.ok(!c.rank.beaten.includes('雲林縣'));
-  assert.equal(c.county.compare.text, '1.00 倍');
+  assert.equal(c.county.compare.text, '跟它差不多'); // 剛好一樣：不說「1.00 倍」
 });
 
 test('名次：比所有縣市都少時排最後一名（第 23 名）；2 本贏過人均最低的 4 個縣市', () => {
@@ -102,7 +106,7 @@ test('選「大概的範圍」時用代表值計算，並標示為估算', () =>
   assert.equal(c.books, 9);
   assert.equal(c.estimated, true);
   assert.equal(c.title.name, '比冠軍新北還能借');
-  assert.equal(c.county.compare.text, '1.03 倍');
+  assert.equal(c.county.compare.text, '是它的 1.03 倍');
   assert.equal(card({ county: '新北市', age: '18-24', range: '0' }).books, 0);
   assert.equal(card({ county: '新北市', age: '18-24', range: '1-5' }).books, 3);
   assert.equal(card({ county: '新北市', age: '18-24', range: '13+' }).books, 15);
@@ -193,8 +197,8 @@ test('跟台北同齡人比：18–24 歲台北 2024 年平均每人借約 2.18 
   assert.equal(c.peer.loans, 317624);
   assert.equal(c.peer.population, 145692);
   assert.equal(c.peer.perCapita.toFixed(2), '2.18');
-  assert.equal(c.peer.compare.text, '4.13 倍');
-  assert.equal(exact('新北市', 0).peer.compare.text, '還差 2.2 本');
+  assert.equal(c.peer.compare.text, '是它的 4.13 倍');
+  assert.equal(exact('新北市', 0).peer.compare.text, '還差 2.2 本就追上');
 });
 
 // 台北 2024 年底各年齡層人口（內政部 113 年 12 月，人工逐歲加總核對過）；65+ 含 100 歲以上 1,125 人。
@@ -213,4 +217,47 @@ test('同齡人人均借閱：9 個年齡層都有，人口跟人工加總一樣
   }
   assert.equal(total, 2490869);
   assert.equal(window.LIBRARY_DATA.age.population.total, 2490869);
+});
+
+// 先四捨五入再決定說法：25–34 歲台北 2024 年人均 = （女 604,713 + 男 255,436 =）860,149 冊 ÷ 284,291 人 ≈ 3.026 本（列上顯示 3.0），
+// 3 本只差 0.026，四捨五入後是 0.0 本，不能說「還差 0.0 本」；澎湖 2025 年人均 ≈ 3.018 本，3 本也是一樣。
+// 反過來，多一點點（例如 5.01 本 vs 5 本 = 1.002 倍）四捨五入是 1.00 倍，也不能說「1.00 倍」。
+test('差距四捨五入後是 0 時說「跟它差不多」，不會出現「還差 0.0 本」或「1.00 倍」', () => {
+  const c = card({ county: '澎湖縣', age: '25-34', books: 3 });
+  assert.equal(c.peer.perCapita.toFixed(1), '3.0');
+  assert.equal(c.peer.compare.text, '跟它差不多');
+  assert.equal(c.county.compare.text, '跟它差不多');
+  assert.equal(card({ county: '臺北市', age: '25-34', range: '1-5' }).peer.compare.text, '跟它差不多');
+  assert.doesNotMatch(JSON.stringify(c), /0\.0 本|1\.00 倍/);
+
+  const data = structuredClone(window.LIBRARY_DATA);
+  data.counties.find((x) => x.name === '雲林縣').years.find((y) => y.year === 2025).perCapita = 4.99;
+  assert.equal(card({ county: '雲林縣', age: '18-24', books: 5 }, data).county.compare.text, '跟它差不多');
+  // 差 0.05 以上就照常說
+  data.counties.find((x) => x.name === '雲林縣').years.find((y) => y.year === 2025).perCapita = 5.1;
+  assert.equal(card({ county: '雲林縣', age: '18-24', books: 5 }, data).county.compare.text, '還差 0.1 本就追上');
+});
+
+test('名次：一個縣市都還沒贏過時，成績單附上鼓勵的話', () => {
+  assert.match(exact('新北市', 0).rank.cheer, /借一本就有機會/);
+  assert.equal(exact('新北市', 9).rank.cheer, null);
+});
+
+// 稱號門檻是固定的整數，靠的是數據：全國 2025 年人均約 5.805 本、冠軍新北約 8.73 本。
+// 數據更新後門檻不再成立時，這個測試會失敗，提醒要改稱號表。
+test('稱號門檻跟數據對得上：「超越全台平均」從剛超過全國人均開始，「比冠軍新北還能借」從剛超過新北開始，而且新北是第一名', () => {
+  const titleAt = (books) => exact('臺中市', books).title.name;
+  const firstBooks = (name) => { for (let b = 0; b < 100; b++) if (titleAt(b) === name) return b; return null; };
+  const d = window.LIBRARY_DATA;
+  const national = d.national.find((r) => r.year === 2025).printPerCapita;
+  const per = d.counties.map((c) => ({ name: c.name, v: c.years.find((y) => y.year === 2025).perCapita }));
+  const top = per.reduce((a, b) => (b.v > a.v ? b : a));
+  assert.equal(top.name, '新北市');
+
+  const aboveNational = firstBooks('超越全台平均');
+  assert.ok(aboveNational - 1 < national && national < aboveNational, `全國人均 ${national} 應落在 ${aboveNational - 1}～${aboveNational} 本之間`);
+  const aboveTop = firstBooks('比冠軍新北還能借');
+  assert.ok(aboveTop - 1 < top.v && top.v < aboveTop, `新北人均 ${top.v} 應落在 ${aboveTop - 1}～${aboveTop} 本之間`);
+  assert.equal(exact('臺中市', aboveTop).rank.position, 1);
+  assert.equal(exact('臺中市', aboveTop - 1).rank.position, 2);
 });

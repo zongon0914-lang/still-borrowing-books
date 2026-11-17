@@ -5,27 +5,39 @@
   /** 縣市和全國比較用的年份 */
   const YEAR = 2025;
 
-  /** 讀者比平均多（或一樣）時說「幾倍」；比較少時說「還差幾本」，所以 0 本不會出現「0 倍」 */
+  /** 人均借閱這類數字在成績單上都寫到小數一位 */
+  const perCapitaText = (n) => n.toFixed(1);
+
+  /**
+   * 跟一個平均比，回傳成績單上那半句話（主詞「你／我」由頁面和圖片各自加上）：
+   * 比較少時說「還差 X 本就追上」，比較多時說「是它的 X 倍」，所以 0 本不會出現「0 倍」。
+   * 先四捨五入再決定說法：差距四捨五入後是 0（「還差 0.0 本」「1.00 倍」）就說「跟它差不多」。
+   * strong 是頁面要加粗的那一段。
+   */
   function compare(books, average) {
     if (books < average) {
-      const short = average - books;
-      return { times: null, short, text: `還差 ${short.toFixed(1)} 本` };
+      const short = perCapitaText(average - books);
+      if (Number(short) > 0) return { times: null, short: Number(short), text: `還差 ${short} 本就追上`, strong: `還差 ${short} 本` };
+    } else {
+      const times = (books / average).toFixed(2);
+      if (times !== '1.00') return { times: Number(times), short: null, text: `是它的 ${times} 倍`, strong: `${times} 倍` };
     }
-    const times = books / average;
-    return { times, short: null, text: `${times.toFixed(2)} 倍` };
+    return { times: null, short: null, text: '跟它差不多', strong: '差不多' };
   }
 
   /**
    * 稱號和一句話（規格使用者故事 22）。門檻是固定的整數：6 本超過全國人均（約 5.8），9 本超過冠軍新北（約 8.7）。
-   * 語氣是友善的玩笑；一句話裡的數字依讀者的輸入算出來。
+   * 語氣是友善的玩笑；一句話裡的數字依讀者的輸入算出來（規格使用者故事 23），
+   * 而且跟「跟全國比」那一列的數字一致、不灌水：還差幾本照抄那一列，抵幾個人無條件捨去。
+   * @param vsNational compare(books, 全國人均) 的結果
    */
-  function titleOf(books, national) {
+  function titleOf(books, vsNational) {
     if (books === 0) return { name: '還沒開卡的讀者', line: '第一本最難，我們幫你挑好了' };
-    if (books <= 5) return { name: '偶爾路過圖書館', line: `再多借 ${Math.ceil(national - books)} 本，就追上全台平均` };
+    if (books <= 5) return { name: '偶爾路過圖書館', line: `再多借 ${perCapitaText(vsNational.short)} 本，就追上全台平均` };
     if (books <= 8) return { name: '超越全台平均', line: '你比大部分台灣人都愛借書' };
     if (books <= 23) return { name: '比冠軍新北還能借', line: '全台沒有一個縣市追得上你' };
     if (books <= 51) return { name: '圖書館常駐居民', line: `平均每個月借 ${Math.floor(books / 12)} 本以上` };
-    return { name: '每週一本俱樂部', line: `你一個人抵 ${Math.round(books / national)} 個台灣人` };
+    return { name: '每週一本俱樂部', line: `你一個人抵 ${Math.floor(vsNational.times)} 個台灣人` };
   }
 
   /** 記不清楚的讀者改選範圍：每個範圍用一個代表值計算（規格「成績單計算模組」） */
@@ -57,7 +69,7 @@
     const categories = [...group.all.categories].sort((a, b) => b.loans - a.loans).slice(0, 3).map((c) => c.name);
     const books = categories.flatMap((name) =>
       data.books.categories.find((c) => c.name === name).books.map((b) => ({ title: b.title, author: b.author, category: name })));
-    return { categories, books, ageUrl: `age.html?age=${encodeURIComponent(group.age)}` };
+    return { categories, books, ageUrl: window.Chapter3Page.ageUrl(group.age) };
   }
 
   /**
@@ -91,6 +103,8 @@
     const perCapita = county.years.find((y) => y.year === YEAR).perCapita;
     const national = data.national.find((r) => r.year === YEAR).printPerCapita;
     const others = data.counties.map((c) => ({ name: c.name, perCapita: c.years.find((y) => y.year === YEAR).perCapita }));
+    const beaten = others.filter((c) => c.perCapita < books).map((c) => c.name);
+    const vsNational = compare(books, national);
 
     return {
       ok: true,
@@ -101,13 +115,15 @@
       age: group.age,
       ageLabel: window.Chapter3Page.ageLabel(group.age),
       county: { name: county.name, perCapita, compare: compare(books, perCapita) },
-      national: { perCapita: national, compare: compare(books, national) },
+      national: { perCapita: national, compare: vsNational },
       rank: {
         position: 1 + others.filter((c) => c.perCapita > books).length,
         of: data.counties.length + 1,
-        beaten: others.filter((c) => c.perCapita < books).map((c) => c.name),
+        beaten,
+        // 一個縣市都還沒贏過時的鼓勵（規格：不能讓借得少的人覺得被嘲笑），頁面和圖片都用
+        cheer: beaten.length === 0 ? '還沒贏過任何一個縣市，借一本就有機會。' : null,
       },
-      // 跟台北同齡人比：北市圖該年齡層借閱冊數 ÷ 台北該年齡層人口（只有台北、2024 年）
+      // 跟台北同齡人比：北市圖該年齡層紙本借閱冊數 ÷ 台北該年齡層人口（只有台北、2024 年）
       peer: {
         year: data.age.year,
         city: data.age.population.city,
@@ -117,7 +133,7 @@
         perCapita: group.perCapita,
         compare: compare(books, group.perCapita),
       },
-      title: titleOf(books, national),
+      title: titleOf(books, vsNational),
       recommend: recommendOf(data, group),
     };
   }
@@ -135,7 +151,7 @@
     return { name: lib.name, label: `到${lib.name}借這本 →`, url, withTitle };
   }
 
-  window.Scorecard = { compute, libraryLink, RANGES, YEAR };
+  window.Scorecard = { compute, libraryLink, perCapitaText, RANGES, YEAR };
 
   if (typeof document === 'undefined' || !window.Site) return; // Node 測試，或數據檔沒載入
 
@@ -156,11 +172,8 @@
   $('sc-ranges').addEventListener('change', () => { booksInput.value = ''; });
 
   const esc = (s) => String(s).replace(/[&<>"]/g, (ch) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[ch]);
-  const one = (n) => n.toFixed(1);
-  const compareHtml = (cmp) =>
-    cmp.times === null
-      ? `你<strong>還差 ${one(cmp.short)} 本</strong>就追上`
-      : `你是它的 <strong>${cmp.times.toFixed(2)} 倍</strong>`;
+  /** compute() 寫好的那半句話，加上主詞「你」，要強調的那段加粗 */
+  const compareHtml = (cmp) => `你${esc(cmp.text).replace(esc(cmp.strong), (m) => `<strong>${m}</strong>`)}`;
 
   // ---------- 推薦書：隨機挑一本、「換一本」 ----------
   let candidates = [];
@@ -225,20 +238,20 @@
 
     $('sc-county-label').textContent = `跟${c.county.name}比`;
     $('sc-county-compare').innerHTML =
-      `${esc(c.county.name)} ${c.year} 年人均借閱 ${one(c.county.perCapita)} 本，${compareHtml(c.county.compare)}。`;
+      `${esc(c.county.name)} ${c.year} 年人均借閱 ${perCapitaText(c.county.perCapita)} 本，${compareHtml(c.county.compare)}。`;
     $('sc-national-compare').innerHTML =
-      `全國 ${c.year} 年人均借閱 ${one(c.national.perCapita)} 本，${compareHtml(c.national.compare)}。`;
+      `全國 ${c.year} 年人均借閱 ${perCapitaText(c.national.perCapita)} 本，${compareHtml(c.national.compare)}。`;
 
     $('sc-peer-compare').innerHTML =
-      `台北 ${esc(c.ageLabel)} ${c.peer.year} 年平均每人借 ${one(c.peer.perCapita)} 本，${compareHtml(c.peer.compare)}。` +
-      `<span class="scorecard__fine">只有臺北市、${c.peer.year} 年的數據：北市圖這個年齡層的借閱冊數 ÷ 台北這個年齡層的人口。` +
+      `台北 ${esc(c.ageLabel)} ${c.peer.year} 年平均每人借 ${perCapitaText(c.peer.perCapita)} 本，${compareHtml(c.peer.compare)}。` +
+      `<span class="scorecard__fine">只有臺北市、${c.peer.year} 年的數據：北市圖這個年齡層的紙本借閱冊數 ÷ 台北這個年齡層的人口。` +
       '借書的人不一定住台北，所以這是「平均每個台北人」的算法，跟縣市人均借閱一樣。</span>';
 
-    const all = data.counties.length;
+    const all = c.rank.of - 1; // 縣市數（名次的總數裡多了一個你）
     const beaten = c.rank.beaten;
     let beatText;
     if (beaten.length === all) beatText = `全台 ${all} 個縣市你都贏過。`;
-    else if (beaten.length === 0) beatText = '還沒贏過任何一個縣市，借一本就有機會。';
+    else if (c.rank.cheer) beatText = esc(c.rank.cheer);
     else beatText = `贏過 ${beaten.length} 個縣市：${beaten.map(esc).join('、')}。`;
     $('sc-rank').innerHTML =
       `你可以排全台<strong>第 ${c.rank.position} 名</strong>（${all} 個縣市加上你，共 ${c.rank.of} 名）。${beatText}`;
