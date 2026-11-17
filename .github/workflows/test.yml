@@ -1,0 +1,15 @@
+# 推上 GitHub（或開 PR）時自動跑兩個檢查點：npm test。
+# 結果在 GitHub 儲存庫的 Actions 分頁；沒過會顯示紅色叉叉並寄信通知。
+name: test
+on:
+  push:
+  pull_request:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: npm test

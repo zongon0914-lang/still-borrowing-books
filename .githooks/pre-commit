@@ -1,0 +1,9 @@
+#!/bin/sh
+# commit 前自動跑兩個檢查點；沒過就不讓 commit。
+# 啟用方式（每台電腦一次）：npm.cmd run setup-hooks
+npm test --silent >/tmp/pre-commit-test.log 2>&1 || {
+  grep -E "^not ok|^# (pass|fail)|^ℹ (pass|fail)|✖" /tmp/pre-commit-test.log | head -20
+  echo ""
+  echo "測試沒過，這次 commit 被擋下來了。先修好再 commit（完整訊息：npm.cmd test）。"
+  exit 1
+}

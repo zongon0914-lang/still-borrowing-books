@@ -34,7 +34,10 @@ npm.cmd run build-data    # 原始資料有改時，重新產生 assets/data.js
 npm.cmd run build-map     # 縣市界線有改時，重新產生 assets/taiwan-map.js
 npm.cmd run fetch-raw     # 重新從政府 API 下載原始資料（平常不用）
 npm.cmd run fetch-population  # 重新下載台北 2024 年底各歲人口，存成 tools/raw/taipei-pop-2024.json（平常不用）
+npm.cmd run setup-hooks   # 每台電腦跑一次：之後每次 commit 前自動跑 npm test，沒過就不讓 commit
 ```
+
+自動把關有兩道：commit 前的 `.githooks/pre-commit`（要先跑一次 `setup-hooks`），以及推上 GitHub 後的 `.github/workflows/test.yml`（結果在儲存庫的 Actions 分頁）。
 
 手機版檢查不是指令，是用瀏覽器打開一個網頁，等它跑完看結果（約 1 分鐘）：
 
