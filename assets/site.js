@@ -25,10 +25,28 @@
     });
   }
 
+  /**
+   * 捲動動畫（只給章節一紙本折線圖、章節二排行長條用）：el 捲進畫面時呼叫 play()，只播一次。
+   * 讀者開了「減少動態效果」、或瀏覽器沒有 IntersectionObserver 時，改呼叫 still()，直接顯示完整的圖。
+   */
+  function drawWhenSeen(el, play, still) {
+    const reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduce || !('IntersectionObserver' in window)) {
+      still();
+      return;
+    }
+    const observer = new IntersectionObserver((entries) => {
+      if (!entries.some((e) => e.isIntersecting)) return;
+      observer.disconnect();
+      play();
+    }, { threshold: 0.3 });
+    observer.observe(el);
+  }
+
   const latest = data.national[data.national.length - 1];
   const first = data.national[0];
 
-  window.Site = { data, formatBig, byYear, fillStats, latest, first };
+  window.Site = { data, formatBig, byYear, fillStats, drawWhenSeen, latest, first };
 
   fillStats({
     latestYear: () => latest.year,
