@@ -23,24 +23,26 @@ tools/geo/counties-10t.json ──tools/build-map.mjs──> assets/taiwan-map.j
 
 | 頁面 | 專用程式 | 計算那一半（Node 裡可測） | 測試 |
 |---|---|---|---|
-| `index.html`（卡片：一、二、三、結語、換你回答） | 無 | | `links.test.mjs` |
-| `chapter1.html` 一年借幾本 | `chapter1.js` | `Chapter1Page.guess`（先猜再看的揭曉句） | `data.test.mjs`、`chapter1-guess.test.mjs` |
-| `chapter2.html` 哪裡最愛借 | `taiwan-map.js`、`chapter2.js` | 無（只畫圖） | `data.test.mjs` |
+| `index.html`（大數字下的總答案、卡片：一、二、三、結語、換你回答，章節卡的小數字由 `site.js` 填） | 無 | | `links.test.mjs`、`home.test.mjs`、`ending.test.mjs`（總答案） |
+| `chapter1.html` 一年借幾本 | `chapter1.js` | `Chapter1Page.guess`（先猜再看的揭曉句）、`axisTick`／`axisUnit`（縱軸刻度） | `data.test.mjs`、`chapter1-guess.test.mjs` |
+| `chapter2.html` 哪裡最愛借 | `taiwan-map.js`、`chapter2.js` | `Chapter2Page.mapLabels`（地圖標哪幾個縣市、標籤放哪裡） | `data.test.mjs`、`chapter2.test.mjs` |
 | `county.html?county=…` | `county.js` | `CountyPage.view` | `county.test.mjs` |
-| `chapter3.html` 我們借什麼 | `chapter3.js` | `Chapter3Page.view` | `chapter3.test.mjs`、`age.test.mjs` |
+| `chapter3.html` 我們借什麼 | `chapter3.js` | `Chapter3Page.view`（人均借閱、生活感換算、顏色深淺表） | `chapter3.test.mjs`、`age.test.mjs` |
 | `ending.html` 結語：所以，還借書嗎？ | `chapter3.js`、`ending.js` | `EndingPage.view` | `ending.test.mjs`、`links.test.mjs` |
 | `age.html?age=…&sex=…` | `chapter3.js`、`age.js` | `AgePage.view` | `age-tool.test.mjs` |
 | `category.html?category=…` | `category.js` | `CategoryPage.view` | `category.test.mjs`、`books.test.mjs` |
 | `scorecard.html` 借書成績單 | `chapter3.js`、`scorecard.js`、`scorecard-image.js` | `Scorecard.compute`、`Scorecard.libraryLink`、`ScorecardImage.content` / `layout` | `scorecard*.test.mjs`、`library.test.mjs` |
 | `sources.html` 資料來源與 AI 使用說明 | 無 | | `sources.test.mjs` |
 
-`chapter3.js` 也給成績單、年齡工具和結語用（年齡層名稱、網址、「18–24 歲是不是借得最少」），所以要比它們先載入。結語的三個發現和整體答案只在 `EndingPage.view` 產生；`ending.html` 裡的備用文字要跟它一樣（`ending.test.mjs` 會比對）。
+`chapter3.js` 也給成績單、年齡工具和結語用（年齡層名稱、網址、「18–24 歲人均借閱是不是所有年齡層最低」），所以要比它們先載入。結語的三個發現和整體答案只在 `EndingPage.view` 產生；`ending.html` 和 `index.html` 裡的總答案、結語的備用文字要跟它一樣（`ending.test.mjs` 會比對）。章節三的顏色深淺表也是寫在 HTML 裡的備用表格，數據變了要跟著改（`chapter3.test.mjs` 會比對）。
+
+縣市名稱一律寫「台」：`tools/clean-data.mjs` 的 `countyName` 在整理時就轉好，`county.js` 也接受舊網址的「臺」。用字規則（「台」、中文標點後不空白、不寫「十年」）由 `wording.test.mjs` 掃全站。
 
 ## 檢查
 
 | 檢查 | 怎麼跑 | 看什麼 |
 |---|---|---|
-| 全部自動測試 | `npm.cmd test`（commit 前和推上 GitHub 時也會自動跑） | 數據對不對、站內連結、每頁內容、成績單所有組合、用詞 |
+| 全部自動測試 | `npm.cmd test`（commit 前和推上 GitHub 時也會自動跑） | 數據對不對、站內連結、導覽列、每頁內容、成績單所有組合（含圖片長條圖）、用詞 |
 | 線上網站 | `npm.cmd run check-online` | 線上每頁點得通，加上 22 縣市圖書館連結（`tools/check-libraries.mjs`） |
 | 手機寬度 | 瀏覽器打開 `tools/check-mobile.html` | 每頁 320／375px 不左右捲動、不卡在「載入中」 |
 | 成績單操作 | 瀏覽器打開 `tools/check-scorecard.html` | 填表、換一本、借書連結、1080×1920 圖片 |
