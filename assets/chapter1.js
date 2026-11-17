@@ -61,6 +61,15 @@
     const revealButton = document.getElementById('guess-reveal');
     const again = document.getElementById('guess-again');
 
+    // 開場白和數字卡裡的平均本數會洩漏答案：揭曉前藏起來（數字卡換成「？ 本」），揭曉後一直顯示。
+    // 沒有 JavaScript 時不會跑到這裡，讀者照樣看到完整內容。
+    const spoilers = document.querySelectorAll('.guess-spoiler');
+    const placeholders = document.querySelectorAll('.guess-placeholder');
+    const showSpoilers = (shown) => {
+      spoilers.forEach((el) => { el.hidden = !shown; });
+      placeholders.forEach((el) => { el.hidden = shown; });
+    };
+
     const showValue = () => { value.textContent = `${range.value} 本`; };
     range.addEventListener('input', showValue);
 
@@ -72,6 +81,7 @@
       again.hidden = false;
       revealButton.hidden = true;
       range.disabled = true;
+      showSpoilers(true);
       again.focus();
     });
 
@@ -85,6 +95,7 @@
 
     play.hidden = false;
     result.hidden = true;
+    showSpoilers(false);
     showValue();
   }
 
