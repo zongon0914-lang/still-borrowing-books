@@ -141,6 +141,7 @@
     },
     options: {
       maintainAspectRatio: false,
+      animation: false, // 只有章節一紙本折線圖和章節二排行長條有動畫
       interaction: { mode: 'index', intersect: false },
       plugins: {
         legend: { position: 'top', align: 'start', labels: { boxWidth: 16, boxHeight: 2 } },

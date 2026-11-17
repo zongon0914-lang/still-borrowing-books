@@ -303,6 +303,10 @@ h2 {
 @media (prefers-reduced-motion: reduce) {
   .rank-bars.is-growing .rank-bars__bar { animation: none; }
 }
+/* 列印時不管動畫跑到哪，長條一律完整 */
+@media print {
+  .rank-bars .rank-bars__bar { transform: none; animation: none; }
+}
 .rank-bars__value { text-align: right; font-variant-numeric: tabular-nums; line-height: 1.2; }
 .rank-bars__note { display: block; font-size: 0.625rem; color: var(--ink-soft); white-space: nowrap; }
 

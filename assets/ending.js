@@ -21,11 +21,12 @@
     const perCapitaOf = (name) =>
       data.counties.find((c) => c.name === name).years.find((y) => y.year === latest.year).perCapita;
     const rankOf = (name) => data.counties.filter((c) => perCapitaOf(c.name) > perCapitaOf(name)).length + 1;
-    const ntpc = { perCapita: perCapitaOf('新北市'), rank: rankOf('新北市') };
+    const topName = data.counties.map((c) => c.name).find((name) => rankOf(name) === 1);
+    const top = { name: topName, perCapita: perCapitaOf(topName) };
     const tpe = { perCapita: perCapitaOf('臺北市'), rank: rankOf('臺北市') };
 
     // ---------- 發現三：台北各年齡層（章節三） ----------
-    const ch3 = window.Chapter3Page.view(data);
+    const taipeiAges = window.Chapter3Page.view(data);
 
     const findings = [
       {
@@ -35,34 +36,34 @@
         caption: `${latest.year} 年全國平均每人借的紙本書`,
         text:
           `疫情那年（${covid.year} 年）跌到平均每人 ${fmt(covid.printPerCapita)} 本紙本書，` +
-          `${latest.year} 年回升到 ${fmt(latest.printPerCapita)} 本，是十年新高。`,
+          `${latest.year} 年回升到 ${fmt(latest.printPerCapita)} 本${isRecord ? '，是十年新高' : ''}。`,
         url: 'chapter1.html',
         linkText: '回去看章節一：台灣人一年借幾本書？',
         holds: isRecord && covid.printPerCapita < latest.printPerCapita,
       },
       {
         title: '愛借書的不一定是台北',
-        value: fmt(ntpc.perCapita),
+        value: fmt(top.perCapita),
         unit: '本',
-        caption: `${latest.year} 年新北市平均每人借的紙本書`,
+        caption: `${latest.year} 年${top.name}平均每人借的紙本書`,
         text:
-          `${latest.year} 年人均借閱第 1 名是新北市，平均每人 ${fmt(ntpc.perCapita)} 本紙本書；` +
+          `${latest.year} 年人均借閱第 1 名是${top.name}，平均每人 ${fmt(top.perCapita)} 本紙本書；` +
           `臺北市約 ${fmt(tpe.perCapita)} 本，在 ${data.counties.length} 縣市中排第 ${tpe.rank} 名。`,
         url: 'chapter2.html',
         linkText: '回去看章節二：哪裡的人最愛借書？',
-        holds: ntpc.rank === 1 && tpe.rank > 1,
+        holds: tpe.rank > 1,
       },
       {
         title: '我們這一代借得最少',
-        value: pct(ch3.young.share),
+        value: pct(taipeiAges.young.share),
         unit: '%',
-        caption: `${ch3.year} 年北市圖的紙本借閱裡，18–24 歲借的比例`,
+        caption: `${taipeiAges.year} 年北市圖的紙本借閱裡，18–24 歲借的比例`,
         text:
-          `${ch3.year} 年在台北，18–24 歲一年借了 ${wan(ch3.young.loans)}冊紙本書，只占全部的 ${pct(ch3.young.share)}%，` +
+          `${taipeiAges.year} 年在台北，18–24 歲一年借了 ${wan(taipeiAges.young.loans)}冊紙本書，只占全部的 ${pct(taipeiAges.young.share)}%，` +
           `是 6 歲以上借得最少的一群。（年齡資料只有台北市）`,
         url: 'chapter3.html',
         linkText: '回去看章節三：我們這一代借什麼？',
-        holds: ch3.young.leastAmongReaders,
+        holds: taipeiAges.young.leastAmongReaders,
       },
     ];
 
@@ -74,12 +75,12 @@
   if (typeof document === 'undefined' || !window.Site || !window.Chapter3Page) return; // Node 測試，或程式沒載入：保留 HTML 的備用文字
 
   // ---------- 填到頁面上 ----------
-  const v = view(window.Site.data);
+  const ending = view(window.Site.data);
   document.querySelectorAll('[data-finding]').forEach((el) => {
-    const f = v.findings[Number(el.dataset.finding)];
-    el.querySelectorAll('[data-part]').forEach((part) => (part.textContent = f[part.dataset.part]));
+    const finding = ending.findings[Number(el.dataset.finding)];
+    el.querySelectorAll('[data-part]').forEach((part) => (part.textContent = finding[part.dataset.part]));
     const link = el.querySelector('a');
-    if (link) link.href = f.url;
+    if (link) link.href = finding.url;
   });
-  document.querySelectorAll('[data-ending-answer]').forEach((el) => (el.textContent = v.answer));
+  document.querySelectorAll('[data-ending-answer]').forEach((el) => (el.textContent = ending.answer));
 })();

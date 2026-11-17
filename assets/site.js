@@ -27,20 +27,36 @@
 
   /**
    * 捲動動畫（只給章節一紙本折線圖、章節二排行長條用）：el 捲進畫面時呼叫 play()，只播一次。
-   * 讀者開了「減少動態效果」、或瀏覽器沒有 IntersectionObserver 時，改呼叫 still()，直接顯示完整的圖。
+   * 讀者開了「減少動態效果」、瀏覽器沒有 IntersectionObserver、或觀察器設定失敗時，改呼叫 still()，直接顯示完整的圖。
+   * 還沒捲到就列印時（例如分頁一直在背景，觀察器沒觸發）也改呼叫 still()，不讓圖停在空白。
+   * play() 和 still() 加起來只會呼叫一次。
    */
   function drawWhenSeen(el, play, still) {
+    let observer = null;
+    let done = false;
+    const showAllBeforePrint = () => finish(still);
+    function finish(draw) {
+      if (done) return;
+      done = true;
+      if (observer) observer.disconnect();
+      window.removeEventListener('beforeprint', showAllBeforePrint);
+      draw();
+    }
+
     const reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (reduce || !('IntersectionObserver' in window)) {
-      still();
+      finish(still);
       return;
     }
-    const observer = new IntersectionObserver((entries) => {
-      if (!entries.some((e) => e.isIntersecting)) return;
-      observer.disconnect();
-      play();
-    }, { threshold: 0.3 });
-    observer.observe(el);
+    try {
+      observer = new IntersectionObserver((entries) => {
+        if (entries.some((e) => e.isIntersecting)) finish(play);
+      }, { threshold: 0.15 });
+      observer.observe(el);
+      window.addEventListener('beforeprint', showAllBeforePrint);
+    } catch (err) {
+      finish(still);
+    }
   }
 
   const latest = data.national[data.national.length - 1];
