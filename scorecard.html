@@ -126,6 +126,15 @@
         <p class="scorecard__book-more"><a id="sc-book-age" href="age.html">看你這個年齡層完整的類別排行和書單 →</a></p>
       </div>
 
+      <!-- 成績單圖片在瀏覽器裡畫出來，不上傳；「分享」只在能分享檔案的瀏覽器顯示 -->
+      <div class="scorecard__save">
+        <p class="scorecard__save-actions">
+          <button class="button" type="button" id="sc-save">存成圖片</button>
+          <button class="button button--quiet" type="button" id="sc-share" hidden>分享</button>
+        </p>
+        <p class="scorecard__save-note" id="sc-save-status" role="status">存成 IG 限動尺寸的直式圖片（1080×1920），圖片在你的瀏覽器裡畫好，不會上傳。</p>
+      </div>
+
       <p class="chart-source" id="sc-source"></p>
       <p class="age-share"><a href="#scorecard-form">改輸入、重算一次 ↑</a></p>
     </section>
@@ -145,5 +154,6 @@
   <script src="assets/site.js"></script>
   <script src="assets/chapter3.js"></script>
   <script src="assets/scorecard.js"></script>
+  <script src="assets/scorecard-image.js"></script>
 </body>
 </html>

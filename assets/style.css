@@ -560,6 +560,14 @@ h2 {
 .scorecard__book-more { margin: 0.75rem 0 0; font-family: var(--sans); font-size: 0.875rem; }
 .button--quiet { border: 1px solid var(--accent); background: transparent; color: var(--accent); cursor: pointer; font-size: 1rem; }
 .button--quiet:hover { background: var(--accent); color: #fffdf8; }
+.scorecard__save { padding: 1rem 0 0.25rem; }
+.scorecard__save-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0; }
+.scorecard__save .button { border: 1px solid var(--accent); font-size: 1rem; cursor: pointer; }
+.scorecard__save .button--quiet { background: transparent; }
+.scorecard__save .button--quiet:hover { background: var(--accent); }
+.scorecard__save .button[hidden] { display: none; }
+.scorecard__save .button:disabled { opacity: 0.6; cursor: progress; }
+.scorecard__save-note { margin: 0.5rem 0 0; font-family: var(--sans); font-size: 0.8125rem; color: var(--ink-soft); line-height: 1.6; }
 
 /* ---------- 資料來源與 AI 使用說明 ---------- */
 .toc { list-style: none; margin: 1.5rem 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.5rem 1.25rem; font-family: var(--sans); font-size: 0.9375rem; }
