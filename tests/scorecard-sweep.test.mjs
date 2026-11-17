@@ -44,7 +44,7 @@ const pageTexts = (c) => [
 ];
 const imageTexts = (c) => {
   const img = content(c, book);
-  return [img.booksValue, img.estimate, img.title, img.line, ...img.rows.map((r) => r.text)];
+  return [img.booksValue, img.estimate, img.title, img.line, ...img.rows.map((r) => r.text), ...img.bars.map((b) => b.text)];
 };
 
 test('22 縣市 × 9 年齡層 × 0–999 本和 4 個範圍：網頁和圖片都沒有怪說法', () => {

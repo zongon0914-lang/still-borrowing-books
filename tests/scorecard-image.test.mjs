@@ -92,14 +92,23 @@ test('換行：最後一行不會只剩一個字', () => {
   assert.equal(lines.join(''), text.replace(/ (?=追上)/, ''));
 });
 
-// 排版：每一段字都在圖片的邊界內、彼此不重疊
+// 排版：每一段字（和長條）都在圖片的邊界內、彼此不重疊。
+// 長條圖那幾列的名稱、橫條、本數排在同一列，所以用「方框有沒有相交」來檢查，不是只看上下順序
+const rectOf = (op) => (op.kind === 'bar'
+  ? { x: op.x, y: op.y, w: op.track, h: op.height, name: `${op.role} 長條` }
+  : { x: op.x, y: op.y, w: op.width, h: op.size * 1.2, name: `「${op.text}」` });
 function assertInBounds(ops) {
-  let bottom = 0;
-  for (const op of ops) {
-    assert.ok(op.x >= 0 && op.x + op.width <= WIDTH - 72, `「${op.text}」超出左右邊界`);
-    assert.ok(op.y >= 72 && op.y + op.size * 1.2 <= HEIGHT - 72, `「${op.text}」超出上下邊界（y=${op.y}）`);
-    assert.ok(op.y >= bottom - 0.5, `「${op.text}」跟上一段重疊`);
-    bottom = op.y + op.size * 1.2;
+  const rects = ops.filter((op) => op.kind !== 'rule').map(rectOf);
+  for (const r of rects) {
+    assert.ok(r.x >= 0 && r.x + r.w <= WIDTH - 72, `${r.name}超出左右邊界`);
+    assert.ok(r.y >= 72 && r.y + r.h <= HEIGHT - 72, `${r.name}超出上下邊界（y=${r.y}）`);
+  }
+  for (let i = 0; i < rects.length; i++) {
+    for (let j = i + 1; j < rects.length; j++) {
+      const a = rects[i], b = rects[j];
+      const hit = a.x < b.x + b.w - 0.5 && b.x < a.x + a.w - 0.5 && a.y < b.y + b.h - 0.5 && b.y < a.y + a.h - 0.5;
+      assert.ok(!hit, `${a.name}和${b.name}重疊`);
+    }
   }
 }
 // 頁尾上面那條線：上面的字都要在線的上方
@@ -115,7 +124,7 @@ const narrow = (text, size) => [...text].reduce((w, ch) => w + (ch.charCodeAt(0)
 const textOps = (c, m = measure) => {
   const ops = layout(c, m);
   assertAboveFooter(ops);
-  return ops.filter((op) => op.kind === 'text');
+  return ops.filter((op) => op.kind !== 'rule');
 };
 
 const longest = {
@@ -140,7 +149,7 @@ for (const [name, [input, b]] of Object.entries(cases)) {
       const ops = textOps(c, m);
       assertInBounds(ops);
       // 重要的字都有畫上去
-      const drawn = ops.map((op) => op.text).join('');
+      const drawn = ops.filter((op) => op.kind === 'text').map((op) => op.text).join('');
       for (const must of [c.booksValue, c.title, c.url]) assert.ok(drawn.includes(must), `沒畫出「${must}」`);
       if (c.estimate) assert.ok(drawn.includes('估算'));
     });
@@ -190,4 +199,60 @@ test('排版的保險：內容多到最緊的排法也放不下時，推薦書�
   const titleOps = ops.filter((op) => op.role === 'bookTitle');
   assert.ok(titleOps.length >= 1, '書名還是要畫出來');
   assert.ok(titleOps[titleOps.length - 1].text.endsWith('…'));
+});
+
+// ---------- 長條圖（docs/spec-polish.md 使用者故事 44–49） ----------
+// 手算：新北 2025 年 35,301,750 ÷ 4,044,831 ≈ 8.73 → 8.7 本；全國 135,251,757 ÷ 23,299,132 ≈ 5.81 → 5.8 本；
+// 台北 18–24 歲 2024 年 317,624 ÷ 145,692 ≈ 2.18 → 2.2 本
+const barOps = (c, m = measure) => layout(c, m).filter((op) => op.kind === 'bar');
+const barTexts = (c, m = measure) => layout(c, m).filter((op) => op.role === 'barLabel' || op.role === 'barValue').map((op) => op.text);
+
+test('長條圖有四根：我、我的縣市、全國、台北同齡人，每根都標本數', () => {
+  const c = content(card({ county: '新北市', books: 3 }), book);
+  assert.deepEqual(c.bars.map((b) => [b.label, b.text]), [
+    ['我', '3 本'],
+    ['新北市', '8.7 本'],
+    ['全國', '5.8 本'],
+    ['台北 18–24 歲', '2.2 本'],
+  ]);
+  assert.equal(barOps(c).length, 4);
+  assert.deepEqual(barTexts(c), ['我', '3 本', '新北市', '8.7 本', '全國', '5.8 本', '台北 18–24 歲', '2.2 本']);
+});
+
+test('長條圖的四個數字跟成績單計算一樣（圖片不自己算）', () => {
+  const k = card({ county: '台東縣', books: 7, age: '65+' });
+  const c = content(k, book);
+  assert.deepEqual(c.bars.map((b) => b.value), [k.books, k.county.perCapita, k.national.perCapita, k.peer.perCapita]);
+});
+
+test('選了範圍：「我」那一根用成績單的估計值，標「約 15 本」', () => {
+  const c = content(card({ county: '新北市', range: '13+' }), book);
+  assert.equal(c.bars[0].value, 15);
+  assert.equal(c.bars[0].text, '約 15 本');
+});
+
+test('以最大的數字為滿格：3 本時新北 8.7 本最長；「我」3 本 ≈ 3 ÷ 8.73 ≈ 34% 長', () => {
+  const [me, county, nation, peer] = barOps(content(card({ county: '新北市', books: 3 }), book));
+  assert.equal(county.width, county.track);
+  assert.ok(Math.abs(me.width / me.track - 3 / 8.73) < 0.01);
+  assert.ok(nation.width < county.width && peer.width < nation.width);
+});
+
+test('0 本：「我」那一根長度是 0、標「0 本」，其他三根照樣畫', () => {
+  const c = content(card({ county: '新北市', books: 0 }), book);
+  const [me, ...others] = barOps(c);
+  assert.equal(me.width, 0);
+  assert.equal(c.bars[0].text, '0 本');
+  for (const b of others) assert.ok(b.width > 0);
+  // 語氣（CODING_STANDARDS 第 4 條）：長條圖的字只有名稱和本數，沒有責備的字眼
+  assert.doesNotMatch(c.barsLabel + c.bars.map((b) => b.label + b.text).join(''), /落後|墊底|太少/);
+});
+
+test('120 本、999 本：「我」滿格不爆出圖片，其他三根仍至少看得見一小段（10 像素以上）', () => {
+  for (const books of [120, 999]) {
+    const [me, ...others] = barOps(content(card({ county: '新北市', books }), book));
+    assert.equal(me.width, me.track, `${books} 本`);
+    assert.ok(me.x + me.width <= WIDTH - 72, `${books} 本`);
+    for (const b of others) assert.ok(b.width >= 10, `${books} 本：其他長條太短`);
+  }
 });

@@ -34,6 +34,14 @@
         { label: '跟台北同齡人比', text: `台北 ${card.ageLabel} ${card.peer.year} 年平均每人借 ${perCapitaText(card.peer.perCapita)} 本，${compareText(card.peer.compare)}` },
         { label: '如果我是一個縣市', text: `我可以排全台第 ${card.rank.position} 名（共 ${card.rank.of} 名）${card.rank.cheer ? `，${card.rank.cheer.replace(/。$/, '')}` : ''}` },
       ],
+      // 四根橫條：數字全部照抄 compute() 的結果，圖片不自己算；選範圍時「我」用同一個估計值，標「約」
+      barsLabel: '一年借幾本（紙本）',
+      bars: [
+        { label: '我', value: card.books, text: `${card.estimated ? '約 ' : ''}${card.books} 本`, isMe: true },
+        { label: card.county.name, value: card.county.perCapita, text: `${perCapitaText(card.county.perCapita)} 本` },
+        { label: '全國', value: card.national.perCapita, text: `${perCapitaText(card.national.perCapita)} 本` },
+        { label: `台北 ${card.ageLabel}`, value: card.peer.perCapita, text: `${perCapitaText(card.peer.perCapita)} 本` },
+      ],
       bookLabel: '推薦我借這本',
       bookTitle: book.title,
       bookMeta: `${book.author}・${book.category}類熱門書`,
@@ -127,7 +135,15 @@
     { gap: 0.75, bookTitle: [44, 40, 36], titleLines: 3, metaLines: 2 },
     { gap: 0.5, bookTitle: [38, 34, 30], titleLines: 3, metaLines: 1 },
     { gap: 0.5, bookTitle: [30], titleLines: 1, metaLines: 1 },
+    // 最後的保險：說明和比較句也各縮成一行（放不下就加「…」），長條圖排密一點
+    { gap: 0.5, bookTitle: [30], titleLines: 1, metaLines: 1, textLines: 1, barRow: 40 },
   ];
+  // 長條圖每一列的高度、名稱和本數欄的寬度、橫條的粗細和最短長度
+  const BAR_ROW = 50;
+  const BAR_LABEL_WIDTH = 240;
+  const BAR_VALUE_WIDTH = 170;
+  const BAR_HEIGHT = 22;
+  const BAR_MIN = 10;
   const FOOTER_TOP = HEIGHT - MARGIN - 32 * 1.3 - 30 * 1.5; // 頁尾兩行（邀請、網址）的上緣
   const FOOTER_RULE = FOOTER_TOP - 28;
 
@@ -147,24 +163,53 @@
     const gap = (h) => { y += h * density.gap; };
     const rule = () => { ops.push({ kind: 'rule', role: 'rule', x: MARGIN, y, width: TEXT_WIDTH }); };
 
+    /**
+     * 長條圖：每一列「名稱｜橫條｜本數」。四個數字裡最大的那個是滿格；
+     * 不是 0 的至少畫 BAR_MIN 寬，「我」借很多時其他三根也還看得見一小段。0 本就是 0 寬，只寫「0 本」。
+     */
+    const bars = (content) => {
+      block('barsLabel', content.barsLabel, [30, 26], 1, 'sans', 700, 'ink', 1.45);
+      const max = Math.max(...content.bars.map((b) => b.value));
+      const trackX = MARGIN + BAR_LABEL_WIDTH + 16;
+      const trackWidth = WIDTH - MARGIN - BAR_VALUE_WIDTH - 16 - trackX;
+      const row = density.barRow || BAR_ROW;
+      for (const b of content.bars) {
+        const color = b.isMe ? 'accent' : 'inkSoft';
+        const weight = b.isMe ? 700 : 400;
+        const label = fit(b.label, [28, 24, 20], BAR_LABEL_WIDTH, 1, (t, size) => measure(t, size, 'sans', weight));
+        const value = fit(b.text, [30, 26], BAR_VALUE_WIDTH, 1, (t, size) => measure(t, size, 'sans', 700));
+        const valueWidth = measure(value.lines[0], value.size, 'sans', 700);
+        const width = b.value <= 0 || max <= 0 ? 0 : Math.max(BAR_MIN, (trackWidth * b.value) / max);
+        ops.push({ kind: 'text', role: 'barLabel', text: label.lines[0], x: MARGIN, y: y + (row - label.size * 1.2) / 2, size: label.size, family: 'sans', weight, color, width: measure(label.lines[0], label.size, 'sans', weight) });
+        ops.push({ kind: 'bar', role: b.isMe ? 'barMe' : 'bar', x: trackX, y: y + (row - BAR_HEIGHT) / 2, width, height: BAR_HEIGHT, track: trackWidth, color });
+        ops.push({ kind: 'text', role: 'barValue', text: value.lines[0], x: WIDTH - MARGIN - valueWidth, y: y + (row - value.size * 1.2) / 2, size: value.size, family: 'sans', weight: 700, color, width: valueWidth });
+        y += row;
+      }
+    };
+
     text('header', c.header, 30, 'sans', 400, 'inkSoft', 1.5);
     text('heading', c.heading, 48, 'serif', 700, 'ink');
     gap(40);
     text('booksLead', c.booksLead, 34, 'sans', 400, 'inkSoft', 1.3);
     block('booksValue', c.booksValue, [150, 120, 96], 1, 'serif', 700, 'accent', 1.2);
     block('who', c.who, [32, 28], 1, 'sans', 400, 'ink', 1.5);
-    if (c.estimate) block('estimate', c.estimate, [30, 26], 2, 'sans', 700, 'accent', 1.5);
+    const textLines = density.textLines || 2;
+    if (c.estimate) block('estimate', c.estimate, [30, 26], textLines, 'sans', 700, 'accent', 1.5);
     gap(20);
     rule();
     gap(44);
     block('title', c.title, [76, 64, 54], 1, 'serif', 700, 'accent', 1.3);
-    block('line', c.line, [40, 34], 2, 'serif', 400, 'ink', 1.45);
+    block('line', c.line, [40, 34], textLines, 'serif', 400, 'ink', 1.45);
     gap(24);
+    rule();
+    gap(32);
+    bars(c);
+    gap(28);
     rule();
     gap(32);
     for (const row of c.rows) {
       block('rowLabel', row.label, [30, 26], 1, 'sans', 700, 'ink', 1.45);
-      block('rowText', row.text, [34, 30], 2, 'serif', 400, 'ink', 1.45);
+      block('rowText', row.text, [34, 30], textLines, 'serif', 400, 'ink', 1.45);
       gap(22);
     }
     rule();
@@ -193,6 +238,7 @@
   const token = (name, fallback) => css.getPropertyValue(name).trim() || fallback;
   const COLORS = {
     paper: token('--paper', '#f6f1e6'),
+    paperDeep: token('--paper-deep', '#ece4d2'),
     ink: token('--ink', '#2b2620'),
     inkSoft: token('--ink-soft', '#5e554a'),
     rule: token('--rule', '#d6cbb5'),
@@ -240,6 +286,13 @@
       if (op.kind === 'rule') {
         ctx.fillStyle = COLORS.rule;
         ctx.fillRect(op.x, op.y, op.width, 2);
+        continue;
+      }
+      if (op.kind === 'bar') {
+        ctx.fillStyle = COLORS.paperDeep; // 整條軌道淡淡的底，0 本時也看得出這一列是長條
+        ctx.fillRect(op.x, op.y, op.track, op.height);
+        ctx.fillStyle = COLORS[op.color];
+        ctx.fillRect(op.x, op.y, op.width, op.height);
         continue;
       }
       ctx.font = fontOf(op.size, op.family, op.weight);
