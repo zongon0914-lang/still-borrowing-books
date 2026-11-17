@@ -282,6 +282,17 @@ h2 {
   border-left: 1px dashed var(--accent);
 }
 .rank-bars__bar { display: block; height: 100%; border-radius: 0 2px 2px 0; }
+/* 章節二排行的捲動動畫（chapter2.js 加 class）：依名次（--i）一條一條長出來，只播一次 */
+.rank-bars.is-waiting .rank-bars__bar { transform: scaleX(0); transform-origin: left; }
+.rank-bars.is-growing .rank-bars__bar {
+  transform-origin: left;
+  animation: rank-bar-grow 0.5s ease-out backwards;
+  animation-delay: calc(var(--i, 0) * 60ms);
+}
+@keyframes rank-bar-grow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@media (prefers-reduced-motion: reduce) {
+  .rank-bars.is-growing .rank-bars__bar { animation: none; }
+}
 .rank-bars__value { text-align: right; font-variant-numeric: tabular-nums; line-height: 1.2; }
 .rank-bars__note { display: block; font-size: 0.625rem; color: var(--ink-soft); white-space: nowrap; }
 
