@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>資料來源與 AI 使用說明｜我們這一代，還借書嗎？</title>
+  <meta name="description" content="本作品使用的公開資料來源、名詞解釋、數字的計算方式，以及生成式 AI 的使用說明。">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&family=Noto+Serif+TC:wght@400;700&display=swap">
@@ -32,19 +33,111 @@
   <main>
     <p class="chapter-label">附錄</p>
     <h1>資料來源與 AI 使用說明</h1>
-    <!-- 暫時頁面：之後的任務會換成正式內容 -->
-    <p class="placeholder">完整的資料來源清單和 AI 使用說明，製作中。</p>
-    <h2>目前使用的資料</h2>
-    <ul>
-      <li>政府資料開放平台「公共圖書館統計」，國立公共資訊圖書館提供，2014–2025 年。
-        <a href="https://data.gov.tw/dataset/6425">資料集頁面</a>｜
-        <a href="https://publibstat.nlpi.edu.tw/">公共圖書館統計系統</a>（實際下載自此系統的 API）</li>
+    <p class="lead">
+      這個作品裡的每一個數字，都來自政府公開資料和圖書館的年度報告。
+      這一頁列出全部來源，說明數字是怎麼算的，也交代哪些部分用了生成式 AI。
+    </p>
+    <ul class="toc">
+      <li><a href="#data-sources">資料來源</a></li>
+      <li><a href="#terms">名詞解釋</a></li>
+      <li><a href="#methods">數字怎麼算</a></li>
+      <li><a href="#ai-note">AI 使用說明</a></li>
     </ul>
-    <h2>AI 使用說明（暫定）</h2>
-    <p>網頁程式碼由生成式 AI（Claude）協助撰寫；主題選擇、故事架構、視覺方向由參賽者決定；所有數據來自政府公開資料並經人工核對，不是 AI 生成的。</p>
+
+    <h2 id="data-sources">資料來源</h2>
+    <ol class="source-list">
+      <li>
+        <h3>公共圖書館統計</h3>
+        <p class="source-list__meta">國立公共資訊圖書館｜2014–2025 年｜全國與 22 縣市</p>
+        <p>用在<a href="chapter1.html">章節一</a>的全國紙本、電子書借閱趨勢，以及<a href="chapter2.html">章節二</a>和<a href="county.html?county=臺北市">縣市細節頁</a>的人均借閱。
+          用到的欄位：紙本借閱冊數、紙本借閱人次、電子書借閱冊數、服務轄區人口。</p>
+        <p class="source-list__links">
+          <a href="https://data.gov.tw/dataset/6425">政府資料開放平台・資料集頁面</a>
+          <a href="https://publibstat.nlpi.edu.tw/">公共圖書館統計系統</a>（實際由這個系統的 API 下載）
+        </p>
+      </li>
+      <li>
+        <h3>113年度臺北市立圖書館年刊</h3>
+        <p class="source-list__meta">臺北市立圖書館｜2024 年資料（114 年 6 月出版）｜只有台北市</p>
+        <p>用在<a href="chapter3.html">章節三</a>、<a href="age.html">年齡工具</a>和類別細節頁的類別占比：
+          年度統計-9「113 年各年齡層讀者借閱類別統計」表，9 個年齡層 × 男女 × 10 個類別的借閱冊數，人工抄寫，
+          再用原表的小計和總計核對有沒有抄錯。類別頁標「台北」的書，出自同一本年刊年度統計-6、7「臺北人閱讀偏好大剖析」。</p>
+        <p class="source-list__links">
+          <a href="https://www-ws.gov.taipei/001/Upload/430/relfile/37525/9430558/c5b84396-2495-4d76-b7c6-f6868a841053.pdf">年刊 PDF</a>
+        </p>
+      </li>
+      <li>
+        <h3>113年臺灣閱讀風貌及全民閱讀力年度報告</h3>
+        <p class="source-list__meta">國家圖書館｜2024 年資料｜全國公共圖書館</p>
+        <p>用在<a href="category.html?category=語言文學">類別細節頁</a>和年齡結果頁的熱門書單：報告裡各類別圖書借閱 TOP20 表，每類取前 10 名，人工整理。
+          「長銷」照抄報告內文的說法（連續入榜 3 年以上或入榜多年）。北市圖年刊沒有按類別列出完整排行，所以書單以國圖報告為主，
+          是全國所有年齡的排行，不是只有台北或某個年齡層。</p>
+        <p class="source-list__links">
+          <a href="https://nclfile.ncl.edu.tw/files/202504/f4dc0de0-1425-4dd2-b462-6c25f5155848.pdf">報告 PDF</a>
+          <a href="https://web.archive.org/web/20260123210425/https://nclfile.ncl.edu.tw/files/202504/f4dc0de0-1425-4dd2-b462-6c25f5155848.pdf">網路備份（原連結失效時用）</a>
+        </p>
+      </li>
+      <li>
+        <h3>台灣縣市界線</h3>
+        <p class="source-list__meta">內政部國土測繪中心｜經 taiwan-atlas（MIT 授權）轉換</p>
+        <p>用在<a href="chapter2.html">章節二</a>的縣市地圖，只拿來畫形狀，不含任何數字。</p>
+        <p class="source-list__links">
+          <a href="https://www.nlsc.gov.tw/">內政部國土測繪中心</a>
+          <a href="https://www.npmjs.com/package/taiwan-atlas">taiwan-atlas</a>
+        </p>
+      </li>
+    </ol>
+    <p class="note">
+      網頁另外使用 Chart.js 4.4.1（MIT 授權）畫折線圖，字型是 Google Fonts 的 Noto Sans TC、Noto Serif TC（SIL Open Font License）。
+    </p>
+
+    <h2 id="terms">名詞解釋</h2>
+    <dl class="term-list">
+      <dt>借閱冊數</dt>
+      <dd>一年內被借出去的書本總數。一個人一次借 5 本，就算 5 冊。</dd>
+      <dt>借閱人次</dt>
+      <dd>一年內「借書這個動作」發生了幾次。一個人一次借 5 本，只算 1 人次。</dd>
+      <dt>紙本借閱／電子書借閱</dt>
+      <dd>兩者分開計算。國圖公布的總數包含電子書，開放資料則把兩者分開列。作品中寫到「借閱冊數」時，一律說清楚是紙本、電子書，還是合計。</dd>
+      <dt>人均借閱</dt>
+      <dd>某縣市的借閱冊數 ÷ 該縣市圖書館服務的人口數，代表「平均每人借幾本」。本作品用的是紙本借閱冊數 ÷ 服務轄區人口。</dd>
+      <dt>年輕世代</dt>
+      <dd>本作品指 18–24 歲，也就是北市圖年齡分組中的大學生年紀。</dd>
+    </dl>
+
+    <h2 id="methods">數字怎麼算</h2>
+    <h3 class="method-q">紙本和電子書為什麼分開算？</h3>
+    <p>
+      國家圖書館對外公布的「借閱冊數」把電子書也算進去，但公共圖書館統計的開放資料把紙本和電子書分成兩欄。
+      兩者的性質不一樣：電子書借出不用到館，而且這十年成長了二十幾倍，混在一起會看不出紙本借閱本身的變化。
+      所以本作品的趨勢圖、人均借閱都只用紙本，電子書另外畫一張圖。
+    </p>
+    <h3 class="method-q">新北、臺中、南投為什麼要「不含國立館」？</h3>
+    <p>
+      這三個縣市境內有國立的公共圖書館，原始資料同時提供「含國立館」和「不含國立館」兩種數字。
+      國立館服務的是全國讀者，不只是當地人，如果算進去，這三個縣市的人均借閱會被灌高，跟其他縣市比較就不公平。
+      所以計算這三個縣市的人均借閱時，一律用不含國立館的數字。
+    </p>
+    <h3 class="method-q">縣市資料和年齡資料，年份為什麼不一樣？</h3>
+    <p>
+      縣市和全國的數字來自公共圖書館統計，每年更新，所以能看到 2014–2025 年。
+      依年齡、性別、類別分開的借閱數字，目前只有臺北市立圖書館的年刊有公布，本作品用的是 113 年度（2024 年）年刊；
+      熱門書單也配合用國家圖書館同一年（2024 年）的報告。
+      所以章節一、二是到 2025 年的全國和縣市資料，章節三和年齡工具是 2024 年、只有台北市的資料，各頁都有標示年份。
+    </p>
+
+    <h2 id="ai-note">AI 使用說明</h2>
+    <p>依照競賽簡章的規定，說明本作品使用生成式 AI 的地方：</p>
+    <ul class="ai-split">
+      <li><strong>AI 協助的部分：</strong>網頁程式碼由生成式 AI（Claude）協助撰寫，包括版面、圖表、地圖、年齡工具，以及整理數據、自動檢查數字和連結的程式。</li>
+      <li><strong>參賽者決定的部分：</strong>主題選擇、故事架構、視覺方向由參賽者決定，包括要回答哪三個問題、章節順序、書頁質感的風格。</li>
+      <li><strong>數據：</strong>所有數據來自政府公開資料和圖書館年報，經過人工核對，不是 AI 生成的。手動抄寫的表格用原表的小計、總計核對；網站上的關鍵數字有自動檢查。</li>
+    </ul>
+    <p class="note">網站本身沒有連到任何 AI 服務，也沒有後端或資料庫；所有數字都在製作時整理好，直接放在網頁裡。</p>
 
     <nav class="chapter-nav" aria-label="章節導覽">
       <a href="index.html">← 回首頁</a>
+      <a href="chapter1.html">從頭開始看 →</a>
     </nav>
   </main>
 

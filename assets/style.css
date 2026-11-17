@@ -498,3 +498,19 @@ h2 {
 .age-links { list-style: none; margin: 1rem 0 1.25rem; padding: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 0.5rem; font-family: var(--sans); font-size: 0.9375rem; }
 .age-links a { display: inline-block; min-height: 2.75rem; line-height: 2.75rem; padding: 0 1rem; border: 1px solid var(--rule); border-radius: 999px; background: #fffdf8; color: var(--ink); text-decoration: none; }
 .age-links a:hover { border-color: var(--accent); color: var(--accent); }
+
+/* ---------- 資料來源與 AI 使用說明 ---------- */
+.toc { list-style: none; margin: 1.5rem 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.5rem 1.25rem; font-family: var(--sans); font-size: 0.9375rem; }
+.source-list { list-style: none; margin: 0; padding: 0; counter-reset: src; }
+.source-list > li { counter-increment: src; position: relative; padding: 1rem 0 1rem 2.25rem; border-bottom: 1px solid var(--rule); }
+.source-list > li::before { content: counter(src); position: absolute; left: 0; top: 1.1rem; width: 1.5rem; height: 1.5rem; border-radius: 50%; background: var(--accent); color: #fffdf8; font-family: var(--sans); font-size: 0.8125rem; line-height: 1.5rem; text-align: center; }
+.source-list h3 { margin: 0; font-size: 1.0625rem; }
+.source-list p { margin: 0.4rem 0; }
+.source-list__meta { font-family: var(--sans); font-size: 0.875rem; color: var(--ink-soft); }
+.source-list__links { display: flex; flex-wrap: wrap; gap: 0.25rem 1rem; font-family: var(--sans); font-size: 0.875rem; overflow-wrap: anywhere; }
+.term-list { margin: 0; }
+.term-list dt { font-weight: 700; margin-top: 1rem; }
+.term-list dd { margin: 0.25rem 0 0; padding-left: 0.75rem; border-left: 3px solid var(--accent-soft); }
+.method-q { font-size: 1.0625rem; margin: 1.75rem 0 0.5rem; }
+.ai-split { padding-left: 1.25rem; }
+.ai-split li { margin: 0.5rem 0; }
