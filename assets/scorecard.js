@@ -174,6 +174,10 @@
 
   $('sc-book-next').addEventListener('click', nextBook);
 
+  // 「存成圖片」和「分享」（assets/scorecard-image.js）用的：現在的成績單和畫面上這本推薦書
+  let currentCard = null;
+  window.Scorecard.current = () => ({ card: currentCard, book: shown >= 0 ? candidates[shown] : null });
+
   function renderRecommend(c) {
     candidates = c.recommend.books;
     shown = -1;
@@ -185,6 +189,7 @@
   }
 
   function render(c) {
+    currentCard = c;
     const booksText = `${c.books} 本`;
     $('sc-books-line').innerHTML = c.estimated
       ? `你選了「${esc(c.rangeLabel)}」，用 <strong>${booksText}</strong> 來算（依你選的範圍估算）・${esc(c.ageLabel)}`
