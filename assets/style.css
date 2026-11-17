@@ -257,6 +257,13 @@ h2 {
 .county-map__county.is-active { /* 讓外框畫在鄰居上面 */ paint-order: stroke; }
 .county-map__inset { fill: none; stroke: var(--rule); stroke-dasharray: 3 2; }
 .county-map__inset-label { font-family: var(--sans); font-size: 9px; fill: var(--ink-soft); }
+/* 地圖上標的第一名、台北、最後一名：標籤不接收點擊，點了會穿過去到下面的縣市 */
+.county-map__labels { pointer-events: none; font-family: var(--sans); }
+.county-map__label-bg { fill: #fffdf8; fill-opacity: 0.92; stroke: var(--ink-soft); stroke-width: 0.6; }
+.county-map__label-name { font-weight: 700; fill: var(--ink); text-anchor: middle; }
+.county-map__label-detail { fill: var(--accent); text-anchor: middle; font-variant-numeric: tabular-nums; }
+.county-map__leader { stroke: var(--ink); stroke-width: 0.8; }
+.county-map__dot { fill: var(--accent); stroke: #fffdf8; stroke-width: 0.8; }
 
 .map-legend { list-style: none; margin: 0 0 1rem; padding: 0; font-family: var(--sans); font-size: 0.8125rem; }
 .map-legend li { display: flex; align-items: center; gap: 0.5rem; line-height: 1.9; }
@@ -352,6 +359,9 @@ h2 {
 }
 .question-card__title { display: block; font-size: 1.25rem; font-weight: 700; }
 .question-card__hint { display: block; font-family: var(--sans); font-size: 0.875rem; color: var(--ink-soft); }
+/* 首頁章節卡的小數字預告 */
+.question-card__teaser { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0 0.5rem; margin: 0.35rem 0 0.15rem; font-family: var(--sans); font-size: 0.8125rem; color: var(--ink-soft); }
+.question-card__teaser strong { font-family: var(--serif); font-size: 1.375rem; color: var(--accent); font-variant-numeric: tabular-nums; }
 
 /* ---------- 章節底部導覽 ---------- */
 .chapter-nav {

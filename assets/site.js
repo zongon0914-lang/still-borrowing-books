@@ -76,9 +76,19 @@
   const latest = data.national[data.national.length - 1];
   const first = data.national[0];
 
+  /** 最新一年人均借閱第一名的縣市（首頁章節二卡片的小數字） */
+  const perCapitaIn = (county, year) => county.years.find((y) => y.year === year).perCapita;
+  const topCounty = data.counties.reduce((a, b) => (perCapitaIn(b, latest.year) > perCapitaIn(a, latest.year) ? b : a));
+  /** 台北 18–24 歲的人均借閱（首頁章節三卡片的小數字） */
+  const youngGroup = data.age.groups.find((g) => g.age === data.age.youngGroup);
+
   window.Site = { data, formatBig, byYear, fillStats, drawWhenSeen, revealOnMobile, latest, first };
 
   fillStats({
+    topCountyShort: () => topCounty.name.replace(/[市縣]$/, ''),
+    topCountyPerCapita: () => perCapitaIn(topCounty, latest.year).toFixed(1),
+    youngPerCapita: () => youngGroup.perCapita.toFixed(1),
+    ageYear: () => data.age.year,
     latestYear: () => latest.year,
     firstYear: () => first.year,
     latestPrint: () => formatBig(latest.printLoans),
