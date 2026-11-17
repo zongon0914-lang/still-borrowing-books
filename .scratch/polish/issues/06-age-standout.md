@@ -6,7 +6,7 @@
 
 **Blocked by:** 03（同一頁的縣市用字）
 
-**Status:** 完成（2026-11-17）分支 ending。`AgePage.view` 多了 standoutMeaning、standoutLine，書單改跟 standout；預期值用 Python 直接讀原表算（註解在 `tests/age-tool.test.mjs`）。
+**Status:** 已上線（2026-11-17，aed1c01）分支 ending。`AgePage.view` 多了 standoutMeaning、standoutLine，書單改跟 standout；預期值用 Python 直接讀原表算（註解在 `tests/age-tool.test.mjs`）。
 
 - [x] 「特別愛借」沿用現有算法（占比差最多個百分點、不是第一名），選性別時跟同性別所有讀者比
 - [x] 書單跟著「特別愛借」，連到該類的類別細節頁

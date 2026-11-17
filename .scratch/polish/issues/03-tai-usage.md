@@ -6,7 +6,7 @@
 
 **Blocked by:** None (can start immediately)
 
-**Status:** 完成（2026-11-17）分支 ending。`tools/clean-data.mjs` 的 `countyName` 在整理時轉成「台」，重新產生 data.js 和 taiwan-map.js；`county.js` 接受舊網址「臺」。全站掃描在 `tests/wording.test.mjs`。
+**Status:** 已上線（2026-11-17，aed1c01）分支 ending。`tools/clean-data.mjs` 的 `countyName` 在整理時轉成「台」，重新產生 data.js 和 taiwan-map.js；`county.js` 接受舊網址「臺」。全站掃描在 `tests/wording.test.mjs`。
 
 - [x] 縣市名稱在資料整理流程轉成「台」，重新產生網站數據和地圖數據
 - [x] 縣市頁同時接受「台」和「臺」的網址參數，有測試

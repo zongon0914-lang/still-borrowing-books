@@ -6,7 +6,7 @@
 
 **Blocked by:** None (can start immediately)
 
-**Status:** 完成（2026-11-17）分支 ending。`Chapter3Page.view` 多了 perCapita、leastOfAll、vsPeak；測試在 `tests/chapter3.test.mjs`、`tests/ending.test.mjs`。章節三的長條圖改畫人均；資料來源頁新增「不同年齡層怎麼比借得多或少？」一段。
+**Status:** 已上線（2026-11-17，aed1c01）分支 ending。`Chapter3Page.view` 多了 perCapita、leastOfAll、vsPeak；測試在 `tests/chapter3.test.mjs`、`tests/ending.test.mjs`。章節三的長條圖改畫人均；資料來源頁新增「不同年齡層怎麼比借得多或少？」一段。
 
 - [x] 章節三的計算輸出每個年齡層的人均借閱，「18–24 歲最少」改用人均、範圍是所有年齡層
 - [x] 比較對象是 18 歲以上人均最高的那一組（2024 年是 35–44 歲，約 4 倍），由數據決定、不寫死

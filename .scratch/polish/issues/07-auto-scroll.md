@@ -6,7 +6,7 @@
 
 **Blocked by:** 06（同一個年齡工具程式）
 
-**Status:** 完成（2026-11-17）分支 ending。`Site.revealOnMobile`：手機寬度（767px 以下）、結果不在畫面裡才捲，`block: nearest`；年齡工具用網址的 `#result` 判斷是剛選完的。375px 實測兩處都會捲。
+**Status:** 已上線（2026-11-17，aed1c01）分支 ending。`Site.revealOnMobile`：手機寬度（767px 以下）、結果不在畫面裡才捲，`block: nearest`；年齡工具用網址的 `#result` 判斷是剛選完的。375px 實測兩處都會捲。
 
 - [x] 只在結果不在畫面內時才捲；桌機上結果已經看得到就不動
 - [x] 尊重「減少動態效果」

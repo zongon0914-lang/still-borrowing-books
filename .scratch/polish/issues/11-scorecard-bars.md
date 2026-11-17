@@ -6,7 +6,7 @@
 
 **Blocked by:** None (can start immediately)
 
-**Status:** 完成（2026-11-17）分支 ending。`ScorecardImage.content().bars` 照抄 compute 的數字，`layout` 畫長條；最緊的排法多一層保險（說明和比較句各縮成一行）。重疊測試改成兩兩比方框。用瀏覽器實際產生 0 本、約 15 本、120 本三張圖確認。
+**Status:** 已上線（2026-11-17，aed1c01）分支 ending。`ScorecardImage.content().bars` 照抄 compute 的數字，`layout` 畫長條；最緊的排法多一層保險（說明和比較句各縮成一行）。重疊測試改成兩兩比方框。用瀏覽器實際產生 0 本、約 15 本、120 本三張圖確認。
 
 - [x] 四個數字全部來自成績單的計算，圖片不自己算
 - [x] 以最大值為滿格；「我」很大時其他三根仍看得見一小段，一律標數字

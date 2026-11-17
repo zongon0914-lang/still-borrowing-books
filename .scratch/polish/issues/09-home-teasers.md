@@ -6,7 +6,7 @@
 
 **Blocked by:** 02（同一頁）
 
-**Status:** 完成（2026-11-17）分支 ending。數字由 `site.js` 填（topCountyShort、topCountyPerCapita、youngPerCapita），測試在 `tests/home.test.mjs`。
+**Status:** 已上線（2026-11-17，aed1c01）分支 ending。數字由 `site.js` 填（topCountyShort、topCountyPerCapita、youngPerCapita），測試在 `tests/home.test.mjs`。
 
 - [x] 數字用現有的 `data-stat` 機制從數據填入，不寫死；沒有 JavaScript 時有合理的備用文字
 - [x] 章節三卡片用 18–24 歲人均借閱，不用 2.5%
