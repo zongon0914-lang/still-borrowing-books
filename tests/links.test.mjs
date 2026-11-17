@@ -6,7 +6,11 @@ import assert from 'node:assert/strict';
 import { crawlSite, localSite, onlineSite } from './crawl.mjs';
 
 const SITE_URL = process.env.SITE_URL;
-const site = await crawlSite('index.html', SITE_URL ? onlineSite(SITE_URL) : localSite());
+const read = SITE_URL ? onlineSite(SITE_URL) : localSite();
+const site = await crawlSite('index.html', read);
+
+// 分享設定裡寫的是正式網站的完整網址（社群網站不認相對路徑）
+const PRODUCTION_URL = 'https://zongon0914-lang.github.io/still-borrowing-books/';
 
 test('從首頁出發，沒有壞掉的連結（含圖片、樣式、程式檔）', () => {
   assert.deepEqual(site.broken, []);
@@ -94,4 +98,40 @@ test('首頁（第五個入口）和章節三都連得到「換你回答」成�
   assert.ok(site.pages.get('index.html').includes('scorecard.html'), '首頁沒有連到 scorecard.html');
   assert.ok(site.pages.get('chapter3.html')?.includes('scorecard.html'), '章節三沒有連到 scorecard.html');
   assert.ok(site.pages.has('scorecard.html'), '點不到 scorecard.html');
+});
+
+// 讀 <meta property="og:title" content="…"> 或 <meta name="twitter:card" content="…">
+function meta(html, key) {
+  const m = html.match(new RegExp(`<meta (?:property|name)="${key.replace(':', '\\:')}" content="([^"]*)">`));
+  return m ? m[1] : null;
+}
+
+test('每一頁都有分享預覽設定（Open Graph 和 Twitter 卡片），網址寫成正式網站的完整網址', () => {
+  for (const [page] of site.pages) {
+    const html = site.html.get(page);
+    for (const key of ['og:title', 'og:description', 'og:image', 'og:url', 'og:type', 'twitter:card', 'twitter:title', 'twitter:description', 'twitter:image']) {
+      assert.ok(meta(html, key), `${page} 沒有 ${key}`);
+    }
+    assert.equal(meta(html, 'og:url'), PRODUCTION_URL + (page === 'index.html' ? '' : page), `${page} 的 og:url 不對`);
+    assert.ok(meta(html, 'og:image').startsWith(PRODUCTION_URL), `${page} 的 og:image 不是正式網站的完整網址`);
+    assert.equal(meta(html, 'twitter:image'), meta(html, 'og:image'), `${page} 的 twitter:image 跟 og:image 不一樣`);
+    assert.equal(meta(html, 'twitter:card'), 'summary_large_image', `${page} 的 twitter:card 不是大圖`);
+  }
+});
+
+test('分享預覽的標題每頁各自寫；成績單頁寫「換你回答：你還借書嗎？」', () => {
+  const titles = [...site.pages.keys()].map((page) => meta(site.html.get(page), 'og:title'));
+  assert.equal(new Set(titles).size, titles.length, `有重複的標題：${titles.join('、')}`);
+  const descriptions = [...site.pages.keys()].map((page) => meta(site.html.get(page), 'og:description'));
+  assert.equal(new Set(descriptions).size, descriptions.length, '有重複的介紹');
+  assert.match(meta(site.html.get('scorecard.html'), 'og:title'), /^換你回答：你還借書嗎？/);
+  assert.equal(meta(site.html.get('chapter2.html'), 'og:title').includes('哪裡的人最愛借書？'), true, '章節二的標題沒有章名');
+});
+
+test('分享預覽圖指向的檔案真的存在', async () => {
+  const images = new Set([...site.pages.keys()].map((page) => meta(site.html.get(page), 'og:image')));
+  for (const image of images) {
+    const file = image.slice(PRODUCTION_URL.length);
+    assert.notEqual(await read(file), null, `找不到預覽圖 ${file}`);
+  }
 });

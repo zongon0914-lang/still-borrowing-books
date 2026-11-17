@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="utf-8">
+  <!--
+    分享預覽圖（assets/share-preview.png，1200×630）的版面。
+    沿用網站的 assets/style.css（紙張色、字型、首頁封面的大數字），數字由 site.js 從 data.js 填上。
+    數據更新後重新產生（在專案根目錄的 PowerShell 執行）：
+      & "C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe" --headless --disable-gpu --hide-scrollbars --force-device-scale-factor=1 --window-size=1200,630 --virtual-time-budget=8000 --screenshot="$PWD\assets\share-preview.png" "$PWD\tools\share-preview.html"
+    要連網路（字型從 Google Fonts 載入）；產生後用瀏覽器打開 PNG 看一眼字型和數字。
+  -->
+  <title>分享預覽圖</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&family=Noto+Serif+TC:wght@400;700&display=swap">
+  <link rel="stylesheet" href="../assets/style.css">
+  <style>
+    html, body { width: 1200px; height: 630px; overflow: hidden; }
+    body { display: flex; align-items: center; justify-content: center; }
+    .preview {
+      width: 1120px;
+      height: 550px;
+      border: 1px solid var(--rule);
+      outline: 6px solid var(--paper-deep);
+      outline-offset: 10px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      text-align: center;
+    }
+    .preview .chapter-label { font-size: 22px; }
+    .preview h1 { font-size: 72px; letter-spacing: 0.05em; margin: 12px 0 8px; }
+    .preview .big-number { margin: 8px 0 0; }
+    .preview .big-number__value { font-size: 110px; }
+    .preview .big-number__caption { font-size: 24px; margin-top: 8px; }
+  </style>
+</head>
+<body>
+  <div class="preview">
+    <p class="chapter-label">從十年借閱數據，看見年輕人的閱讀樣貌</p>
+    <h1>我們這一代，還借書嗎？</h1>
+    <p class="big-number">
+      <span class="big-number__value"><span data-stat="latestPrint">1.35 億</span><span class="big-number__unit">冊</span></span>
+      <span class="big-number__caption"><span data-stat="latestYear">2025</span> 年，全台灣公共圖書館借出的紙本書</span>
+    </p>
+  </div>
+  <script src="../assets/data.js"></script>
+  <script src="../assets/site.js"></script>
+</body>
+</html>

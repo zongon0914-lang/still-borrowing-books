@@ -45,6 +45,16 @@ tools/geo/counties-10t.json ──tools/build-map.mjs──> assets/taiwan-map.j
 | 手機寬度 | 瀏覽器打開 `tools/check-mobile.html` | 每頁 320／375px 不左右捲動、不卡在「載入中」 |
 | 成績單操作 | 瀏覽器打開 `tools/check-scorecard.html` | 填表、換一本、借書連結、1080×1920 圖片 |
 
+## 分享預覽
+
+每一頁 `<head>` 裡有 Open Graph 和 Twitter 卡片設定（標題、介紹每頁各自寫，圖片和網址寫正式網站的完整網址；`links.test.mjs` 會檢查）。全站共用一張預覽圖 `assets/share-preview.png`（1200×630），版面在 `tools/share-preview.html`（沿用 `style.css`，數字由 `data.js` 填）。數據更新後要重新產生，在專案根目錄的 PowerShell 執行（要連網路載字型）：
+
+```powershell
+& "C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe" --headless --disable-gpu --hide-scrollbars --force-device-scale-factor=1 --window-size=1200,630 --virtual-time-budget=8000 --screenshot="$PWD\assets\share-preview.png" "$PWD\tools\share-preview.html"
+```
+
+新增頁面時，從現有頁面複製這組設定，改 `og:title`、`og:description`、`og:url`（和對應的 `twitter:`）。
+
 `tests/crawl.mjs` 是 `links.test.mjs` 用的站內爬蟲；`tools/live-version.mjs` 讓 `check-online` 先等 GitHub Pages 換成新版本。
 
 ## 文件
